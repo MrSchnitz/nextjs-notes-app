@@ -1,0 +1,44 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./notes-db.db"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+
+model Note {
+  id  String @default(uuid()) @id
+  name String
+  type String @default("TEXT")
+  content String
+  color String
+  pinned Boolean
+  // tags TagType[];
+  // checkPoStrings? CheckPoStringType[];
+}
+
+model Tag {
+  id String @default(uuid()) @id
+  name String
+}
+
+model CheckPoint {
+  id String @default(uuid()) @id
+  text String
+  checked Boolean
+}
+
+model User {
+  id String @default(uuid()) @id
+  login String
+  firstName String
+  lastName String
+  role String
+  // notes: NoteType[];
+  // tags: TagType[];
+}
