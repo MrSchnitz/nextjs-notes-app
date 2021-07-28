@@ -6,6 +6,7 @@ import {
   NavTop,
   NavUser,
   NavRight,
+  NavUserImage,
 } from "./navbar.styles";
 import { Button, IconButton } from "@material-ui/core";
 import ExitToAppOutlinedIcon from "@material-ui/icons/ExitToAppOutlined";
@@ -13,9 +14,10 @@ import NavigationItem from "../NavItem/navitem.component";
 import EmojiObjectsOutlinedIcon from "@material-ui/icons/EmojiObjectsOutlined";
 import KeepLogo from "../../../resources/assets/keep.svg";
 import MenuIcon from "@material-ui/icons/Menu";
-import PersonOutlineOutlinedIcon from '@material-ui/icons/PersonOutlineOutlined';
+import PersonOutlineOutlinedIcon from "@material-ui/icons/PersonOutlineOutlined";
 import { useRouter } from "next/router";
 import { signIn, signOut, useSession } from "next-auth/client";
+import Image from "next/image";
 
 interface NavbarProps {
   children: ReactNode;
@@ -26,6 +28,7 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
 
   const [session, loading] = useSession();
 
+  console.log(session);
 
   const router = useRouter();
 
@@ -65,6 +68,7 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
         isActive={
           router.pathname.includes("notes") && !router.pathname.includes("all")
         }
+        isOpen={openNav}
       />
       {/*<hr />*/}
       {/*{renderTags()}*/}
@@ -76,13 +80,14 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
     </NavLeft>
   );
 
+
+
   const renderUserBar = session && (
     <NavUser>
-      <h6 className="m-0">
-        Logged as:{" "}
-        <strong>
-          {/*{loggedUser && `${loggedUser.firstName} ${loggedUser.lastName}`}*/}
-        </strong>
+      <NavUserImage imageUrl={session?.user?.image}>
+      </NavUserImage>
+      <h6 className="m-0 ms-2 me-3">
+        <strong>{session?.user?.name}</strong>
       </h6>
       <Button
         size={"small"}

@@ -42,12 +42,27 @@ const NavUser = styled.div`
   }
 `;
 
+interface NavUserImageInterface {
+  imageUrl?: any;
+}
+
+const NavUserImage = styled.div<NavUserImageInterface>`
+  height: 30px;
+  width: 30px;
+  background-size: cover;
+  border-radius: 50%;
+  overflow: hidden;
+
+  background-image: ${(props) =>
+    props.imageUrl ? `url(${props.imageUrl})` : "#fff"};
+`;
+
 const NavContent = styled.div`
   display: flex;
 `;
 
 interface NavLeftInterface {
-    open: boolean;
+  open: boolean;
 }
 
 const NavLeft = styled.div<NavLeftInterface>`
@@ -55,7 +70,7 @@ const NavLeft = styled.div<NavLeftInterface>`
   height: calc(100vh - 50px);
   padding-right: 0.1rem;
   overflow: hidden;
-  
+
   transition: 1s all;
 `;
 
@@ -63,7 +78,16 @@ NavLeft.displayName = "NavLeft";
 
 const NavRight = styled.div`
   flex: 1;
-  background-color: #0070f3;
+  padding: 1rem 2rem;
+  //background-color: #0070f3;
 `;
 
-export { NavTop, NavLogo, NavUser, NavLeft, NavContent, NavRight };
+export {
+  NavTop,
+  NavLogo,
+  NavUser,
+  NavLeft,
+  NavContent,
+  NavRight,
+  NavUserImage,
+};

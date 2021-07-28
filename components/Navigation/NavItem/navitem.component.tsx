@@ -12,6 +12,7 @@ interface NavigationItemProps {
   onClick?: () => void;
   onDelete?: () => void;
   isActive?: boolean;
+  isOpen?: boolean;
   isTag?: boolean;
 }
 
@@ -22,6 +23,7 @@ const NavigationItem: React.FC<NavigationItemProps> = ({
   onClick,
   onDelete,
   isActive,
+    isOpen,
   isTag,
 }: NavigationItemProps) => {
   const handleDelete = (e: any) => {
@@ -36,6 +38,7 @@ const NavigationItem: React.FC<NavigationItemProps> = ({
   return (
     <NavItem
       active={isActive ?? false}
+      open={isOpen ?? true}
       onClick={onClick ? onClick : () => push(url!)}
     >
       <NavItemIcon>
