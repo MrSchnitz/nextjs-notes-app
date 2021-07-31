@@ -12,7 +12,11 @@ export const getAllUserTags = async (userSession: Session): Promise<Tag[]> => {
   const user = await prisma.user.findFirst({
     where: { name: userSession?.user?.name },
     include: {
-      tags: true,
+      tags: {
+        orderBy: {
+          createdAt: "asc",
+        },
+      },
     },
   });
   if (user) {

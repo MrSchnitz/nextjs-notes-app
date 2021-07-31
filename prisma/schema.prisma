@@ -71,6 +71,7 @@ model Note {
   content String
   color String
   pinned Boolean
+  createdAt DateTime @default(now())
   tags Tag[]
   checkPoints CheckPoint[]
   user User @relation(fields: [userId], references: [id])
@@ -80,6 +81,7 @@ model Note {
 model Tag {
   id String @default(cuid()) @id
   name String
+  createdAt DateTime @default(now())
   notes Note[]
   user User @relation(fields: [userId], references: [id])
   userId String

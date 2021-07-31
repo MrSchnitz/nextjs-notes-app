@@ -21,6 +21,9 @@ export const getAllUserNotes = async (
           tags: true,
           checkPoints: true,
         },
+        orderBy: {
+          createdAt: "asc"
+        }
       },
     },
   });
