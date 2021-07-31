@@ -47,6 +47,8 @@ model User {
   updatedAt     DateTime  @updatedAt
   accounts      Account[]
   sessions      Session[]
+  notes Note[]
+  tags Tag[]
 }
 
 model VerificationRequest {
@@ -63,25 +65,43 @@ model VerificationRequest {
 
 
 model Note {
-  id  String @default(uuid()) @id
+  id  String @default(cuid()) @id
   name String
   noteType String @default("TEXT")
   content String
   color String
   pinned Boolean
-  // tags TagType[];
-  // checkPoStrings? CheckPoStringType[];
+  tags Tag[]
+  checkPoints CheckPoint[]
+  user User @relation(fields: [userId], references: [id])
+  userId String
 }
 
 model Tag {
-  id String @default(uuid()) @id
+  id String @default(cuid()) @id
   name String
+  notes Note[]
+  user User @relation(fields: [userId], references: [id])
+  userId String
 }
 
+//model TagsOnNotes {
+//      tag        Tag     @relation(fields: [tagId], references: [id])
+//      tagId      String       // relation scalar field (used in the `@relation` attribute above)
+//      note    Note @relation(fields: [noteId], references: [id])
+//      noteId  String      // relation scalar field (used in the `@relation` attribute above)
+//      assignedAt  DateTime @default(now())
+//      assignedBy  String
+//
+//      @@id([tagId, noteId])
+//}
+
 model CheckPoint {
-  id String @default(uuid()) @id
+  id String @default(cuid()) @id
   text String
   checked Boolean
+  note Note @relation(fields: [noteId], references: [id])
+  noteId String
 }
 
 //model User {
