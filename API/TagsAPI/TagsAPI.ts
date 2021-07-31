@@ -3,7 +3,7 @@ import { all, call, put, select, takeLatest } from "redux-saga/effects";
 import { TagObject, TagType } from "../../models/Tag";
 import { ChangeActionType } from "../../utils/helpers";
 import { Tag } from "@prisma/client";
-import { del, post } from "../../utils/restAPI";
+import { del, post, put as update } from "../../utils/restAPI";
 import { toast } from "react-toastify";
 import { RootState } from "../../store/RootState";
 import { NoteType } from "../../models/Note";
@@ -32,8 +32,9 @@ class TagsApi {
   private static instance: TagsApi;
 
   private constructor() {
-    this.handleAddTag = this.handleAddTag.bind(this);
     this.handleFetchTags = this.handleFetchTags.bind(this);
+    this.handleAddTag = this.handleAddTag.bind(this);
+    this.handleUpdateTag = this.handleUpdateTag.bind(this);
     this.handleDeleteTag = this.handleDeleteTag.bind(this);
 
     this.saga = this.saga.bind(this);
@@ -68,6 +69,7 @@ class TagsApi {
         state.tagsLoading = false;
       },
       addTag() {},
+      updateTag(state, action: PayloadAction<TagType>) {},
       deleteTag(state, action: PayloadAction<TagType>) {},
     },
   });
@@ -75,7 +77,24 @@ class TagsApi {
   /*
    * SAGAS
    */
+  private *handleFetchTags(): Generator<any> {
+    const request = () =>
+      fetch(`/api/tags`, {
+        method: "GET",
+      }).then((res) => res.json());
+
+    try {
+      const tags: any = yield call(request);
+
+      yield put(this.slice.actions.setTags(tags));
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
   private *handleAddTag(): Generator<any> {
+    toast.info(`Adding tag...`);
+
     const tag: any = yield select(
       (state: RootState) => state.tagsApiSlice?.newTag
     );
@@ -92,29 +111,29 @@ class TagsApi {
 
       yield put(this.slice.actions.reset());
       yield put(this.slice.actions.fetchTags());
-      console.log(response);
     } catch (e) {
       console.log(e);
       toast.error("Tag was not added. Something went wrong...");
     }
   }
 
-  private *handleFetchTags(): Generator<any> {
-    const request = () =>
-      fetch(`/api/tags`, {
-        method: "GET",
-      }).then((res) => res.json());
-
+  private *handleUpdateTag(action: PayloadAction<TagType>): Generator<any> {
+    toast.info(`Updating tag...`);
     try {
-      const tags: any = yield call(request);
+      const response = yield call(update, "/api/tags", action.payload);
+      toast.success("Tag updated.");
 
-      yield put(this.slice.actions.setTags(tags));
+      yield put(this.slice.actions.reset());
+      yield put(this.slice.actions.fetchTags());
     } catch (e) {
       console.log(e);
+      toast.error("Tag was not added. Something went wrong...");
     }
   }
 
-  public *handleDeleteTag(action: PayloadAction<TagType>): Generator<any> {
+  private *handleDeleteTag(action: PayloadAction<TagType>): Generator<any> {
+    toast.info(`Deleting tag...`);
+
     try {
       const res: any = yield call(del, `/api/tags/${action.payload.id}`);
       yield put(this.slice.actions.fetchTags());
@@ -129,10 +148,11 @@ class TagsApi {
    * SAGA - MAIN
    */
   public *saga(): Generator<any> {
-    const { addTag, fetchTags, deleteTag } = this.slice.actions;
+    const { addTag, fetchTags, deleteTag, updateTag } = this.slice.actions;
     yield all([
-      yield takeLatest([addTag.type], this.handleAddTag),
       yield takeLatest([fetchTags.type], this.handleFetchTags),
+      yield takeLatest([addTag.type], this.handleAddTag),
+      yield takeLatest([updateTag.type], this.handleUpdateTag),
       yield takeLatest([deleteTag.type], this.handleDeleteTag),
     ]);
   }
