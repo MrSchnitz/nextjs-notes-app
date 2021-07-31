@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test": "jest --verbose --runInBand"
   },
   "dependencies": {
     "@fontsource/roboto": "^4.5.0",
@@ -25,7 +26,9 @@
     "next": "11.0.1",
     "next-auth": "^3.27.3",
     "react": "17.0.2",
+    "react-color": "^2.19.3",
     "react-dom": "17.0.2",
+    "react-hook-form": "^7.12.2",
     "react-redux": "^7.2.4",
     "react-toastify": "^7.0.4",
     "redux-saga": "^1.1.3",
@@ -35,14 +38,41 @@
     "swr": "^0.5.6"
   },
   "devDependencies": {
+    "@types/enzyme": "^3.10.8",
+    "@types/jest": "^26.0.21",
     "@types/node": "^16.4.3",
     "@types/react": "17.0.14",
+    "@types/react-color": "^3.0.5",
+    "@wojtekmaj/enzyme-adapter-react-17": "^0.5.0",
     "autoprefixer": "^10.3.1",
+    "enzyme": "^3.11.0",
     "eslint": "7.31.0",
     "eslint-config-next": "11.0.1",
+    "jest": "^26.6.3",
     "postcss": "^8.3.6",
     "prisma": "^2.27.0",
+    "ts-jest": "^26.5.4",
     "typescript": "4.3.5"
+  },
+  "jest": {
+    "moduleNameMapper": {
+      "\\.(css|scss|sass|less)$": "<rootDir>/style-mock.js"
+    },
+    "transform": {
+      "^.+\\.(ts|tsx)$": "ts-jest"
+    },
+    "setupFilesAfterEnv": [
+      "<rootDir>/jest.setup.ts"
+    ],
+    "testPathIgnorePatterns": [
+      "./.next/",
+      "./node_modules/"
+    ],
+    "globals": {
+      "ts-jest": {
+        "tsconfig": "tsconfig.jest.json"
+      }
+    }
   },
   "resolutions": {
     "styled-components": "^5"
