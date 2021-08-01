@@ -14,6 +14,7 @@ export interface NoteModel {
   content: string;
   color: string;
   pinned: boolean;
+  createdAt: Date;
   tags: TagType[];
   checkPoints?: CheckPointType[];
 }
@@ -27,6 +28,7 @@ export const NoteObject: NoteType = {
   content: '',
   color: '#fff',
   pinned: false,
+  createdAt: new Date(Date.now()),
   tags: [],
   checkPoints: [],
 };
@@ -38,6 +40,7 @@ export const NoteDBObject: Note = {
   color: "",
   content: "",
   pinned: false,
+  createdAt: new Date(Date.now()),
   userId: ''
 };
 
@@ -48,6 +51,7 @@ export enum cNoteModel {
   color = 'color',
   content = 'content',
   pinned = 'pinned',
+  createdAt = 'createdAt',
   tags = 'tags',
   checkPoints = 'checkPoints',
 }

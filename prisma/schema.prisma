@@ -112,6 +112,6 @@ model CheckPoint {
   //firstName String
   //lastName String
   //role String
-  // notes: NoteType[];
+  // searchNotes: NoteType[];
   // tags: TagType[];
 //}

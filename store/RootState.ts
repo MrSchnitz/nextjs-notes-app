@@ -1,15 +1,15 @@
 import { Action, ThunkAction } from "@reduxjs/toolkit";
 import { all } from "redux-saga/effects";
 import {
-  NotesPageApiInterface,
-  NotesPageApiReducer,
+  NotesApiInterface,
+  NotesApiReducer,
   NotesPageApiSaga,
-} from "../API/NotesPageAPI/NotesPageAPI";
+} from "../API/NotesPageAPI/NotesAPI";
 import { TagsAPIInterface, TagsApiReducer, TagsApiSaga } from "../API/TagsAPI/TagsAPI";
 
 export interface RootState {
   // API
-  notesPageApiSlice?: NotesPageApiInterface;
+  notesPageApiSlice?: NotesApiInterface;
   tagsApiSlice?: TagsAPIInterface;
 }
 
@@ -17,7 +17,7 @@ export type AppThunk = ThunkAction<void, RootState, unknown, Action<string>>;
 
 export const mainReducers = {
   // API
-  notesPageApiSlice: NotesPageApiReducer,
+  notesPageApiSlice: NotesApiReducer,
   tagsApiSlice: TagsApiReducer,
 };
 
