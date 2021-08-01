@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "jest --verbose --runInBand"
+    "test": "jest --verbose --watch"
   },
   "dependencies": {
     "@fontsource/roboto": "^4.5.0",
@@ -48,6 +48,7 @@
     "enzyme": "^3.11.0",
     "eslint": "7.31.0",
     "eslint-config-next": "11.0.1",
+    "identity-obj-proxy": "^3.0.0",
     "jest": "^26.6.3",
     "postcss": "^8.3.6",
     "prisma": "^2.27.0",
@@ -56,7 +57,8 @@
   },
   "jest": {
     "moduleNameMapper": {
-      "\\.(css|scss|sass|less)$": "<rootDir>/style-mock.js"
+      "\\.(css|scss|sass|less)$": "<rootDir>/style-mock.js",
+      ".+\\.(svg|png|jpg)$": "identity-obj-proxy"
     },
     "transform": {
       "^.+\\.(ts|tsx)$": "ts-jest"
