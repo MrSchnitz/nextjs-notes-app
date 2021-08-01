@@ -3,14 +3,13 @@ import { useDispatch } from "react-redux";
 import { NavItem, NavItemContent, NavItemIcon } from "./navitem.styles";
 import { IconButton } from "@material-ui/core";
 import DeleteForeverOutlinedIcon from "@material-ui/icons/DeleteForeverOutlined";
-import {useRouter} from "next/router";
+import { useRouter } from "next/router";
 
-interface NavigationItemProps {
+export interface NavigationItemProps {
   name: string;
   icon: any;
   url?: string;
   onClick?: () => void;
-  onDelete?: () => void;
   isActive?: boolean;
   isOpen?: boolean;
   isTag?: boolean;
@@ -21,35 +20,21 @@ const NavigationItem: React.FC<NavigationItemProps> = ({
   url,
   icon,
   onClick,
-  onDelete,
   isActive,
-    isOpen,
+  isOpen,
   isTag,
 }: NavigationItemProps) => {
-  const handleDelete = (e: any) => {
-    e.stopPropagation();
-    if (onDelete) {
-      onDelete();
-    }
-  };
-
-  const {push} = useRouter();
+  const { push } = useRouter();
 
   return (
     <NavItem
       active={isActive ?? false}
       open={isOpen ?? true}
       onClick={onClick ? onClick : () => push(url!)}
+      isTag={isTag}
     >
-      <NavItemIcon>
-        {icon}
-      </NavItemIcon>
-      <NavItemContent>{name}</NavItemContent>
-      {onDelete && (
-        <IconButton onClick={onDelete}>
-          <DeleteForeverOutlinedIcon />{" "}
-        </IconButton>
-      )}
+      <NavItemIcon>{icon}</NavItemIcon>
+      <NavItemContent isTag={!!isTag}>{name}</NavItemContent>
     </NavItem>
   );
 };
