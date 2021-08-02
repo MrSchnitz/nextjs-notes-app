@@ -1,27 +1,29 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
-import { ChangeActionType } from "../../internals/helpers";
+import React, {useCallback, useEffect, useRef, useState} from "react";
+import {ChangeActionType} from "../../internals/helpers";
 import {
   AddNoteInput,
   AddNoteInputAddCheckPoint,
   AddNoteInputCheckPoints,
   AddNoteInputContent,
   AddNoteInputContentSwitch,
+  AddNoteInputContentWrapper,
+  AddNoteInputErrorMessage,
   AddNoteInputMenu,
   AddNoteInputNameInput,
   AddNoteInputTag,
   AddNoteInputTags,
 } from "./add-note.styles";
-import { Button, Divider, IconButton } from "@material-ui/core";
+import {Button, Divider, IconButton} from "@material-ui/core";
 import AddOutlinedIcon from "@material-ui/icons/AddOutlined";
-import { SubmitHandler, useForm } from "react-hook-form";
+import {SubmitHandler, useForm} from "react-hook-form";
 import ColorPicker from "../ColorPicker/color-picker-component";
 import ListOutlinedIcon from "@material-ui/icons/ListOutlined";
 import TextFieldsOutlinedIcon from "@material-ui/icons/TextFieldsOutlined";
 import LabelOutlinedIcon from "@material-ui/icons/LabelOutlined";
 import NoteCheckItem from "./AddNoteCheckItem/add-note-checkitem.component";
-import { cNoteModel, NoteType, NoteTypeEnum } from "../../models/Note";
-import { CheckPointObject, CheckPointType } from "../../models/CheckPointObject";
-import { TagType } from "../../models/Tag";
+import {cNoteModel, NoteType, NoteTypeEnum} from "../../models/Note";
+import {CheckPointObject, CheckPointType,} from "../../models/CheckPointObject";
+import {TagType} from "../../models/Tag";
 
 export interface AddNoteProps {
   onHandleChange: (action: ChangeActionType) => void;
@@ -121,6 +123,7 @@ const AddNote: React.FC<AddNoteProps> = ({
   return (
     <AddNoteInput
       edit={edit}
+      open={focused}
       onFocus={() => setFocused(true)}
       onClick={onClick}
       style={{ backgroundColor: noteModel.color }}
@@ -144,7 +147,7 @@ const AddNote: React.FC<AddNoteProps> = ({
       />
       {errors.name?.type === "required" && "Name is required"}
       {(focused || (edit !== undefined && edit)) && (
-        <>
+        <AddNoteInputContentWrapper initial={{ opacity: 0, width: "100%" }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
           {noteModel.noteType === NoteTypeEnum.TEXT ? (
             <>
               <AddNoteInputContent
@@ -160,7 +163,7 @@ const AddNote: React.FC<AddNoteProps> = ({
                 placeholder={"Write something"}
                 value={noteModel.content}
               />
-              {errors.content?.type === "required" && "This field is required"}
+              {errors.content?.type === "required" && <AddNoteInputErrorMessage>This field is required</AddNoteInputErrorMessage>}
             </>
           ) : (
             <>
@@ -236,7 +239,7 @@ const AddNote: React.FC<AddNoteProps> = ({
           >
             {edit ? "Update" : "Add"}
           </Button>
-        </>
+        </AddNoteInputContentWrapper>
       )}
     </AddNoteInput>
   );

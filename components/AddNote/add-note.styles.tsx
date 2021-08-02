@@ -1,11 +1,15 @@
 import styled from "styled-components";
-import {device} from "../../resources/styles/utils/media-query-utils";
+import { device } from "../../resources/styles/utils/media-query-utils";
+import { motion } from "framer-motion";
 
 interface AddNoteInputInterface {
+  open: boolean;
   edit?: boolean;
 }
 
 export const AddNoteInput = styled.div<AddNoteInputInterface>`
+  height: ${(props) =>
+    props.edit ? "max-content" : props.open ? "233px" : "45px"};
   width: ${(props) => (props.edit ? "100%" : "500px")};
   padding: 0.6rem;
   border-radius: 0.5rem;
@@ -15,8 +19,10 @@ export const AddNoteInput = styled.div<AddNoteInputInterface>`
   align-items: center;
   background-color: #fff;
 
+  overflow: hidden;
+
   transition: 0.5s all;
-  
+
   @media only screen and ${device.mobileL} {
     width: 100%;
   }
@@ -36,6 +42,17 @@ export const AddNoteInputNameInput = styled.input`
   &:focus {
     border-bottom: 1px solid gray;
   }
+`;
+
+export const AddNoteInputErrorMessage = styled.span`
+  color: red;
+`;
+
+export const AddNoteInputContentWrapper = styled(motion.div)`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 
 export const AddNoteInputContent = styled.textarea`
@@ -60,7 +77,7 @@ export const AddNoteInputTags = styled.div`
   display: flex;
   overflow-x: auto;
   padding: 0.3rem 0;
-  
+
   &::-webkit-scrollbar {
     height: 5px;
   }
@@ -93,7 +110,7 @@ export const AddNoteInputCheckPoints = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  
+
   max-height: 300px;
   overflow-y: auto;
 `;

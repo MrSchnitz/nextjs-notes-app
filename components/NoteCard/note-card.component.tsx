@@ -16,6 +16,20 @@ import DeleteOutlineOutlinedIcon from "@material-ui/icons/DeleteOutlineOutlined"
 import LabelOutlinedIcon from "@material-ui/icons/LabelOutlined";
 import AddNote from "../AddNote/add-note.component";
 
+const transition = {
+  type: "spring",
+  stiffness: 100,
+};
+
+const noteVariants = {
+  exit: { y: "50%", opacity: 0, transition },
+  enter: {
+    y: "0%",
+    opacity: 1,
+    transition,
+  },
+};
+
 export interface NoteCardProps {
   note: NoteType;
   tags: TagType[];
@@ -130,6 +144,10 @@ const NoteCard: React.FC<NoteCardProps> = ({
           }
         }}
         color={note.color}
+        variants={noteVariants}
+        initial="exit"
+        animate="enter"
+        exit="exit"
       >
         {renderHeader}
         {renderContent}

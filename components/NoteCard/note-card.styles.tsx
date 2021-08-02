@@ -1,11 +1,12 @@
 import styled from "styled-components";
+import {motion} from "framer-motion";
 
 interface NoteCardComponentInterface {
   color?: string;
   edit?: boolean;
 }
 
-export const NoteCardComponent = styled.div<NoteCardComponentInterface>`
+export const NoteCardComponent = styled(motion.div)<NoteCardComponentInterface>`
   border-radius: 1rem;
   border: 1px solid #d6d6d6;
   padding: 0.5rem;

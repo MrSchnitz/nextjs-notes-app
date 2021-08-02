@@ -57,12 +57,13 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
   const router = useRouter();
 
   const tagsLoading: boolean = useSelector(selectTagsLoading);
-
   const tags: TagType[] = useSelector(selectTags);
-
   const newTag: TagType = useSelector(selectNewTag);
-
   const searchNotesQuery = useSelector(selectSearchNotesQuery);
+
+  const handleOnNavClick = () => {
+    dispatch(NotesAPI.reset());
+  };
 
   useEffect(() => {
     dispatch(TagsAPI.fetchTags());
@@ -85,14 +86,15 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
   ) : (
     tags &&
     tags.map((tag: TagType, index: number) => (
-      <Link href={`${PageLinks.tagsPage}/${tag.id}`} key={tag.id}>
-        <NavigationItem
-          name={tag.name}
-          icon={<LabelOutlinedIcon />}
-          isTag={true}
-          isActive={router.query.tagId === tag.id}
-        />
-      </Link>
+      <NavigationItem
+        key={tag.id}
+        name={tag.name}
+        icon={<LabelOutlinedIcon />}
+        url={`${PageLinks.tagsPage}/${tag.id}`}
+        isTag={true}
+        isActive={router.query.tagId === tag.id}
+        onClick={handleOnNavClick}
+      />
     ))
   );
 
@@ -109,6 +111,7 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
             !router.pathname.includes("all")
           }
           isOpen={openNav}
+          onClick={handleOnNavClick}
         />
         {renderTagLinks}
         <TagsModal
@@ -173,24 +176,28 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
     </NavUser>
   );
 
+  const renderSearchField = session && (
+    <NavSearchField
+      onSearch={(query: string) =>
+        dispatch(
+          NotesAPI.searchNotes({
+            query: query,
+            tagId: router.query.tagId
+              ? (router.query.tagId as string)
+              : undefined,
+          })
+        )
+      }
+      value={searchNotesQuery}
+    />
+  );
+
   return (
     <>
       <NavTop>
         {renderMenuIcon}
         {renderLogo}
-        <NavSearchField
-          onSearch={(query: string) =>
-            dispatch(
-              NotesAPI.searchNotes({
-                query: query,
-                tagId: router.query.tagId
-                  ? (router.query.tagId as string)
-                  : undefined,
-              })
-            )
-          }
-          value={searchNotesQuery}
-        />
+        {renderSearchField}
         {renderUserBar}
         {renderSignIn}
       </NavTop>
