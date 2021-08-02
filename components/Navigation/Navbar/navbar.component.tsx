@@ -1,25 +1,43 @@
-import React, {ReactNode, useEffect, useState} from "react";
-import {NavContent, NavLeft, NavLogo, NavRight, NavTop, NavUser, NavUserImage,} from "./navbar.styles";
-import {Button, IconButton, useMediaQuery,} from "@material-ui/core";
+import React, { ReactNode, useEffect, useState } from "react";
+import {
+  NavContent,
+  NavLeft,
+  NavLogo,
+  NavRight,
+  NavTop,
+  NavUser,
+  NavUserImage,
+} from "./navbar.styles";
+import { Button, IconButton, useMediaQuery } from "@material-ui/core";
 import ExitToAppOutlinedIcon from "@material-ui/icons/ExitToAppOutlined";
 import NavigationItem from "../NavItem/navitem.component";
 import EmojiObjectsOutlinedIcon from "@material-ui/icons/EmojiObjectsOutlined";
 import KeepLogo from "../../../resources/assets/keep.svg";
 import MenuIcon from "@material-ui/icons/Menu";
 import PersonOutlineOutlinedIcon from "@material-ui/icons/PersonOutlineOutlined";
-import {useRouter} from "next/router";
-import {signIn, signOut, useSession} from "next-auth/client";
-import {selectNewTag, selectTags, selectTagsLoading, TagsAPI,} from "../../../API/TagsAPI/TagsAPI";
-import {useDispatch, useSelector} from "react-redux";
-import {TagType} from "../../../models/Tag";
+import { useRouter } from "next/router";
+import { signIn, signOut, useSession } from "next-auth/client";
+import {
+  selectNewTag,
+  selectTags,
+  selectTagsLoading,
+  TagsAPI,
+} from "../../../API/TagsAPI/TagsAPI";
+import { useDispatch, useSelector } from "react-redux";
+import { TagType } from "../../../models/Tag";
 import TagsModal from "../../TagsModal/tags-modal.component";
 import Link from "next/link";
 import LabelOutlinedIcon from "@material-ui/icons/LabelOutlined";
-import {ChangeActionType} from "../../../utils/helpers";
-import {Loading} from "../../Loading/loading.component";
+import { ChangeActionType } from "../../../utils/helpers";
+import { Loading } from "../../Loading/loading.component";
 import useRouterRefresh from "../../../hooks/useRouterRefresh";
-import {PageLinks} from "../../../utils/Links";
-import {device} from "../../../resources/styles/utils/media-query-utils";
+import { PageLinks } from "../../../utils/Links";
+import { device } from "../../../resources/styles/utils/media-query-utils";
+import NavSearchField from "../NavSearchField/nav-search-field.component";
+import {
+  NotesAPI,
+  selectSearchNotesQuery,
+} from "../../../API/NotesPageAPI/NotesAPI";
 
 export interface NavbarProps {
   children: ReactNode;
@@ -43,6 +61,8 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
   const tags: TagType[] = useSelector(selectTags);
 
   const newTag: TagType = useSelector(selectNewTag);
+
+  const searchNotesQuery = useSelector(selectSearchNotesQuery);
 
   useEffect(() => {
     dispatch(TagsAPI.fetchTags());
@@ -158,6 +178,19 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
       <NavTop>
         {renderMenuIcon}
         {renderLogo}
+        <NavSearchField
+          onSearch={(query: string) =>
+            dispatch(
+              NotesAPI.searchNotes({
+                query: query,
+                tagId: router.query.tagId
+                  ? (router.query.tagId as string)
+                  : undefined,
+              })
+            )
+          }
+          value={searchNotesQuery}
+        />
         {renderUserBar}
         {renderSignIn}
       </NavTop>
