@@ -1,4 +1,3 @@
-
 // Imported fonts
 @font-face {
   font-family: "Dosis";
@@ -11,7 +10,6 @@
   src: url("../../fonts/Dosis.ttf");
 }
 
-
 *,
 *::before,
 *::after {
@@ -20,24 +18,22 @@
   box-sizing: border-box;
 }
 
-
 html {
-  //font-size: 62.5%;
+  font-size: 100%;
   overflow: hidden;
 }
 
 html,
 body {
-  font-family: 'Dosis', -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-  Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif !important;
+  font-family: "Dosis", -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
+    Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif !important;
 }
-
 
 a {
   color: inherit;
   text-decoration: none;
 }
 
-* {
-  box-sizing: border-box;
+.cursor-pointer {
+  cursor: pointer;
 }

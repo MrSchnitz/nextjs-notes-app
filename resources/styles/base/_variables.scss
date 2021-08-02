@@ -1,34 +1,24 @@
-
-// Application layout variables
-$container-height-with-nav: calc(100vh - 100px);
-$container-height-with-nav-smaller: calc(100vh - 80px);
-
 // Application colors
 $app-primary: #fff;
-$app-secondary: #B83F1C;
-$app-tertiary: #F5DEB3;
+$app-secondary: #f5b500;
+$app-tertiary: #f5d783;
 $app-nav: #fff;
-$app-components-primary: #61dafb;
-$app-components-secondary: #FFE4C4;
-
 
 $app-font-primary: rgb(65, 61, 61);
 
 $app-colors: () !default;
 $app-colors: map-merge(
-                (
-                        "app-primary": $app-primary,
-                        "app-secondary": $app-secondary,
-                ),
-                $app-colors
+  (
+    "app-primary": $app-primary,
+    "app-secondary": $app-secondary,
+  ),
+  $app-colors
 );
 
 $theme-colors: (
   "app-primary": $app-primary,
   "app-secondary": $app-secondary,
   "app-tertiary": $app-tertiary,
-  "app-components-primary": $app-components-primary,
-  "app-components-secondary": $app-components-secondary,
 );
 
 .icon-color {
