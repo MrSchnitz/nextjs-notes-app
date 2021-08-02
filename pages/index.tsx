@@ -2,7 +2,7 @@ import Head from "next/head";
 import { getSession } from "next-auth/client";
 import { GetServerSideProps } from "next";
 import { Session } from "next-auth";
-import { PageLinks } from "../utils/Links";
+import { PageLinks } from "../internals/Links";
 
 export default function Home() {
   return (

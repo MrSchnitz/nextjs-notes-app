@@ -3,7 +3,7 @@ import {Dialog, DialogContent, DialogTitle, Grid, IconButton, TextField,} from "
 import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
 import CheckOutlinedIcon from "@material-ui/icons/CheckOutlined";
 import {cTagModel, TagType} from "../../models/Tag";
-import {ChangeActionType} from "../../utils/helpers";
+import {ChangeActionType} from "../../internals/helpers";
 import NavigationItem from "../Navigation/NavItem/navitem.component";
 import {Loading} from "../Loading/loading.component";
 import TagModalItem from "./TagModalItem/tag-modal-item.component";

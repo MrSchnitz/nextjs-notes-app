@@ -3,7 +3,7 @@ import { NoteObject, NoteType, NoteTypeEnum } from "../../models/Note";
 import { CheckPointType } from "../../models/CheckPoint";
 import NoteCardCheckItem from "./NoteCardCheckItem/note-card-checkitem.component";
 import { TagType } from "../../models/Tag";
-import { ChangeActionType } from "../../utils/helpers";
+import { ChangeActionType } from "../../internals/helpers";
 import { Dialog, Divider, IconButton } from "@material-ui/core";
 import {
   NoteCardComponent,

@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { ChangeActionType } from "../../utils/helpers";
+import { ChangeActionType } from "../../internals/helpers";
 import {
   AddNoteInput,
   AddNoteInputAddCheckPoint,
@@ -135,7 +135,7 @@ const AddNote: React.FC<AddNoteProps> = ({
       }
     >
       <AddNoteInputNameInput
-        placeholder={focused ? "Name" : "Create new note"}
+        placeholder={focused ? "Name" : "Create new note..."}
         {...register(cNoteModel.name, { required: true, maxLength: 20 })}
         onChange={(event) =>
           onHandleChange({ attr: cNoteModel.name, value: event.target.value })

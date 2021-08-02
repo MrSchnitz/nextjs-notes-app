@@ -12,15 +12,15 @@ import {
   selectSearchNotes,
   selectSearchNotesLoading,
 } from "../../API/NotesPageAPI/NotesAPI";
-import {get} from "../../utils/restAPI";
+import {get} from "../../internals/RestAPI";
 import {NoteType} from "../../models/Note";
 import React, {useEffect, useState} from "react";
 import NoteCard from "../../components/NoteCard/note-card.component";
 import {TagType} from "../../models/Tag";
 import {selectTags} from "../../API/TagsAPI/TagsAPI";
-import {ChangeActionType} from "../../utils/helpers";
+import {ChangeActionType} from "../../internals/helpers";
 import {useRouter} from "next/router";
-import {ApiLinks, PageLinks} from "../../utils/Links";
+import {ApiLinks, PageLinks} from "../../internals/Links";
 import {CheckPointType} from "../../models/CheckPoint";
 import {Loading} from "../../components/Loading/loading.component";
 

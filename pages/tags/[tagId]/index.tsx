@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import NoteCard from "../../../components/NoteCard/note-card.component";
 import { GetServerSideProps } from "next";
 import { getSession } from "next-auth/client";
-import { get } from "../../../utils/restAPI";
+import { get } from "../../../internals/RestAPI";
 import useRouterRefresh from "../../../hooks/useRouterRefresh";
 import {
   NotesAPI,
@@ -18,8 +18,8 @@ import {
 } from "../../../API/NotesPageAPI/NotesAPI";
 import { TagType } from "../../../models/Tag";
 import { selectTags } from "../../../API/TagsAPI/TagsAPI";
-import { ApiLinks, PageLinks } from "../../../utils/Links";
-import { ChangeActionType } from "../../../utils/helpers";
+import { ApiLinks, PageLinks } from "../../../internals/Links";
+import { ChangeActionType } from "../../../internals/helpers";
 import { CheckPointType } from "../../../models/CheckPoint";
 import { useRouter } from "next/router";
 import { Loading } from "../../../components/Loading/loading.component";

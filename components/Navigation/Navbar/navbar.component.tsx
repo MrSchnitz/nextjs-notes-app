@@ -28,10 +28,10 @@ import { TagType } from "../../../models/Tag";
 import TagsModal from "../../TagsModal/tags-modal.component";
 import Link from "next/link";
 import LabelOutlinedIcon from "@material-ui/icons/LabelOutlined";
-import { ChangeActionType } from "../../../utils/helpers";
+import { ChangeActionType } from "../../../internals/helpers";
 import { Loading } from "../../Loading/loading.component";
 import useRouterRefresh from "../../../hooks/useRouterRefresh";
-import { PageLinks } from "../../../utils/Links";
+import { PageLinks } from "../../../internals/Links";
 import { device } from "../../../resources/styles/utils/media-query-utils";
 import NavSearchField from "../NavSearchField/nav-search-field.component";
 import {

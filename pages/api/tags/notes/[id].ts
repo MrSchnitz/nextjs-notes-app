@@ -1,7 +1,7 @@
 import {Note} from "@prisma/client";
 import {NextApiRequest, NextApiResponse} from "next";
 import {getSession} from "next-auth/client";
-import {cRestMethods} from "../../../../utils/restAPI";
+import {cRestMethods} from "../../../../internals/RestAPI";
 import {getTagNotes} from "../../../../repositories/TagRepository";
 
 type Data = {
