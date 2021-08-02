@@ -1,9 +1,13 @@
-import {GetServerSideProps} from "next";
-import {Session} from "next-auth";
-import {getSession} from "next-auth/client";
+import { GetServerSideProps } from "next";
+import { Session } from "next-auth";
+import { getSession } from "next-auth/client";
 import AddNote from "../../components/AddNote/add-note.component";
-import {NotesPageAddNote, NotesPageNoNotes, NotesPageNotes,} from "./notes-page.styles";
-import {useDispatch, useSelector} from "react-redux";
+import {
+  NotesPageAddNote,
+  NotesPageNoNotes,
+  NotesPageNotes,
+} from "./notes-page.styles";
+import { useDispatch, useSelector } from "react-redux";
 import {
   NotesAPI,
   selectCurrentRoute,
@@ -12,17 +16,18 @@ import {
   selectSearchNotes,
   selectSearchNotesLoading,
 } from "../../API/NotesPageAPI/NotesAPI";
-import {get} from "../../internals/RestAPI";
-import {NoteType} from "../../models/Note";
-import React, {useEffect, useState} from "react";
+import { get } from "../../internals/RestAPI";
+import { NoteType } from "../../models/Note";
+import React, { useEffect, useState } from "react";
 import NoteCard from "../../components/NoteCard/note-card.component";
-import {TagType} from "../../models/Tag";
-import {selectTags} from "../../API/TagsAPI/TagsAPI";
-import {ChangeActionType} from "../../internals/helpers";
-import {useRouter} from "next/router";
-import {ApiLinks, PageLinks} from "../../internals/Links";
-import {CheckPointType} from "../../models/CheckPointObject";
-import {Loading} from "../../components/Loading/loading.component";
+import { TagType } from "../../models/Tag";
+import { selectTags } from "../../API/TagsAPI/TagsAPI";
+import { ChangeActionType } from "../../internals/helpers";
+import { useRouter } from "next/router";
+import { ApiLinks, PageLinks } from "../../internals/Links";
+import { CheckPointType } from "../../models/CheckPointObject";
+import { Loading } from "../../components/Loading/loading.component";
+import Head from "next/head";
 
 export interface NotesPageProps {
   session: Session | null;
@@ -55,7 +60,6 @@ export default function NotesPage({ session, userNotes }: NotesPageProps) {
     }
   }, [userNotes, searchNotes]);
 
-
   const handleOnAddNote = (update: boolean) => {
     dispatch(NotesAPI.addNote(update));
   };
@@ -75,47 +79,54 @@ export default function NotesPage({ session, userNotes }: NotesPageProps) {
     dispatch(NotesAPI.checkNoteAndSubmit({ note: note, checkitem: checkitem }));
   };
 
+  const renderAddNoteInput = (
+    <NotesPageAddNote>
+      <AddNote
+        tags={tags}
+        onHandleChange={(action) =>
+          handleChangeNote({ ...action, edit: false })
+        }
+        noteModel={newNote}
+        onAddNote={() => handleOnAddNote(false)}
+      />
+    </NotesPageAddNote>
+  );
+
+  const renderNoteCards = searchNotesLoading ? (
+    <Loading size={30} />
+  ) : notesToRender && notesToRender.length > 0 ? (
+    <NotesPageNotes>
+      {notesToRender.map((note: NoteType, k: number) => (
+        <NoteCard
+          key={note.id}
+          note={note}
+          tags={tags}
+          editNote={editNote}
+          onHandleChange={(action) =>
+            handleChangeNote({ ...action, edit: true })
+          }
+          onAddNote={() => handleOnAddNote(true)}
+          onClick={() => dispatch(NotesAPI.setNote({ note: note, edit: true }))}
+          onDeleteNote={() => handleOnDeleteNote(note)}
+          onCheckItemClick={(checkitem) =>
+            handleClickNoteCheckItem(note, checkitem)
+          }
+        />
+      ))}
+    </NotesPageNotes>
+  ) : (
+    <NotesPageNoNotes>
+      <h1>Sorry, no notes are available...</h1>
+    </NotesPageNoNotes>
+  );
+
   return (
     <>
-      <NotesPageAddNote>
-        <AddNote
-          tags={tags}
-          onHandleChange={(action) =>
-            handleChangeNote({ ...action, edit: false })
-          }
-          noteModel={newNote}
-          onAddNote={() => handleOnAddNote(false)}
-        />
-      </NotesPageAddNote>
-      {searchNotesLoading ? (
-        <Loading size={30} />
-      ) : notesToRender && notesToRender.length > 0 ? (
-        <NotesPageNotes>
-          {notesToRender.map((note: NoteType, k: number) => (
-            <NoteCard
-              key={note.id}
-              note={note}
-              tags={tags}
-              editNote={editNote}
-              onHandleChange={(action) =>
-                handleChangeNote({ ...action, edit: true })
-              }
-              onAddNote={() => handleOnAddNote(true)}
-              onClick={() =>
-                dispatch(NotesAPI.setNote({ note: note, edit: true }))
-              }
-              onDeleteNote={() => handleOnDeleteNote(note)}
-              onCheckItemClick={(checkitem) =>
-                handleClickNoteCheckItem(note, checkitem)
-              }
-            />
-          ))}
-        </NotesPageNotes>
-      ) : (
-        <NotesPageNoNotes>
-          <h1>Sorry, no notes are available...</h1>
-        </NotesPageNoNotes>
-      )}
+      <Head>
+        <title>My notes</title>
+      </Head>
+      {renderAddNoteInput}
+      {renderNoteCards}
     </>
   );
 }
