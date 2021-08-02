@@ -1,5 +1,5 @@
 import React from "react";
-import { cCheckPoint, CheckPointType } from "../../../models/CheckPoint";
+import { cCheckPoint, CheckPointType } from "../../../models/CheckPointObject";
 import { Checkbox } from "@material-ui/core";
 import {
   NoteCardCheckItemCheck,

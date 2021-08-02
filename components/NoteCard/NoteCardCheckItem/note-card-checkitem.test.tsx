@@ -1,6 +1,6 @@
 import React from "react";
 import { shallow, ShallowWrapper } from "enzyme";
-import { CheckPoint } from "../../../models/CheckPoint";
+import { CheckPointObject } from "../../../models/CheckPointObject";
 import { Checkbox, IconButton, TextField } from "@material-ui/core";
 import NoteCardCheckItem, {
   NoteCardCheckItemProps,
@@ -10,7 +10,7 @@ import { NoteCardCheckItemText } from "./note-card-checkitem.styles";
 describe("NoteCardCheckItem component", () => {
   let wrapper: ShallowWrapper;
   let mockOnChecked: any;
-  const checkPoint = CheckPoint;
+  const checkPoint = CheckPointObject;
   checkPoint.checked = true;
   checkPoint.text = "text";
 

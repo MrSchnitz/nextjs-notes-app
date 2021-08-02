@@ -3,7 +3,7 @@ import { all } from "redux-saga/effects";
 import {
   NotesApiInterface,
   NotesApiReducer,
-  NotesPageApiSaga,
+  NotesApiSaga,
 } from "../API/NotesPageAPI/NotesAPI";
 import { TagsAPIInterface, TagsApiReducer, TagsApiSaga } from "../API/TagsAPI/TagsAPI";
 
@@ -25,5 +25,5 @@ export const mainReducers = {
  * IMPORT EVERY OTHER NOT SOMEWHERE ELSE INJECTED SAGA
  */
 export default function* rootSaga() {
-  yield all([NotesPageApiSaga(), TagsApiSaga()]);
+  yield all([NotesApiSaga(), TagsApiSaga()]);
 }

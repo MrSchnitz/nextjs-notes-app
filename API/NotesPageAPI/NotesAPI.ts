@@ -1,37 +1,49 @@
 import { createSelector, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { all, call, put, select, takeLatest } from "redux-saga/effects";
+import { all, call, delay, put, select, takeLatest } from "redux-saga/effects";
 import { RootState } from "../../store/RootState";
-import { ChangeActionType } from "../../utils/helpers";
+import { ChangeActionType } from "../../internals/helpers";
 import { cNoteModel, NoteObject, NoteType } from "../../models/Note";
-import { del, post, put as update } from "../../utils/restAPI";
+import { del, get, post, put as update } from "../../internals/RestAPI";
 import { toast } from "react-toastify";
 import { TagType } from "../../models/Tag";
-import { CheckPoint, CheckPointType } from "../../models/CheckPoint";
-import { ApiLinks, PageLinks } from "../../utils/Links";
+import {
+  CheckPointObject,
+  CheckPointType,
+} from "../../models/CheckPointObject";
+import { ApiLinks, PageLinks } from "../../internals/Links";
 
 /**
  * NotesPage API State interface
  */
-export interface NotesPageApiInterface {
+export interface NotesApiInterface {
   newNote: NoteType;
   editNote: NoteType | null;
-  notes: NoteType[];
+  searchNotes: NoteType[];
+  searchNoteQuery: string;
+  searchNotesLoading: boolean;
   currentRoute: string;
 }
 
-type SetNoteType = {
+export type SetNoteType = {
   note: NoteType;
   edit?: boolean;
 };
 
-const NoteInit: NoteType = { ...NoteObject };
-NoteInit.checkPoints = [CheckPoint];
+export type SearchNoteQuery = {
+  query: string;
+  tagId?: string;
+};
 
-const getInitialState = (): NotesPageApiInterface => {
+const NoteInit: NoteType = { ...NoteObject };
+NoteInit.checkPoints = [CheckPointObject];
+
+export const getInitialState = (): NotesApiInterface => {
   return {
     newNote: NoteInit,
     editNote: null,
-    notes: [],
+    searchNotes: [],
+    searchNoteQuery: "",
+    searchNotesLoading: false,
     currentRoute: PageLinks.notesPage,
   };
 };
@@ -39,22 +51,23 @@ const getInitialState = (): NotesPageApiInterface => {
 /**
  * NotesPage API
  */
-class NotesPageApi {
-  private static instance: NotesPageApi;
+class NotesApi {
+  private static instance: NotesApi;
 
   private constructor() {
     this.handleAddNote = this.handleAddNote.bind(this);
     this.handleDeleteNote = this.handleDeleteNote.bind(this);
-    this.handleChangeNote = this.handleChangeNote.bind(this);
+    this.handleChange = this.handleChange.bind(this);
     this.handleCheckNoteAndSubmit = this.handleCheckNoteAndSubmit.bind(this);
+    this.handleOnSearchNotes = this.handleOnSearchNotes.bind(this);
     this.saga = this.saga.bind(this);
   }
 
-  public static getInstance(): NotesPageApi {
-    if (NotesPageApi.instance) {
+  public static getInstance(): NotesApi {
+    if (NotesApi.instance) {
       return this.instance;
     }
-    this.instance = new NotesPageApi();
+    this.instance = new NotesApi();
     return this.instance;
   }
 
@@ -77,7 +90,7 @@ class NotesPageApi {
               checked: ch.checked,
             })
           );
-          const editedNote = Object.assign({}, action.payload.note);
+          const editedNote = { ...action.payload.note };
           editedNote.checkPoints = checkPoints;
 
           state.editNote = editedNote;
@@ -85,8 +98,9 @@ class NotesPageApi {
           state.newNote = action.payload.note;
         }
       },
-      setNotes(state, action: PayloadAction<NoteType[]>) {
-        state.notes = action.payload;
+      setSearchNotes(state, action: PayloadAction<NoteType[]>) {
+        state.searchNotes = action.payload;
+        state.searchNotesLoading = false;
       },
       changeCurrentRoute(state, action: PayloadAction<string>) {
         state.currentRoute = action.payload;
@@ -97,13 +111,17 @@ class NotesPageApi {
         state,
         action: PayloadAction<{ note: NoteType; checkitem: CheckPointType }>
       ) {},
+      searchNotes(state, action: PayloadAction<SearchNoteQuery>) {
+        state.searchNotesLoading = true;
+        state.searchNoteQuery = action.payload.query;
+      },
     },
   });
 
   /*
    * SAGAS
    */
-  public *handleChangeNote(
+  public *handleChange(
     action: PayloadAction<ChangeActionType>
   ): Generator<any> {
     const { attr, value, edit } = action.payload;
@@ -123,7 +141,7 @@ class NotesPageApi {
     }
 
     if (attr === cNoteModel.checkPoints) {
-      if (value === CheckPoint) {
+      if (value === CheckPointObject) {
         const lastCheckPointId = note.checkPoints![note.checkPoints!.length - 1]
           .id;
 
@@ -141,7 +159,7 @@ class NotesPageApi {
       } else {
         if (typeof value === "number") {
           if (note.checkPoints?.length === 1) {
-            note.checkPoints = [CheckPoint];
+            note.checkPoints = [CheckPointObject];
           } else {
             note.checkPoints = note.checkPoints?.filter(
               (f: any) => f.id !== value
@@ -209,8 +227,8 @@ class NotesPageApi {
 
     try {
       const res: any = yield call(del, `/api/notes/${action.payload.id}`);
-      console.log(res);
       toast.success("Note deleted.");
+      yield put(this.slice.actions.reset());
     } catch (e) {
       console.log(e);
       toast.error("Note was not deleted. Something went wrong...");
@@ -229,7 +247,7 @@ class NotesPageApi {
 
     const { note, checkitem } = action.payload;
 
-    const noteCopy: NoteType = Object.assign({}, note);
+    const noteCopy: NoteType = { ...note };
 
     const editedCheckitems: CheckPointType[] = note.checkPoints!.map(
       (ch: CheckPointType) => (ch.id === checkitem.id ? checkitem : ch)
@@ -250,6 +268,35 @@ class NotesPageApi {
     yield put(this.slice.actions.changeCurrentRoute(PageLinks.notesPage));
   }
 
+  public *handleOnSearchNotes(
+    action: PayloadAction<SearchNoteQuery>
+  ): Generator<any> {
+    const { query, tagId } = action.payload;
+
+    yield delay(500);
+
+    if (action.payload.query.length === 0) {
+      yield put(this.slice.actions.setSearchNotes([]));
+      return;
+    }
+
+    try {
+      const response: NoteType[] | any = yield call(
+        get,
+        `${ApiLinks.notes}/search?query=${query}${
+          tagId ? `&tagId=${tagId}` : ""
+        }`
+      );
+
+      yield delay(300);
+
+      yield put(this.slice.actions.setSearchNotes(response));
+    } catch (e) {
+      console.log(e);
+      toast.error(`Sorry, something went wrong...`);
+    }
+  }
+
   /*
    * SAGA - MAIN
    */
@@ -259,15 +306,17 @@ class NotesPageApi {
       deleteNote,
       handleChange,
       checkNoteAndSubmit,
+      searchNotes,
     } = this.slice.actions;
     yield all([
+      yield takeLatest([handleChange.type], this.handleChange),
       yield takeLatest([addNote.type], this.handleAddNote),
       yield takeLatest([deleteNote.type], this.handleDeleteNote),
-      yield takeLatest([handleChange.type], this.handleChangeNote),
       yield takeLatest(
         [checkNoteAndSubmit.type],
         this.handleCheckNoteAndSubmit
       ),
+      yield takeLatest([searchNotes.type], this.handleOnSearchNotes),
     ]);
   }
 
@@ -283,6 +332,21 @@ class NotesPageApi {
     (notesPageApiState) => notesPageApiState.newNote
   );
 
+  public selectSearchNotes = createSelector(
+    [this.selectDomain],
+    (notesPageApiState) => notesPageApiState.searchNotes
+  );
+
+  public selectSearchNotesQuery = createSelector(
+    [this.selectDomain],
+    (notesPageApiState) => notesPageApiState.searchNoteQuery
+  );
+
+  public selectSearchNotesLoading = createSelector(
+    [this.selectDomain],
+    (notesPageApiState) => notesPageApiState.searchNotesLoading
+  );
+
   public selectEditNote = createSelector(
     [this.selectDomain],
     (notesPageApiState) => notesPageApiState.editNote
@@ -295,15 +359,23 @@ class NotesPageApi {
 }
 
 export const {
-  actions: NotesPageAPI,
-  reducer: NotesPageApiReducer,
-  name: NotesPageApiName,
-} = NotesPageApi.getInstance().slice;
+  actions: NotesAPI,
+  reducer: NotesApiReducer,
+  name: NotesApiName,
+} = NotesApi.getInstance().slice;
 
-export const { saga: NotesPageApiSaga } = NotesPageApi.getInstance();
+export const { saga: NotesApiSaga } = NotesApi.getInstance();
 
 export const {
   selectNote,
+  selectSearchNotes,
+  selectSearchNotesQuery,
+  selectSearchNotesLoading,
   selectEditNote,
   selectCurrentRoute,
-} = NotesPageApi.getInstance();
+  handleAddNote,
+  handleChange,
+  handleCheckNoteAndSubmit,
+  handleDeleteNote,
+  handleOnSearchNotes,
+} = NotesApi.getInstance();

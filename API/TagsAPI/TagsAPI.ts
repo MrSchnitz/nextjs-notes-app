@@ -1,12 +1,11 @@
 import { createSelector, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { all, call, put, select, takeLatest } from "redux-saga/effects";
 import { TagObject, TagType } from "../../models/Tag";
-import { ChangeActionType } from "../../utils/helpers";
+import { ChangeActionType } from "../../internals/helpers";
 import { Tag } from "@prisma/client";
-import { del, post, put as update } from "../../utils/restAPI";
+import { del, post, put as update } from "../../internals/RestAPI";
 import { toast } from "react-toastify";
 import { RootState } from "../../store/RootState";
-import { NoteType } from "../../models/Note";
 
 /**
  * TagsAPI State interface
@@ -17,7 +16,7 @@ export interface TagsAPIInterface {
   tagsLoading: boolean;
 }
 
-const getInitialState = (): TagsAPIInterface => {
+export const getInitialState = (): TagsAPIInterface => {
   return {
     newTag: TagObject,
     tags: [],
@@ -77,7 +76,7 @@ class TagsApi {
   /*
    * SAGAS
    */
-  private *handleFetchTags(): Generator<any> {
+  public *handleFetchTags(): Generator<any> {
     const request = () =>
       fetch(`/api/tags`, {
         method: "GET",
@@ -92,16 +91,20 @@ class TagsApi {
     }
   }
 
-  private *handleAddTag(): Generator<any> {
-    toast.info(`Adding tag...`);
+  public *handleAddTag(): Generator<any> {
+    const tag: TagType | any = yield select(selectNewTag);
 
-    const tag: any = yield select(
-      (state: RootState) => state.tagsApiSlice?.newTag
-    );
+    if (tag.name.length === 0) {
+      toast.warning(`You need to set the tag name.`);
+      return;
+    }
+
+    toast.info(`Adding tag...`);
 
     const tagDTO: Tag = {
       id: "",
       name: tag.name,
+      createdAt: Date.now() as any,
       userId: "",
     };
 
@@ -117,7 +120,12 @@ class TagsApi {
     }
   }
 
-  private *handleUpdateTag(action: PayloadAction<TagType>): Generator<any> {
+  public *handleUpdateTag(action: PayloadAction<TagType>): Generator<any> {
+    if (action.payload.name.length === 0) {
+      toast.warning(`You need to set the tag name.`);
+      return;
+    }
+
     toast.info(`Updating tag...`);
     try {
       const response = yield call(update, "/api/tags", action.payload);
@@ -131,7 +139,7 @@ class TagsApi {
     }
   }
 
-  private *handleDeleteTag(action: PayloadAction<TagType>): Generator<any> {
+  public *handleDeleteTag(action: PayloadAction<TagType>): Generator<any> {
     toast.info(`Deleting tag...`);
 
     try {
@@ -185,7 +193,7 @@ export default TagsApi.getInstance();
 export const {
   actions: TagsAPI,
   reducer: TagsApiReducer,
-  name,
+  name: TagsApiName,
 } = TagsApi.getInstance().slice;
 
 export const {
@@ -193,4 +201,8 @@ export const {
   selectTags,
   selectTagsLoading,
   saga: TagsApiSaga,
+  handleUpdateTag,
+  handleDeleteTag,
+  handleAddTag,
+  handleFetchTags,
 } = TagsApi.getInstance();

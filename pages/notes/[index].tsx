@@ -21,7 +21,7 @@ import {selectTags} from "../../API/TagsAPI/TagsAPI";
 import {ChangeActionType} from "../../internals/helpers";
 import {useRouter} from "next/router";
 import {ApiLinks, PageLinks} from "../../internals/Links";
-import {CheckPointType} from "../../models/CheckPoint";
+import {CheckPointType} from "../../models/CheckPointObject";
 import {Loading} from "../../components/Loading/loading.component";
 
 export interface NotesPageProps {

@@ -4,7 +4,7 @@ import AddNote, {AddNoteProps} from "./add-note.component";
 import {NoteObject, NoteTypeEnum} from "../../models/Note";
 import {TagObject} from "../../models/Tag";
 import {AddNoteInputCheckPoints, AddNoteInputContent, AddNoteInputNameInput, AddNoteInputTag,} from "./add-note.styles";
-import {CheckPoint} from "../../models/CheckPoint";
+import {CheckPointObject} from "../../models/CheckPointObject";
 import NoteCheckItem from "./AddNoteCheckItem/add-note-checkitem.component";
 import {Divider} from "@material-ui/core";
 
@@ -68,9 +68,9 @@ describe("AddNote component", () => {
     const noteModel = NoteObject;
     noteModel.noteType = NoteTypeEnum.CHECK;
 
-    const checkedCheckpoint = CheckPoint;
+    const checkedCheckpoint = CheckPointObject;
     checkedCheckpoint.checked = true;
-    noteModel.checkPoints = [CheckPoint, checkedCheckpoint];
+    noteModel.checkPoints = [CheckPointObject, checkedCheckpoint];
 
     const mockProps: AddNoteProps = {
       edit: true,
@@ -87,7 +87,7 @@ describe("AddNote component", () => {
 
     const noteCheckItemChecked: any = wrapper.find(NoteCheckItem);
     expect(noteCheckItemChecked).toHaveLength(2);
-    expect(noteCheckItemChecked.at(0).prop("checkItem")).toBe(CheckPoint);
+    expect(noteCheckItemChecked.at(0).prop("checkItem")).toBe(CheckPointObject);
     expect(noteCheckItemChecked.at(1).prop("checkItem")).toBe(
       checkedCheckpoint
     );

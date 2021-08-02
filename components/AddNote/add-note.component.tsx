@@ -20,7 +20,7 @@ import TextFieldsOutlinedIcon from "@material-ui/icons/TextFieldsOutlined";
 import LabelOutlinedIcon from "@material-ui/icons/LabelOutlined";
 import NoteCheckItem from "./AddNoteCheckItem/add-note-checkitem.component";
 import { cNoteModel, NoteType, NoteTypeEnum } from "../../models/Note";
-import { CheckPoint, CheckPointType } from "../../models/CheckPoint";
+import { CheckPointObject, CheckPointType } from "../../models/CheckPointObject";
 import { TagType } from "../../models/Tag";
 
 export interface AddNoteProps {
@@ -130,7 +130,7 @@ const AddNote: React.FC<AddNoteProps> = ({
         noteModel.noteType === NoteTypeEnum.CHECK &&
         onHandleChange({
           attr: cNoteModel.checkPoints,
-          value: CheckPoint,
+          value: CheckPointObject,
         })
       }
     >
@@ -215,7 +215,7 @@ const AddNote: React.FC<AddNoteProps> = ({
                   onClick={() =>
                     onHandleChange({
                       attr: cNoteModel.checkPoints,
-                      value: CheckPoint,
+                      value: CheckPointObject,
                     })
                   }
                 >

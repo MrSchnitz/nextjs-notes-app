@@ -1,7 +1,7 @@
 import React from "react";
 import {shallow, ShallowWrapper,} from "enzyme";
 import NoteCheckItem, {NoteCheckItemProps,} from "./add-note-checkitem.component";
-import {CheckPoint} from "../../../models/CheckPoint";
+import {CheckPointObject} from "../../../models/CheckPointObject";
 import {Checkbox, IconButton, TextField} from "@material-ui/core";
 
 describe("AddNoteCheckItem component", () => {
@@ -14,7 +14,7 @@ describe("AddNoteCheckItem component", () => {
     mockOnHandleChange = jest.fn();
 
     const mockProps: NoteCheckItemProps = {
-      checkItem: CheckPoint,
+      checkItem: CheckPointObject,
       onDelete: mockOnDelete,
       onHandleChange: mockOnHandleChange,
     };

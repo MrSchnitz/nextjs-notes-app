@@ -20,7 +20,7 @@ import { TagType } from "../../../models/Tag";
 import { selectTags } from "../../../API/TagsAPI/TagsAPI";
 import { ApiLinks, PageLinks } from "../../../internals/Links";
 import { ChangeActionType } from "../../../internals/helpers";
-import { CheckPointType } from "../../../models/CheckPoint";
+import { CheckPointType } from "../../../models/CheckPointObject";
 import { useRouter } from "next/router";
 import { Loading } from "../../../components/Loading/loading.component";
 

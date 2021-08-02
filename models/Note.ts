@@ -1,5 +1,5 @@
 import { TagType } from './Tag';
-import { CheckPoint, CheckPointType } from './CheckPoint';
+import { CheckPointObject, CheckPointType } from './CheckPointObject';
 import {Note} from "@prisma/client";
 
 export enum NoteTypeEnum {

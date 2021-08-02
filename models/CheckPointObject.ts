@@ -6,7 +6,7 @@ export interface CheckPointInterface {
 
 export type CheckPointType = CheckPointInterface;
 
-export const CheckPoint: CheckPointType = {
+export const CheckPointObject: CheckPointType = {
   id: 0,
   text: '',
   checked: false,

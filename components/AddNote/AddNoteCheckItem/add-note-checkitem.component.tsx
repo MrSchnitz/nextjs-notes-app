@@ -5,7 +5,7 @@ import {
   AddNoteCheckItem,
   AddNoteCheckItemText,
 } from "./add-note-checkItem.styles";
-import { cCheckPoint, CheckPointType } from "../../../models/CheckPoint";
+import { cCheckPoint, CheckPointType } from "../../../models/CheckPointObject";
 
 const useStyles = makeStyles({
   root: {
