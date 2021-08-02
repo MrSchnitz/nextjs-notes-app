@@ -75,7 +75,7 @@ export const updateTag = async (tag: TagType): Promise<Tag | undefined> => {
 };
 
 /**
- * Get all notes of given tag by its ID
+ * Get all searchNotes of given tag by its ID
  * @param tagId
  */
 export const getTagNotes = async (tagId: string): Promise<Note[]> => {

@@ -2,10 +2,10 @@ import { Note, PrismaClient } from "@prisma/client";
 import { Session } from "next-auth";
 import { NoteType } from "../models/Note";
 import { TagType } from "../models/Tag";
-import { CheckPointType } from "../models/CheckPoint";
+import { CheckPointType } from "../models/CheckPointObject";
 
 /**
- * Get all notes of current signed user
+ * Get all searchNotes of current signed user
  * @param userSession - session object of current user
  */
 export const getAllUserNotes = async (
@@ -22,8 +22,8 @@ export const getAllUserNotes = async (
           checkPoints: true,
         },
         orderBy: {
-          createdAt: "asc"
-        }
+          createdAt: "asc",
+        },
       },
     },
   });
@@ -34,6 +34,69 @@ export const getAllUserNotes = async (
   }
 };
 
+/**
+ * Search searchNotes of current signed user
+ * @param query
+ * @param userSession - session object of current user
+ * @param tagId - ID of tag to search for tags notes
+ */
+export const searchNotes = async (
+  query: string,
+  userSession: Session,
+  tagId?: string
+): Promise<Note[]> => {
+  const prisma = new PrismaClient();
+
+  const user = tagId
+    ? await prisma.user.findFirst({
+        where: { name: userSession?.user?.name },
+        include: {
+          notes: {
+            where: {
+              name: {
+                contains: query,
+              },
+              tags: {
+                some: {
+                  id: tagId,
+                },
+              },
+            },
+            include: {
+              tags: true,
+              checkPoints: true,
+            },
+            orderBy: {
+              createdAt: "asc",
+            },
+          },
+        },
+      })
+    : await prisma.user.findFirst({
+        where: { name: userSession?.user?.name },
+        include: {
+          notes: {
+            where: {
+              name: {
+                contains: query,
+              },
+            },
+            include: {
+              tags: true,
+              checkPoints: true,
+            },
+            orderBy: {
+              createdAt: "asc",
+            },
+          },
+        },
+      });
+  if (user) {
+    return user.notes;
+  } else {
+    return [];
+  }
+};
 
 /**
  * Add new note for currently signed user
