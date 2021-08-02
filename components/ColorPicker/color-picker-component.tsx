@@ -28,7 +28,6 @@ const ColorPicker: React.FC<ColorPickerProps> = ({
   );
 
   return (
-    // <ColorPickerMain onBlur={(event) => setPickerOpen(false)}>
     <ColorPickerMain>
       {pickerOpen && renderPicker}
       <IconButton size={"small"} onClick={() => setPickerOpen(!pickerOpen)}>

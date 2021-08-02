@@ -1,16 +1,16 @@
 import { createSelector, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { all, call, delay, put, select, takeLatest } from "redux-saga/effects";
 import { RootState } from "../../store/RootState";
-import { ChangeActionType } from "../../internals/helpers";
+import { ChangeActionType } from "../../lib/helpers";
 import { cNoteModel, NoteObject, NoteType } from "../../models/Note";
-import { del, get, post, put as update } from "../../internals/RestAPI";
+import { del, get, post, put as update } from "../../lib/RestAPI";
 import { toast } from "react-toastify";
 import { TagType } from "../../models/Tag";
 import {
   CheckPointObject,
   CheckPointType,
 } from "../../models/CheckPointObject";
-import { ApiLinks, PageLinks } from "../../internals/Links";
+import { ApiLinks, PageLinks } from "../../lib/Links";
 
 /**
  * NotesPage API State interface

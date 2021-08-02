@@ -1,8 +1,12 @@
-import {Tag} from "@prisma/client";
-import {NextApiRequest, NextApiResponse} from "next";
-import {getSession} from "next-auth/client";
-import {cRestMethods} from "../../../internals/RestAPI";
-import {addNewTag, getAllUserTags, updateTag} from "../../../repositories/TagRepository";
+import { Tag } from "@prisma/client";
+import { NextApiRequest, NextApiResponse } from "next";
+import { getSession } from "next-auth/client";
+import { cRestMethods } from "../../../lib/RestAPI";
+import {
+  addNewTag,
+  getAllUserTags,
+  updateTag,
+} from "../../../repositories/TagRepository";
 
 type Data = {
   message: string;

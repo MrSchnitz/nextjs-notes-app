@@ -1,11 +1,18 @@
-import React, {useState} from "react";
-import {Dialog, DialogContent, DialogTitle, Grid, IconButton, TextField,} from "@material-ui/core";
+import React, { useState } from "react";
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  Grid,
+  IconButton,
+  TextField,
+} from "@material-ui/core";
 import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
 import CheckOutlinedIcon from "@material-ui/icons/CheckOutlined";
-import {cTagModel, TagType} from "../../models/Tag";
-import {ChangeActionType} from "../../internals/helpers";
+import { cTagModel, TagType } from "../../models/Tag";
+import { ChangeActionType } from "../../lib/helpers";
 import NavigationItem from "../Navigation/NavItem/navitem.component";
-import {Loading} from "../Loading/loading.component";
+import { Loading } from "../Loading/loading.component";
 import TagModalItem from "./TagModalItem/tag-modal-item.component";
 
 export interface TagsModalProps {

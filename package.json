@@ -1,13 +1,16 @@
 {
   "name": "notes-app",
-  "version": "0.1.0",
+  "version": "1.0.0",
+  "description": "Notes app implementation inspired by Google Keep developed with NextJS and Prisma.",
+  "author": "Jan Bauer",
   "private": true,
+  "license": "MIT",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "jest --verbose --watch"
+    "test": "jest"
   },
   "dependencies": {
     "@fontsource/roboto": "^4.5.0",

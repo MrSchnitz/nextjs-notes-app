@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import {motion} from "framer-motion";
+import { motion } from "framer-motion";
 
 interface NoteCardComponentInterface {
   color?: string;
@@ -63,7 +63,6 @@ export const NoteCardTags = styled.div`
 `;
 
 export const NoteCardTag = styled.div`
-  //margin: 0 0.5rem;
   border-radius: 0.5rem;
   padding: 0 0.2rem;
   white-space: nowrap;

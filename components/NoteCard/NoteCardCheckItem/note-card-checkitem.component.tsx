@@ -1,15 +1,11 @@
 import React from "react";
-import { cCheckPoint, CheckPointType } from "../../../models/CheckPointObject";
-import { Checkbox } from "@material-ui/core";
-import {
-  NoteCardCheckItemCheck,
-  NoteCardCheckItemComponent,
-  NoteCardCheckItemText,
-} from "./note-card-checkitem.styles";
+import {cCheckPoint, CheckPointType} from "../../../models/CheckPointObject";
+import {Checkbox} from "@material-ui/core";
+import {NoteCardCheckItemCheck, NoteCardCheckItemComponent, NoteCardCheckItemText,} from "./note-card-checkitem.styles";
 
 export interface NoteCardCheckItemProps {
   checkItem: CheckPointType;
-  onChecked?: (checkitem: CheckPointType) => void;
+  onChecked?: (checkItem: CheckPointType) => void;
 }
 
 const NoteCardCheckItem: React.FC<NoteCardCheckItemProps> = ({

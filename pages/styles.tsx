@@ -41,7 +41,6 @@ export const LandingPageBannerWrapper = styled.div`
   overflow: hidden;
 `;
 
-
 export const LandingPageBanner = styled(motion.div)<LandingPageBannerInterface>`
   height: 300px;
   width: 300px;
@@ -56,13 +55,17 @@ export const LandingPageBanner = styled(motion.div)<LandingPageBannerInterface>`
   display: flex;
   flex-direction: column;
 
-  position:${(props) => (props.position ? props.position : "relative")};
+  position: ${(props) => (props.position ? props.position : "relative")};
   background: ${(props) =>
-    props.imageUrl ? `url(${props.imageUrl})` : props.color ? props.color : "#ffe900"};
+    props.imageUrl
+      ? `url(${props.imageUrl})`
+      : props.color
+      ? props.color
+      : "#ffe900"};
 `;
 
 export const LandingPageBannerText = styled(motion.h1)`
-  font-family: 'Shadows Into Light Two', cursive;
+  font-family: "Shadows Into Light Two", cursive;
   font-size: 1.8rem;
   left: 0;
   padding: 10px;

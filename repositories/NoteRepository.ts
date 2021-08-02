@@ -3,6 +3,7 @@ import { Session } from "next-auth";
 import { NoteType } from "../models/Note";
 import { TagType } from "../models/Tag";
 import { CheckPointType } from "../models/CheckPointObject";
+import prisma from "../lib/prisma";
 
 /**
  * Get all searchNotes of current signed user
@@ -11,8 +12,6 @@ import { CheckPointType } from "../models/CheckPointObject";
 export const getAllUserNotes = async (
   userSession: Session
 ): Promise<Note[]> => {
-  const prisma = new PrismaClient();
-
   const user = await prisma.user.findFirst({
     where: { name: userSession?.user?.name },
     include: {
@@ -45,8 +44,6 @@ export const searchNotes = async (
   userSession: Session,
   tagId?: string
 ): Promise<Note[]> => {
-  const prisma = new PrismaClient();
-
   const user = tagId
     ? await prisma.user.findFirst({
         where: { name: userSession?.user?.name },
@@ -107,8 +104,6 @@ export const addNewNote = async (
   note: NoteType,
   userSession: Session
 ): Promise<Note | undefined> => {
-  const prisma = new PrismaClient();
-
   const user = await prisma.user.findFirst({
     where: { name: userSession?.user?.name },
   });
@@ -153,8 +148,6 @@ export const addNewNote = async (
  * @param note
  */
 export const updateNote = async (note: NoteType) => {
-  const prisma = new PrismaClient();
-
   const tags: any[] = note.tags.map((tag: TagType) => ({
     id: tag.id,
   }));
@@ -201,8 +194,6 @@ export const updateNote = async (note: NoteType) => {
  * @param noteId
  */
 export const deleteNote = async (noteId: string) => {
-  const prisma = new PrismaClient();
-
   await prisma.checkPoint.deleteMany({
     where: { noteId: noteId },
   });

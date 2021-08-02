@@ -1,12 +1,17 @@
 import React from "react";
-import {shallow, ShallowWrapper} from "enzyme";
-import AddNote, {AddNoteProps} from "./add-note.component";
-import {NoteObject, NoteTypeEnum} from "../../models/Note";
-import {TagObject} from "../../models/Tag";
-import {AddNoteInputCheckPoints, AddNoteInputContent, AddNoteInputNameInput, AddNoteInputTag,} from "./add-note.styles";
-import {CheckPointObject} from "../../models/CheckPointObject";
+import { shallow, ShallowWrapper } from "enzyme";
+import AddNote, { AddNoteProps } from "./add-note.component";
+import { NoteObject, NoteTypeEnum } from "../../models/Note";
+import { TagObject } from "../../models/Tag";
+import {
+  AddNoteInputCheckPoints,
+  AddNoteInputContent,
+  AddNoteInputNameInput,
+  AddNoteInputTag,
+} from "./add-note.styles";
+import { CheckPointObject } from "../../models/CheckPointObject";
 import NoteCheckItem from "./AddNoteCheckItem/add-note-checkitem.component";
-import {Divider} from "@material-ui/core";
+import { Divider } from "@material-ui/core";
 
 describe("AddNote component", () => {
   let wrapper: ShallowWrapper;
@@ -95,7 +100,6 @@ describe("AddNote component", () => {
     const divider = wrapper.find(Divider);
     expect(divider).toHaveLength(1);
   });
-
 
   it("should render AddNoteInputTag components when tags array is not empty", () => {
     const noteModel = NoteObject;

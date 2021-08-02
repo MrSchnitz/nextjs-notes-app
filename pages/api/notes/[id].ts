@@ -1,8 +1,8 @@
-import {Note} from "@prisma/client";
-import {NextApiRequest, NextApiResponse} from "next";
-import {getSession} from "next-auth/client";
-import {deleteNote, searchNotes} from "../../../repositories/NoteRepository";
-import {cRestMethods} from "../../../internals/RestAPI";
+import { Note } from "@prisma/client";
+import { NextApiRequest, NextApiResponse } from "next";
+import { getSession } from "next-auth/client";
+import { deleteNote, searchNotes } from "../../../repositories/NoteRepository";
+import { cRestMethods } from "../../../lib/RestAPI";
 
 type Data = {
   message: string;
@@ -12,19 +12,21 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data | Note[]>
 ) {
-
   const session = await getSession({ req });
 
   if (session) {
     const {
       query: { id, query, tagId },
       method,
-      body,
     } = req;
 
     switch (method) {
       case cRestMethods.GET:
-        const notes: Note[] = await searchNotes(query as string, session, tagId ? tagId as string : undefined);
+        const notes: Note[] = await searchNotes(
+          query as string,
+          session,
+          tagId ? (tagId as string) : undefined
+        );
         res.status(200).json(notes);
         break;
       case cRestMethods.DELETE:

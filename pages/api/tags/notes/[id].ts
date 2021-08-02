@@ -1,8 +1,8 @@
-import {Note} from "@prisma/client";
-import {NextApiRequest, NextApiResponse} from "next";
-import {getSession} from "next-auth/client";
-import {cRestMethods} from "../../../../internals/RestAPI";
-import {getTagNotes} from "../../../../repositories/TagRepository";
+import { Note } from "@prisma/client";
+import { NextApiRequest, NextApiResponse } from "next";
+import { getSession } from "next-auth/client";
+import { cRestMethods } from "../../../../lib/RestAPI";
+import { getTagNotes } from "../../../../repositories/TagRepository";
 
 type Data = {
   message: string;
@@ -16,9 +16,8 @@ export default async function handler(
 
   if (session) {
     const {
-      query: { id, name },
+      query: { id },
       method,
-      body,
     } = req;
 
     switch (method) {

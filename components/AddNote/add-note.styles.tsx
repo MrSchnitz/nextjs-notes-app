@@ -10,6 +10,7 @@ interface AddNoteInputInterface {
 export const AddNoteInput = styled.div<AddNoteInputInterface>`
   height: ${(props) =>
     props.edit ? "max-content" : props.open ? "233px" : "45px"};
+  max-height: 300px;
   width: ${(props) => (props.edit ? "100%" : "500px")};
   padding: 0.6rem;
   border-radius: 0.5rem;
@@ -18,9 +19,7 @@ export const AddNoteInput = styled.div<AddNoteInputInterface>`
   flex-direction: column;
   align-items: center;
   background-color: #fff;
-
-  overflow: hidden;
-
+  
   transition: 0.5s all;
 
   @media only screen and ${device.mobileL} {
@@ -34,10 +33,7 @@ export const AddNoteInputNameInput = styled.input`
   outline: none;
   background-color: transparent;
   border-radius: 0.5rem;
-
   font-weight: bold;
-
-  //margin-bottom: 1rem;
 
   &:focus {
     border-bottom: 1px solid gray;
@@ -56,16 +52,13 @@ export const AddNoteInputContentWrapper = styled(motion.div)`
 `;
 
 export const AddNoteInputContent = styled.textarea`
+  margin-top: 1rem;
   width: 100%;
   border: none;
   outline: none;
   border-radius: 0.5rem;
-
   resize: none;
-
   background-color: transparent;
-
-  margin-top: 1rem;
 
   &:focus {
     border-bottom: 1px solid gray;
@@ -92,7 +85,6 @@ export const AddNoteInputMenu = styled.div`
 export const AddNoteInputContentSwitch = styled.div`
   padding: 0 0.3rem;
   border-left: 1px solid lightgray;
-  //margin-left: 0.5rem;
 
   svg {
     cursor: pointer;
@@ -111,7 +103,7 @@ export const AddNoteInputCheckPoints = styled.div`
   flex-direction: column;
   align-items: center;
 
-  max-height: 300px;
+  max-height: 90px;
   overflow-y: auto;
 `;
 

@@ -1,9 +1,8 @@
 import { createSelector, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { all, call, put, select, takeLatest } from "redux-saga/effects";
 import { TagObject, TagType } from "../../models/Tag";
-import { ChangeActionType } from "../../internals/helpers";
-import { Tag } from "@prisma/client";
-import { del, post, put as update } from "../../internals/RestAPI";
+import { ChangeActionType } from "../../lib/helpers";
+import { del, post, put as update } from "../../lib/RestAPI";
 import { toast } from "react-toastify";
 import { RootState } from "../../store/RootState";
 
@@ -101,15 +100,8 @@ class TagsApi {
 
     toast.info(`Adding tag...`);
 
-    const tagDTO: Tag = {
-      id: "",
-      name: tag.name,
-      createdAt: Date.now() as any,
-      userId: "",
-    };
-
     try {
-      const response = yield call(post, "/api/tags", tagDTO);
+      const response = yield call(post, "/api/tags", tag);
       toast.success("Tag added.");
 
       yield put(this.slice.actions.reset());

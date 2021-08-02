@@ -1,5 +1,6 @@
 import * as React from "react";
 import { CircularProgress } from "@material-ui/core";
+import { LoadingComponent } from "./loading.styles";
 
 export interface LoadingProps {
   classname?: string;
@@ -8,15 +9,11 @@ export interface LoadingProps {
 
 export const Loading: React.FC<LoadingProps> = ({
   classname,
-    size
+  size,
 }: LoadingProps) => {
   return (
-    <div
-      className={`w-100 d-flex justify-content-center align-items-center ${
-        classname ? classname : ""
-      }`}
-    >
-      <CircularProgress size={size ? size : 20}/>
-    </div>
+    <LoadingComponent className={classname ? classname : ""}>
+      <CircularProgress size={size ? size : 20} />
+    </LoadingComponent>
   );
 };

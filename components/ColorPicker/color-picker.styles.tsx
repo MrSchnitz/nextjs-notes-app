@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import {device} from "../../resources/styles/utils/media-query-utils";
+import { device } from "../../resources/styles/utils/media-query-utils";
 
 export const ColorPickerMain = styled.div`
   position: relative;
@@ -18,7 +18,7 @@ export const ColorPickerContent = styled.div<ColorPickerContentInterface>`
   border-radius: 1rem;
   background-color: white;
   border: 1px solid lightgray;
-  
+
   @media only screen and ${device.mobileL} {
     right: 0;
     left: auto;

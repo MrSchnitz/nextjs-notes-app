@@ -1,6 +1,6 @@
 import React from "react";
-import {shallow, ShallowWrapper} from "enzyme";
-import SignInPage, {SignInProps} from "./index";
+import { shallow, ShallowWrapper } from "enzyme";
+import SignInPage, { SignInProps } from "./index";
 
 describe("SignIn page", () => {
   let wrapper: ShallowWrapper;

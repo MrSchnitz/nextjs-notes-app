@@ -14,7 +14,7 @@ import {
   SetNoteType,
 } from "./NotesAPI";
 import { NoteObject, NoteType } from "../../models/Note";
-import { ChangeActionType } from "../../internals/helpers";
+import { ChangeActionType } from "../../lib/helpers";
 import { CheckPointObject } from "../../models/CheckPointObject";
 import { takeLatest } from "@redux-saga/core/effects";
 

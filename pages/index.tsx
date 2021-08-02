@@ -3,7 +3,7 @@ import Head from "next/head";
 import { getSession, signIn } from "next-auth/client";
 import { GetServerSideProps } from "next";
 import { Session } from "next-auth";
-import { PageLinks } from "../internals/Links";
+import { PageLinks } from "../lib/Links";
 import {
   LandingPageBanner,
   LandingPageBannerText,
@@ -162,7 +162,10 @@ export default function LandingPage() {
     <>
       <Head>
         <title>Notes</title>
-        <meta name="description" content="Notes application for thoughts saving purpose" />
+        <meta
+          name="description"
+          content="Notes application for thoughts saving purpose"
+        />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       {renderMainContent}

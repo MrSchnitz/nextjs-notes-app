@@ -10,7 +10,7 @@ import {
   TagsApiReducer,
   TagsApiSaga,
 } from "./TagsAPI";
-import { ChangeActionType } from "../../internals/helpers";
+import { ChangeActionType } from "../../lib/helpers";
 import { takeLatest } from "@redux-saga/core/effects";
 import { cTagModel, TagObject, TagType } from "../../models/Tag";
 

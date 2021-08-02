@@ -1,8 +1,10 @@
 import React from "react";
-import {shallow, ShallowWrapper,} from "enzyme";
-import NoteCheckItem, {NoteCheckItemProps,} from "./add-note-checkitem.component";
-import {CheckPointObject} from "../../../models/CheckPointObject";
-import {Checkbox, IconButton, TextField} from "@material-ui/core";
+import { shallow, ShallowWrapper } from "enzyme";
+import NoteCheckItem, {
+  NoteCheckItemProps,
+} from "./add-note-checkitem.component";
+import { CheckPointObject } from "../../../models/CheckPointObject";
+import { Checkbox, IconButton, TextField } from "@material-ui/core";
 
 describe("AddNoteCheckItem component", () => {
   let wrapper: ShallowWrapper;

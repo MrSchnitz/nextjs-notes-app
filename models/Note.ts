@@ -1,10 +1,10 @@
-import { TagType } from './Tag';
-import { CheckPointObject, CheckPointType } from './CheckPointObject';
-import {Note} from "@prisma/client";
+import { TagType } from "./Tag";
+import { CheckPointType } from "./CheckPointObject";
+import { Note } from "@prisma/client";
 
 export enum NoteTypeEnum {
-  CHECK = 'CHECK',
-  TEXT = 'TEXT',
+  CHECK = "CHECK",
+  TEXT = "TEXT",
 }
 
 export interface NoteModel {
@@ -14,7 +14,7 @@ export interface NoteModel {
   content: string;
   color: string;
   pinned: boolean;
-  createdAt: Date;
+  createdAt: string;
   tags: TagType[];
   checkPoints?: CheckPointType[];
 }
@@ -22,13 +22,13 @@ export interface NoteModel {
 export type NoteType = NoteModel;
 
 export const NoteObject: NoteType = {
-  id: '',
-  name: '',
+  id: "",
+  name: "",
   noteType: NoteTypeEnum.TEXT,
-  content: '',
-  color: '#fff',
+  content: "",
+  color: "#fff",
   pinned: false,
-  createdAt: new Date(Date.now()),
+  createdAt: new Date(Date.now()).toString(),
   tags: [],
   checkPoints: [],
 };
@@ -41,17 +41,17 @@ export const NoteDBObject: Note = {
   content: "",
   pinned: false,
   createdAt: new Date(Date.now()),
-  userId: ''
+  userId: "",
 };
 
 export enum cNoteModel {
-  id = 'id',
-  name = 'name',
-  noteType = 'noteType',
-  color = 'color',
-  content = 'content',
-  pinned = 'pinned',
-  createdAt = 'createdAt',
-  tags = 'tags',
-  checkPoints = 'checkPoints',
+  id = "id",
+  name = "name",
+  noteType = "noteType",
+  color = "color",
+  content = "content",
+  pinned = "pinned",
+  createdAt = "createdAt",
+  tags = "tags",
+  checkPoints = "checkPoints",
 }

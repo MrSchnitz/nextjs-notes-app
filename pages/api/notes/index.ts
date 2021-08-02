@@ -1,8 +1,12 @@
-import {Note} from "@prisma/client";
-import {NextApiRequest, NextApiResponse} from "next";
-import {getSession} from "next-auth/client";
-import {addNewNote, getAllUserNotes, updateNote,} from "../../../repositories/NoteRepository";
-import {cRestMethods} from "../../../internals/RestAPI";
+import { Note } from "@prisma/client";
+import { NextApiRequest, NextApiResponse } from "next";
+import { getSession } from "next-auth/client";
+import {
+  addNewNote,
+  getAllUserNotes,
+  updateNote,
+} from "../../../repositories/NoteRepository";
+import { cRestMethods } from "../../../lib/RestAPI";
 
 type Data = {
   message: string;

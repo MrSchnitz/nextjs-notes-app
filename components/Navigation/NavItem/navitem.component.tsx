@@ -1,6 +1,6 @@
 import React from "react";
-import {NavItem, NavItemContent, NavItemIcon} from "./navitem.styles";
-import {useRouter} from "next/router";
+import { NavItem, NavItemContent, NavItemIcon } from "./navitem.styles";
+import { useRouter } from "next/router";
 
 export interface NavigationItemProps {
   name: string;

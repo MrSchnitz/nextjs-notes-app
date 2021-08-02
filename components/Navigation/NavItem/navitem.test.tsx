@@ -1,7 +1,7 @@
 import React from "react";
 import { shallow, ShallowWrapper } from "enzyme";
 import NavigationItem, { NavigationItemProps } from "./navitem.component";
-import {NavItem, NavItemContent, NavItemIcon} from "./navitem.styles";
+import { NavItem, NavItemContent, NavItemIcon } from "./navitem.styles";
 
 const useRouter = jest.spyOn(require("next/router"), "useRouter");
 

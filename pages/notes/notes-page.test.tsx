@@ -1,9 +1,9 @@
 import React from "react";
-import {shallow, ShallowWrapper} from "enzyme";
-import NotesPage, {NotesPageProps} from "./[index]";
-import {NoteObject} from "../../models/Note";
-import {initializeStore} from "../../store/configureStore";
-import {Provider} from "react-redux";
+import { shallow, ShallowWrapper } from "enzyme";
+import NotesPage, { NotesPageProps } from "./[index]";
+import { NoteObject } from "../../models/Note";
+import { initializeStore } from "../../store/configureStore";
+import { Provider } from "react-redux";
 
 describe("Notes page", () => {
   let wrapper: ShallowWrapper;

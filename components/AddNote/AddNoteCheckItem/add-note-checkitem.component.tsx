@@ -1,11 +1,8 @@
 import React from "react";
-import { Checkbox, IconButton, makeStyles, TextField } from "@material-ui/core";
+import {Checkbox, IconButton, makeStyles, TextField} from "@material-ui/core";
 import ClearOutlinedIcon from "@material-ui/icons/ClearOutlined";
-import {
-  AddNoteCheckItem,
-  AddNoteCheckItemText,
-} from "./add-note-checkItem.styles";
-import { cCheckPoint, CheckPointType } from "../../../models/CheckPointObject";
+import {AddNoteCheckItem, AddNoteCheckItemText,} from "./add-note-checkItem.styles";
+import {cCheckPoint, CheckPointType} from "../../../models/CheckPointObject";
 
 const useStyles = makeStyles({
   root: {

@@ -6,23 +6,22 @@ import { useDispatch, useSelector } from "react-redux";
 import NoteCard from "../../../components/NoteCard/note-card.component";
 import { GetServerSideProps } from "next";
 import { getSession } from "next-auth/client";
-import { get } from "../../../internals/RestAPI";
-import useRouterRefresh from "../../../hooks/useRouterRefresh";
+import { get } from "../../../lib/RestAPI";
 import {
   NotesAPI,
   selectCurrentRoute,
   selectEditNote,
-  selectNote,
   selectSearchNotes,
   selectSearchNotesLoading,
 } from "../../../API/NotesPageAPI/NotesAPI";
 import { TagType } from "../../../models/Tag";
 import { selectTags } from "../../../API/TagsAPI/TagsAPI";
-import { ApiLinks, PageLinks } from "../../../internals/Links";
-import { ChangeActionType } from "../../../internals/helpers";
+import { ApiLinks, PageLinks } from "../../../lib/Links";
+import { ChangeActionType } from "../../../lib/helpers";
 import { CheckPointType } from "../../../models/CheckPointObject";
 import { useRouter } from "next/router";
 import { Loading } from "../../../components/Loading/loading.component";
+import Head from "next/head";
 
 export interface TagsPageProps {
   session: Session | null;
@@ -75,6 +74,9 @@ export default function TagsPage({ session, tagNotes }: TagsPageProps) {
 
   return (
     <>
+      <Head>
+        <title>Tag notes</title>
+      </Head>
       {searchNotesLoading ? (
         <Loading size={30} />
       ) : notesToRender && notesToRender.length > 0 ? (

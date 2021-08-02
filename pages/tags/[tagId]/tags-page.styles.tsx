@@ -1,11 +1,10 @@
 import styled from "styled-components";
-import {device} from "../../../resources/styles/utils/media-query-utils";
+import { device } from "../../../resources/styles/utils/media-query-utils";
 
 export const TagsPageNotes = styled.div`
-  //height: 100%;
   display: flex;
   flex-wrap: wrap;
-  
+
   @media only screen and ${device.mobileL} {
     flex-direction: column;
     flex-wrap: nowrap;
@@ -25,7 +24,7 @@ export const TagsPageNoNotes = styled.div`
     color: #4c5258;
     font-weight: bold;
     font-size: 2.5rem;
-    
+
     @media only screen and ${device.mobileL} {
       font-size: 1.5rem;
     }

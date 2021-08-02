@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { cTagModel, TagType } from "../../../models/Tag";
+import { TagType } from "../../../models/Tag";
 import { Grid, IconButton, TextField } from "@material-ui/core";
 import LabelOutlinedIcon from "@material-ui/icons/LabelOutlined";
 import DeleteOutlineOutlinedIcon from "@material-ui/icons/DeleteOutlineOutlined";
@@ -29,7 +29,6 @@ const TagModalItem: React.FC<TagModalItemProps> = ({
         !(tagItemRef.current as any).contains(e.target)
       ) {
         setEdit(false);
-        // e.stopPropagation();
       }
     },
     [tagItemRef]

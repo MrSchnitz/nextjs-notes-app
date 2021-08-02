@@ -1,10 +1,8 @@
 import React from "react";
 import { shallow, ShallowWrapper } from "enzyme";
 import Navbar, { NavbarProps } from "./navbar.component";
-import { NavContent, NavRight, NavTop, NavUser } from "./navbar.styles";
-import * as redux from "react-redux";
-import { initializeStore } from "../../../store/configureStore";
 import { Provider } from "react-redux";
+import { initializeStore } from "../../../store/configureStore";
 
 describe("Navbar component", () => {
   let wrapper: ShallowWrapper;

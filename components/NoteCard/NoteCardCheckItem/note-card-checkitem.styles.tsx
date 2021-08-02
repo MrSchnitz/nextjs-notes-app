@@ -4,7 +4,6 @@ export const NoteCardCheckItemComponent = styled.div`
   width: 100%;
   display: flex;
   align-items: center;
-  //padding: 0 1rem;
 `;
 
 export const NoteCardCheckItemCheck = styled.div`

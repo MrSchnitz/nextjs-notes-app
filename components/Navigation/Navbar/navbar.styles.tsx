@@ -67,7 +67,7 @@ const NavUserImage = styled.div<NavUserImageInterface>`
   border-radius: 50%;
   overflow: hidden;
 
-  background-image: ${(props) =>
+  background: ${(props) =>
     props.imageUrl ? `url(${props.imageUrl})` : "#fff"};
 
   @media only screen and ${device.mobileL} {
@@ -104,8 +104,6 @@ const NavLeft = styled.div<NavLeftInterface>`
     box-shadow: 0.1rem 0 0.5rem rgba(0, 0, 0, 0.2);
   }
 `;
-
-NavLeft.displayName = "NavLeft";
 
 const NavRight = styled.div`
   flex: 1;

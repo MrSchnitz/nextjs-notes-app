@@ -25,8 +25,6 @@ const NavItem = styled.div<NavItemInterface>`
   }
 `;
 
-NavItem.displayName = "NavItem";
-
 const NavItemIcon = styled.div`
   margin-right: 1rem;
   margin-left: 0.5rem;
@@ -37,7 +35,6 @@ interface NavItemContentInterface {
 }
 
 const NavItemContent = styled.div<NavItemContentInterface>`
-  // flex: 1;
   text-align: center;
   font-weight: ${(props) => (props.isTag ? "normal" : "bold")};
   font-size: 1rem;

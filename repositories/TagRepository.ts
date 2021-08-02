@@ -1,14 +1,13 @@
 import { Note, PrismaClient, Tag } from "@prisma/client";
 import { Session } from "next-auth";
 import { TagType } from "../models/Tag";
+import prisma from "../lib/prisma";
 
 /**
  * Get all tags of current signed user
  * @param userSession - session object of current user
  */
 export const getAllUserTags = async (userSession: Session): Promise<Tag[]> => {
-  const prisma = new PrismaClient();
-
   const user = await prisma.user.findFirst({
     where: { name: userSession?.user?.name },
     include: {
@@ -35,8 +34,6 @@ export const addNewTag = async (
   tag: Tag,
   userSession: Session
 ): Promise<Tag | undefined> => {
-  const prisma = new PrismaClient();
-
   const user = await prisma.user.findFirst({
     where: { name: userSession?.user?.name },
   });
@@ -62,8 +59,6 @@ export const addNewTag = async (
  * @param tag
  */
 export const updateTag = async (tag: TagType): Promise<Tag | undefined> => {
-  const prisma = new PrismaClient();
-
   return await prisma.tag.update({
     where: {
       id: tag.id,
@@ -79,8 +74,6 @@ export const updateTag = async (tag: TagType): Promise<Tag | undefined> => {
  * @param tagId
  */
 export const getTagNotes = async (tagId: string): Promise<Note[]> => {
-  const prisma = new PrismaClient();
-
   return await prisma.note.findMany({
     where: {
       tags: {
@@ -99,6 +92,5 @@ export const getTagNotes = async (tagId: string): Promise<Note[]> => {
  * @param tagId
  */
 export const deleteTag = async (tagId: string) => {
-  const prisma = new PrismaClient();
   return await prisma.tag.delete({ where: { id: tagId } });
 };
