@@ -21,11 +21,11 @@ import {
   GetServerSidePropsResult,
 } from "next";
 
-interface SignInProps {
+export interface SignInProps {
   providers: Record<string, ClientSafeProvider> | null;
 }
 
-export default function Index({ providers }: SignInProps) {
+export default function SignInPage({ providers }: SignInProps) {
   const renderForm = () => {
     return (
       <SignInPageForm

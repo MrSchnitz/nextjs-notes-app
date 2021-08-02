@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import {device} from "../../../resources/styles/utils/media-query-utils";
 
 const SignInPageContainer = styled.div`
   width: 100%;
@@ -6,6 +7,10 @@ const SignInPageContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  
+  @media only screen and ${device.mobileL} {
+    margin: 0 -25px;
+  }
 `;
 
 const SignInPageForm = styled.div`
