@@ -1,18 +1,38 @@
 import styled from "styled-components";
 import { motion } from "framer-motion";
+import { device } from "../resources/styles/utils/media-query-utils";
+
+const dFlexCentered = `display: flex;
+  justify-content: center;
+  align-items: center;`;
 
 export const LandingPageWrapper = styled(motion.div)`
   height: 100%;
-  display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  ${dFlexCentered}
+
+  @media only screen and ${device.mobileL} {
+    height: max-content;
+    margin-left: -50px;
+    margin-top: 2rem;
+  }
 `;
 
 export const LandingPageContentWrapper = styled(motion.div)`
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  ${dFlexCentered}
+  
+  @media only screen and ${device.mobileL} {
+    flex-direction: column;
+  }
+`;
+
+export const LandingPageCardWrapper = styled(motion.div)`
+  flex-direction: column;
+  ${dFlexCentered}
+
+  @media only screen and ${device.mobileL} {
+    margin: 0 !important;
+  }
 `;
 
 export const LandingPageHeading = styled.h1`

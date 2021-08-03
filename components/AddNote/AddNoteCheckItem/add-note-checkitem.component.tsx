@@ -49,6 +49,7 @@ const NoteCheckItem: React.FC<NoteCheckItemProps> = ({
           classes={{
             root: checkItem.checked ? classes.root : "",
           }}
+          autoFocus={true}
         />
         <IconButton
             id={"clear-button"}

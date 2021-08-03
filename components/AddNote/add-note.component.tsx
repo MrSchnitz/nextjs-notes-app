@@ -123,10 +123,114 @@ const AddNote: React.FC<AddNoteProps> = ({
     </AddNoteInputMenu>
   );
 
+  const renderNameInput = (
+    <>
+      <AddNoteInputNameInput
+        placeholder={focused ? "Name" : "Create new note..."}
+        {...register(cNoteModel.name, { required: true, maxLength: 20 })}
+        onChange={(event) =>
+          onHandleChange({ attr: cNoteModel.name, value: event.target.value })
+        }
+        value={noteModel.name}
+      />
+      {errors.name?.type === "required" && (
+        <AddNoteInputErrorMessage style={{ bottom: 0 }}>
+          Name is required
+        </AddNoteInputErrorMessage>
+      )}
+    </>
+  );
+
+  const renderTextContentInput = (
+    <>
+      <AddNoteInputContent
+        {...register(cNoteModel.content, { maxLength: 1000 })}
+        onFocus={() => setFocused(true)}
+        rows={edit ? 8 : 4}
+        onChange={(event) =>
+          onHandleChange({
+            attr: cNoteModel.content,
+            value: event.target.value,
+          })
+        }
+        placeholder={"Write something"}
+        value={noteModel.content}
+      />
+      {errors.content?.type === "required" && (
+        <AddNoteInputErrorMessage>Too long</AddNoteInputErrorMessage>
+      )}
+    </>
+  );
+
+  const renderCheckPointsContentInput = (
+    <>
+      <AddNoteInputCheckPoints edit={!!edit}>
+        {noteModel.checkPoints
+          ?.filter((f) => !f.checked)
+          .map((c: CheckPointType, i: number) => (
+            <NoteCheckItem
+              key={c.id}
+              checkItem={c}
+              onHandleChange={(newCheckItem) =>
+                onHandleChange({
+                  attr: cNoteModel.checkPoints,
+                  value: newCheckItem,
+                })
+              }
+              onDelete={(id) =>
+                onHandleChange({
+                  attr: cNoteModel.checkPoints,
+                  value: id,
+                })
+              }
+            />
+          ))}
+        {noteModel.checkPoints?.find((f) => f.checked) && (
+          <Divider className="w-100 bg-dark mt-3 mb-2" />
+        )}
+        {noteModel.checkPoints
+          ?.filter((f) => f.checked)
+          .map((c: CheckPointType, i: number) => (
+            <NoteCheckItem
+              key={c.id}
+              checkItem={c}
+              onHandleChange={(newCheckItem) =>
+                onHandleChange({
+                  attr: cNoteModel.checkPoints,
+                  value: newCheckItem,
+                })
+              }
+              onDelete={(id) =>
+                onHandleChange({
+                  attr: cNoteModel.checkPoints,
+                  value: id,
+                })
+              }
+            />
+          ))}
+      </AddNoteInputCheckPoints>
+      <AddNoteInputAddCheckPoint>
+        <IconButton
+          size={"small"}
+          onClick={() =>
+            onHandleChange({
+              attr: cNoteModel.checkPoints,
+              value: CheckPointObject,
+            })
+          }
+        >
+          <AddOutlinedIcon />
+        </IconButton>
+      </AddNoteInputAddCheckPoint>
+    </>
+  );
+
   return (
     <AddNoteInput
       edit={edit}
       open={focused}
+      checkpoints={noteModel.checkPoints?.length}
+      type={noteModel.noteType}
       onFocus={() => setFocused(true)}
       onClick={onClick}
       style={{ backgroundColor: noteModel.color }}
@@ -140,106 +244,16 @@ const AddNote: React.FC<AddNoteProps> = ({
         })
       }
     >
-      <AddNoteInputNameInput
-        placeholder={focused ? "Name" : "Create new note..."}
-        {...register(cNoteModel.name, { required: true, maxLength: 20 })}
-        onChange={(event) =>
-          onHandleChange({ attr: cNoteModel.name, value: event.target.value })
-        }
-        value={noteModel.name}
-      />
-      {errors.name?.type === "required" && (
-        <AddNoteInputErrorMessage>Name is required</AddNoteInputErrorMessage>
-      )}
+      {renderNameInput}
       {(focused || (edit !== undefined && edit)) && (
         <AddNoteInputContentWrapper
           initial={{ opacity: 0, width: "100%" }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5 }}
         >
-          {noteModel.noteType === NoteTypeEnum.TEXT ? (
-            <>
-              <AddNoteInputContent
-                {...register("content", { required: true, maxLength: 1000 })}
-                onFocus={() => setFocused(true)}
-                rows={edit ? 8 : 4}
-                onChange={(event) =>
-                  onHandleChange({
-                    attr: cNoteModel.content,
-                    value: event.target.value,
-                  })
-                }
-                placeholder={"Write something"}
-                value={noteModel.content}
-              />
-              {errors.content?.type === "required" && (
-                <AddNoteInputErrorMessage>
-                  This field is required
-                </AddNoteInputErrorMessage>
-              )}
-            </>
-          ) : (
-            <>
-              <AddNoteInputCheckPoints>
-                {noteModel.checkPoints
-                  ?.filter((f) => !f.checked)
-                  .map((c: CheckPointType, i: number) => (
-                    <NoteCheckItem
-                      key={c.id}
-                      checkItem={c}
-                      onHandleChange={(newCheckItem) =>
-                        onHandleChange({
-                          attr: cNoteModel.checkPoints,
-                          value: newCheckItem,
-                        })
-                      }
-                      onDelete={(id) =>
-                        onHandleChange({
-                          attr: cNoteModel.checkPoints,
-                          value: id,
-                        })
-                      }
-                    />
-                  ))}
-                {noteModel.checkPoints?.find((f) => f.checked) && (
-                  <Divider className="w-100 bg-dark mt-3 mb-2" />
-                )}
-                {noteModel.checkPoints
-                  ?.filter((f) => f.checked)
-                  .map((c: CheckPointType, i: number) => (
-                    <NoteCheckItem
-                      key={c.id}
-                      checkItem={c}
-                      onHandleChange={(newCheckItem) =>
-                        onHandleChange({
-                          attr: cNoteModel.checkPoints,
-                          value: newCheckItem,
-                        })
-                      }
-                      onDelete={(id) =>
-                        onHandleChange({
-                          attr: cNoteModel.checkPoints,
-                          value: id,
-                        })
-                      }
-                    />
-                  ))}
-              </AddNoteInputCheckPoints>
-              <AddNoteInputAddCheckPoint>
-                <IconButton
-                  size={"small"}
-                  onClick={() =>
-                    onHandleChange({
-                      attr: cNoteModel.checkPoints,
-                      value: CheckPointObject,
-                    })
-                  }
-                >
-                  <AddOutlinedIcon />
-                </IconButton>
-              </AddNoteInputAddCheckPoint>
-            </>
-          )}
+          {noteModel.noteType === NoteTypeEnum.TEXT
+            ? renderTextContentInput
+            : renderCheckPointsContentInput}
           {renderBottomMenu}
           <Button
             id={"add-button"}

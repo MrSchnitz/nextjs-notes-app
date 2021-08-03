@@ -8,6 +8,7 @@ import {
   LandingPageBanner,
   LandingPageBannerText,
   LandingPageBannerWrapper,
+  LandingPageCardWrapper,
   LandingPageContentWrapper,
   LandingPageHeading,
   LandingPageSubHeading,
@@ -68,7 +69,7 @@ export default function LandingPage() {
   );
 
   const renderLeftShowNoteWrapper = (
-    <div className="d-flex flex-column align-items-center">
+    <LandingPageCardWrapper>
       <LandingPageBannerWrapper>
         <LandingPageBanner
           imageUrl={
@@ -96,11 +97,11 @@ export default function LandingPage() {
       <IconButton onClick={() => setFirstCardSwitch(!firstCardSwitch)}>
         <NoteIcon />
       </IconButton>
-    </div>
+    </LandingPageCardWrapper>
   );
 
   const renderRightShowNoteWrapper = (
-    <div className="d-flex flex-column align-items-center ms-5">
+    <LandingPageCardWrapper className="ms-5">
       <LandingPageBannerWrapper>
         <LandingPageBanner
           imageUrl={
@@ -145,7 +146,7 @@ export default function LandingPage() {
       >
         <ListIcon />
       </IconButton>
-    </div>
+    </LandingPageCardWrapper>
   );
 
   const renderMainContent = (

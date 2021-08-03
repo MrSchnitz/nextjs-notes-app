@@ -88,7 +88,7 @@ interface NavLeftInterface {
 const NavLeft = styled.div<NavLeftInterface>`
   width: ${(props) => (props.open ? "200px" : "50px")};
   padding-right: 0.1rem;
-  overflow: hidden;
+  overflow-y: auto;
 
   transition: 1s all;
 

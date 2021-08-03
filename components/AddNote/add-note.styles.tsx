@@ -1,16 +1,28 @@
 import styled from "styled-components";
 import { device } from "../../resources/styles/utils/media-query-utils";
 import { motion } from "framer-motion";
+import { NoteTypeEnum } from "../../models/Note";
 
 interface AddNoteInputInterface {
   open: boolean;
   edit?: boolean;
+  checkpoints?: number;
+  type?: NoteTypeEnum;
 }
 
 export const AddNoteInput = styled.div<AddNoteInputInterface>`
   height: ${(props) =>
-    props.edit ? "max-content" : props.open ? "233px" : "45px"};
-  max-height: 300px;
+    props.edit
+      ? "max-content"
+      : props.open
+      ? props.type === NoteTypeEnum.CHECK &&
+        props.checkpoints &&
+        props.checkpoints <= 3
+        ? `${props.checkpoints * 38 + 162}px`
+        : props.type === NoteTypeEnum.CHECK
+        ? "276px"
+        : "235px"
+      : "45px"};
   width: ${(props) => (props.edit ? "100%" : "500px")};
   padding: 0.6rem;
   border-radius: 0.5rem;
@@ -19,7 +31,7 @@ export const AddNoteInput = styled.div<AddNoteInputInterface>`
   flex-direction: column;
   align-items: center;
   background-color: #fff;
-  
+
   transition: 0.5s all;
 
   @media only screen and ${device.mobileL} {
@@ -41,11 +53,14 @@ export const AddNoteInputNameInput = styled.input`
 `;
 
 export const AddNoteInputErrorMessage = styled.span`
+  position: absolute;
   color: red;
+  bottom: 5rem;
 `;
 
 export const AddNoteInputContentWrapper = styled(motion.div)`
   width: 100%;
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -97,13 +112,17 @@ export const AddNoteInputContentSwitch = styled.div`
   }
 `;
 
-export const AddNoteInputCheckPoints = styled.div`
+interface AddNoteInputCheckPointsInterface {
+    edit: boolean;
+}
+
+export const AddNoteInputCheckPoints = styled.div<AddNoteInputCheckPointsInterface>`
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
 
-  max-height: 90px;
+  max-height: ${(props) => props.edit ? "300px" : "114px"};
   overflow-y: auto;
 `;
 

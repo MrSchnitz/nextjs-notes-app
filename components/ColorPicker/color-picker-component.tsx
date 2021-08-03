@@ -16,7 +16,7 @@ const ColorPicker: React.FC<ColorPickerProps> = ({
   const [pickerOpen, setPickerOpen] = useState(false);
 
   const renderPicker = (
-    <ColorPickerContent edit={edit}>
+    <ColorPickerContent edit={edit} onMouseLeave={() => onChooseColor("#fff")}>
       <CirclePicker
         onSwatchHover={(color) => onChooseColor(color.hex)}
         onChangeComplete={(color) => {

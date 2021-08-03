@@ -78,7 +78,7 @@ export default function TagsPage({ session, tagNotes }: TagsPageProps) {
         <title>Tag notes</title>
       </Head>
       {searchNotesLoading ? (
-        <Loading size={30} />
+        <Loading size={30} classname="mt-4" />
       ) : notesToRender && notesToRender.length > 0 ? (
         <TagsPageNotes>
           {notesToRender.map((note: NoteType, k: number) => (
