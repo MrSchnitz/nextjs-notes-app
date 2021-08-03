@@ -126,7 +126,7 @@ const AddNote: React.FC<AddNoteProps> = ({
   const renderNameInput = (
     <>
       <AddNoteInputNameInput
-        placeholder={focused ? "Name" : "Create new note..."}
+        placeholder={focused ? "Name" : "Take a note..."}
         {...register(cNoteModel.name, { required: true, maxLength: 20 })}
         onChange={(event) =>
           onHandleChange({ attr: cNoteModel.name, value: event.target.value })

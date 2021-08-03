@@ -26,7 +26,7 @@ export const AddNoteInput = styled.div<AddNoteInputInterface>`
   width: ${(props) => (props.edit ? "100%" : "500px")};
   padding: 0.6rem;
   border-radius: 0.5rem;
-  box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.3);
+  box-shadow: 0 1px 7px rgb(128 128 128);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -113,16 +113,18 @@ export const AddNoteInputContentSwitch = styled.div`
 `;
 
 interface AddNoteInputCheckPointsInterface {
-    edit: boolean;
+  edit: boolean;
 }
 
-export const AddNoteInputCheckPoints = styled.div<AddNoteInputCheckPointsInterface>`
+export const AddNoteInputCheckPoints = styled.div<
+  AddNoteInputCheckPointsInterface
+>`
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
 
-  max-height: ${(props) => props.edit ? "300px" : "114px"};
+  max-height: ${(props) => (props.edit ? "300px" : "114px")};
   overflow-y: auto;
 `;
 
