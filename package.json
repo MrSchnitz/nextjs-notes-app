@@ -8,9 +8,10 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
+    "start": "next start -p $PORT",
     "lint": "next lint",
-    "test": "jest"
+    "test": "jest",
+    "export": "export"
   },
   "dependencies": {
     "@fontsource/roboto": "^4.5.0",
