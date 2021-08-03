@@ -1,0 +1,26 @@
+// Application colors
+$app-primary: #fff;
+$app-secondary: #f5b500;
+$app-tertiary: #f5d783;
+$app-nav: #fff;
+
+$app-font-primary: rgb(65, 61, 61);
+
+$app-colors: () !default;
+$app-colors: map-merge(
+  (
+    "app-primary": $app-primary,
+    "app-secondary": $app-secondary,
+  ),
+  $app-colors
+);
+
+$theme-colors: (
+  "app-primary": $app-primary,
+  "app-secondary": $app-secondary,
+  "app-tertiary": $app-tertiary,
+);
+
+.icon-color {
+  color: $app-secondary;
+}
