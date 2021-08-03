@@ -13,7 +13,7 @@ import {
   SignInPageForm,
   SignInPageHeadline,
   SignInPageLogo,
-} from "./sigin.styles";
+} from "../../../views/auth/signin/sigin.styles";
 import GitHubIcon from "@material-ui/icons/GitHub";
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next";
 import PersonOutlineOutlinedIcon from "@material-ui/icons/PersonOutlineOutlined";

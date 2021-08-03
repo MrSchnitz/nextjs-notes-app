@@ -1,11 +1,11 @@
 module.exports = {
   reactStrictMode: true,
-  webpack(config, { webpack }) {
+  pageExtensions: ['ts', 'tsx'],
+  webpack(config) {
     config.module.rules.push({
       test: /\.svg$/,
       use: ["@svgr/webpack"],
     });
-    config.plugins.push(new webpack.IgnorePlugin(/\/__tests__\//));
 
     return config;
   },

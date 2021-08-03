@@ -13,7 +13,7 @@ import {
   LandingPageHeading,
   LandingPageSubHeading,
   LandingPageWrapper,
-} from "./styles";
+} from "../views/styles";
 import {
   Button,
   Checkbox,

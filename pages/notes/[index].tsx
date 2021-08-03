@@ -6,7 +6,7 @@ import {
   NotesPageAddNote,
   NotesPageNoNotes,
   NotesPageNotes,
-} from "./notes-page.styles";
+} from "../../views/notes/notes-page.styles";
 import { useDispatch, useSelector } from "react-redux";
 import {
   NotesAPI,

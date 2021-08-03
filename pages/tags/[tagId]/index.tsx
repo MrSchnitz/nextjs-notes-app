@@ -1,7 +1,7 @@
 import { Session } from "next-auth";
 import React, { useEffect, useState } from "react";
 import { NoteType } from "../../../models/Note";
-import { TagsPageNoNotes, TagsPageNotes } from "./tags-page.styles";
+import { TagsPageNoNotes, TagsPageNotes } from "../../../views/tags/[tagId]/tags-page.styles";
 import { useDispatch, useSelector } from "react-redux";
 import NoteCard from "../../../components/NoteCard/note-card.component";
 import { GetServerSideProps } from "next";
