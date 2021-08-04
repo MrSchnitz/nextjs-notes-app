@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { device } from "../../../resources/styles/utils/media-query-utils";
 
-const NavTop = styled.div`
+const NavTop = styled.nav`
   width: 100%;
   padding: 0.5rem 0;
   border-bottom: 1px solid rgba(gray, 0.5);
@@ -76,7 +76,7 @@ const NavUserImage = styled.div<NavUserImageInterface>`
   }
 `;
 
-const NavContent = styled.div`
+const NavContent = styled.main`
   display: flex;
   height: calc(100vh - 64px);
 `;
@@ -85,7 +85,7 @@ interface NavLeftInterface {
   open: boolean;
 }
 
-const NavLeft = styled.div<NavLeftInterface>`
+const NavLeft = styled.aside<NavLeftInterface>`
   width: ${(props) => (props.open ? "200px" : "50px")};
   padding-right: 0.1rem;
   overflow-y: auto;

@@ -6,7 +6,7 @@ const dFlexCentered = `display: flex;
   justify-content: center;
   align-items: center;`;
 
-export const LandingPageWrapper = styled(motion.div)`
+export const LandingPageWrapper = styled(motion.section)`
   height: 100%;
   flex-direction: column;
   ${dFlexCentered}

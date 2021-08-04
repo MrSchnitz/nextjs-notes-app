@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { device } from "../../../resources/styles/utils/media-query-utils";
 
-export const TagsPageNotes = styled.div`
+export const TagsPageNotes = styled.section`
   display: flex;
   flex-wrap: wrap;
 
@@ -12,7 +12,7 @@ export const TagsPageNotes = styled.div`
   }
 `;
 
-export const TagsPageNoNotes = styled.div`
+export const TagsPageNoNotes = styled.section`
   width: 100%;
   height: 100%;
   justify-content: center;

@@ -12,7 +12,7 @@ export const NotesPageAddNote = styled.div`
   }
 `;
 
-export const NotesPageNotes = styled.div`
+export const NotesPageNotes = styled.section`
   display: flex;
   flex-wrap: wrap;
 
@@ -23,7 +23,7 @@ export const NotesPageNotes = styled.div`
   }
 `;
 
-export const NotesPageNoNotes = styled.div`
+export const NotesPageNoNotes = styled.section`
   width: 100%;
   height: 100%;
   justify-content: center;
