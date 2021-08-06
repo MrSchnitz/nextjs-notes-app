@@ -108,4 +108,4 @@ const TagModalItem: React.FC<TagModalItemProps> = ({
   return <div ref={tagItemRef}>{edit ? renderEditItems : renderItems}</div>;
 };
 
-export default TagModalItem;
+export default React.memo(TagModalItem);

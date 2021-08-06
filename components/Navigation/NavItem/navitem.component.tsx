@@ -41,4 +41,4 @@ const NavigationItem: React.FC<NavigationItemProps> = ({
   );
 };
 
-export default NavigationItem;
+export default React.memo(NavigationItem);
