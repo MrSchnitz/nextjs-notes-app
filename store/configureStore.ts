@@ -5,6 +5,7 @@ import {
 } from "@reduxjs/toolkit";
 import rootSaga, { mainReducers } from "./RootState";
 import createSagaMiddleware from "redux-saga";
+import {useMemo} from "react";
 
 let store: any;
 
@@ -36,3 +37,5 @@ export const initializeStore = () => {
 
   return _store;
 };
+
+export const useStore = () => useMemo(() => initializeStore(),[]);

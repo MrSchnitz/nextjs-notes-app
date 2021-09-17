@@ -1,7 +1,7 @@
 import React from "react";
 import { AppProps } from "next/app";
 import { Provider as ReduxProvider } from "react-redux";
-import { initializeStore } from "../store/configureStore";
+import { initializeStore, useStore } from "../store/configureStore";
 import { Provider } from "next-auth/client";
 import Navbar from "../components/Navigation/Navbar/navbar.component";
 import { ToastContainer } from "react-toastify";
@@ -11,9 +11,11 @@ import "../resources/styles/main.scss";
 import "@fontsource/roboto";
 import "react-toastify/dist/ReactToastify.css";
 
-export const store = initializeStore();
+// export const store = initializeStore();
 
 function MyApp({ Component, pageProps }: AppProps) {
+  const store = useStore();
+
   return (
     <Provider session={pageProps.session}>
       <ReduxProvider store={store}>
