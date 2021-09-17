@@ -87,4 +87,4 @@ const TagsModal: React.FC<TagsModalProps> = ({
   );
 };
 
-export default TagsModal;
+export default React.memo(TagsModal);

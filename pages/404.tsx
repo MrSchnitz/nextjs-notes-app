@@ -28,7 +28,7 @@ export default function NotFoundPage() {
           endIcon={<FastRewindOutlinedIcon />}
           onClick={() => push(PageLinks.landingPage)}
         >
-          Return
+          Go back to safety
         </Button>
       </NotFoundPageContentWrapper>
     </NotFoundPageWrapper>

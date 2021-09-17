@@ -87,17 +87,6 @@ model Tag {
   userId String
 }
 
-//model TagsOnNotes {
-//      tag        Tag     @relation(fields: [tagId], references: [id])
-//      tagId      String       // relation scalar field (used in the `@relation` attribute above)
-//      note    Note @relation(fields: [noteId], references: [id])
-//      noteId  String      // relation scalar field (used in the `@relation` attribute above)
-//      assignedAt  DateTime @default(now())
-//      assignedBy  String
-//
-//      @@id([tagId, noteId])
-//}
-
 model CheckPoint {
   id String @default(cuid()) @id
   text String
@@ -105,13 +94,3 @@ model CheckPoint {
   note Note @relation(fields: [noteId], references: [id])
   noteId String
 }
-
-//model User {
-  //id String @default(uuid()) @id
-  //login String
-  //firstName String
-  //lastName String
-  //role String
-  // searchNotes: NoteType[];
-  // tags: TagType[];
-//}

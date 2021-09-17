@@ -1,5 +1,5 @@
 ## Notes app
-Notes demo application inspired by Google Keep and developed in Typescript with Next.js, NextAuth.js, styled-components, Material-UI and Prisma.
+Notes demo application inspired by Google Keep and developed in Typescript with Next.js, NextAuth.js, styled-components, Framer motion, Material-UI and Prisma.
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 

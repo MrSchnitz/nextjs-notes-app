@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { device } from "../../../resources/styles/utils/media-query-utils";
 
-const SignInPageContainer = styled.div`
+const SignInPageContainer = styled.section`
   width: 100%;
   height: 100vh;
   display: flex;
