@@ -28,6 +28,7 @@ import { ApiLinks, PageLinks } from "../../lib/Links";
 import { CheckPointType } from "../../models/CheckPointObject";
 import { Loading } from "../../components/Loading/loading.component";
 import Head from "next/head";
+import {DragDropContext, Draggable, Droppable} from "react-beautiful-dnd";
 
 export interface NotesPageProps {
   session: Session | null;
@@ -95,25 +96,46 @@ export default function NotesPage({ session, userNotes }: NotesPageProps) {
   const renderNoteCards = searchNotesLoading ? (
     <Loading size={30} />
   ) : notesToRender && notesToRender.length > 0 ? (
-    <NotesPageNotes>
-      {notesToRender.map((note: NoteType, k: number) => (
-        <NoteCard
-          key={note.id}
-          note={note}
-          tags={tags}
-          editNote={editNote}
-          onHandleChange={(action) =>
-            handleChangeNote({ ...action, edit: true })
-          }
-          onAddNote={() => handleOnAddNote(true)}
-          onClick={() => dispatch(NotesAPI.setNote({ note: note, edit: true }))}
-          onDeleteNote={() => handleOnDeleteNote(note)}
-          onCheckItemClick={(checkitem) =>
-            handleClickNoteCheckItem(note, checkitem)
-          }
-        />
-      ))}
-    </NotesPageNotes>
+      <DragDropContext onDragEnd={result => console.log(result)}>
+        <Droppable droppableId="notes">
+          {(provided) => (
+              <div ref={provided.innerRef}>
+                    {notesToRender.map((note: NoteType, k: number) => (
+                        <Draggable key={note.id} draggableId={note.id!} index={k}>
+                          {(provided) => (
+                              <div
+                                  key={k}
+                                  ref={provided.innerRef}
+                                  {...provided.draggableProps}
+                                  {...provided.dragHandleProps}
+                                  style={{width: "50px", height: "50px", backgroundColor: "red", margin: "10px"}}>
+                                {k}
+                              </div>
+                              // <NoteCard
+                              //     {...provided.draggableProps}
+                              //     {...provided.dragHandleProps}
+                              //     key={note.id}
+                              //     note={note}
+                              //     tags={tags}
+                              //     editNote={editNote}
+                              //     onHandleChange={(action) =>
+                              //       handleChangeNote({ ...action, edit: true })
+                              //     }
+                              //     onAddNote={() => handleOnAddNote(true)}
+                              //     onClick={() => dispatch(NotesAPI.setNote({ note: note, edit: true }))}
+                              //     onDeleteNote={() => handleOnDeleteNote(note)}
+                              //     onCheckItemClick={(checkitem) =>
+                              //       handleClickNoteCheckItem(note, checkitem)
+                              //     }
+                              // />
+                          )}
+                        </Draggable>
+                    ))}
+                {provided.placeholder}
+              </div>
+          )}
+        </Droppable>
+      </DragDropContext>
   ) : (
     <NotesPageNoNotes>
       <h1>Sorry, no notes are available...</h1>
