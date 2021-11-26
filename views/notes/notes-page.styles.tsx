@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { device } from "../../resources/styles/utils/media-query-utils";
+import {NOTE_WIDTH} from "../../components/NoteCard/note-card.styles";
 
 export const NotesPageAddNote = styled.div`
   padding: 3rem;
@@ -13,9 +14,14 @@ export const NotesPageAddNote = styled.div`
 `;
 
 export const NotesPageNotes = styled.section`
-  display: flex;
-  flex-wrap: wrap;
-
+    //margin: 0 auto;
+    width: 100%;
+    display: grid;
+    grid-gap: 10px;
+    grid-template-columns: repeat(auto-fill, minmax(${NOTE_WIDTH}px, 1fr));
+  //display: flex;
+  //flex-wrap: wrap;
+  
   @media only screen and ${device.mobileL} {
     flex-direction: column;
     flex-wrap: nowrap;

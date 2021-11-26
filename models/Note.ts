@@ -17,6 +17,8 @@ export interface NoteModel {
   createdAt: string;
   tags: TagType[];
   checkPoints?: CheckPointType[];
+  column: number;
+  row: number;
 }
 
 export type NoteType = NoteModel;
@@ -31,6 +33,8 @@ export const NoteObject: NoteType = {
   createdAt: new Date(Date.now()).toString(),
   tags: [],
   checkPoints: [],
+  column: 0,
+  row: 0
 };
 
 export const NoteDBObject: Note = {

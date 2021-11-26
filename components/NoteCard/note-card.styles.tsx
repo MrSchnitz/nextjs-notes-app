@@ -1,6 +1,17 @@
 import styled from "styled-components";
 import { motion } from "framer-motion";
 
+export const NOTE_WIDTH = 250;
+
+interface NoteCardContainerInterface {
+  isDragging: boolean;
+}
+
+export const NoteCardContainer = styled.div<NoteCardContainerInterface>`
+    background-color: ${(props) => (props.isDragging ? "transparent" : "transparent")};
+`
+
+
 interface NoteCardComponentInterface {
   color?: string;
   edit?: boolean;
@@ -11,7 +22,7 @@ export const NoteCardComponent = styled(motion.div)<NoteCardComponentInterface>`
   border: 1px solid #d6d6d6;
   padding: 0.5rem;
   margin: ${(props) => (props.edit ? "0rem" : "1rem")};
-  width: 250px;
+  width: ${NOTE_WIDTH}px;
   height: max-content;
   cursor: pointer;
   background-color: ${(props) => (props.color ? props.color : "white")};

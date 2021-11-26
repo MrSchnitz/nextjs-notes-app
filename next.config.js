@@ -1,5 +1,5 @@
 module.exports = {
-  reactStrictMode: true,
+  reactStrictMode: false,
   pageExtensions: ['ts', 'tsx'],
   webpack(config) {
     config.module.rules.push({

@@ -11,22 +11,16 @@ import {resetServerContext} from "react-beautiful-dnd";
 
 export default class MyDocument extends Document {
   static async getInitialProps(ctx: DocumentContext) {
-    resetServerContext();
-
     const sheet = new ServerStyleSheet();
-    const originalRenderPage = ctx.renderPage;
+    const originalRenderPage = await ctx.renderPage;
 
     try {
       ctx.renderPage = () =>
         originalRenderPage({
           enhanceApp: (App) => (props) => {
-            resetServerContext();
-
             return sheet.collectStyles(<App {...props} />);
           }
         });
-
-      resetServerContext();
 
       const initialProps = await Document.getInitialProps(ctx);
 
@@ -42,13 +36,8 @@ export default class MyDocument extends Document {
         ),
       };
     } finally {
-      resetServerContext();
       sheet.seal();
-      resetServerContext();
-
     }
-    resetServerContext();
-
   }
   render() {
     return (

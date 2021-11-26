@@ -39,7 +39,7 @@ export default async function handler(
         res.status(200).json({ message: "Note updated." });
         break;
       default:
-        res.setHeader("Allow", ["GET", "PUT"]);
+        res.setHeader("Allow", ["GET", "POST", "PUT", "DELETE"]);
         res.status(405).end(`Method ${method} Not Allowed`);
     }
   } else {

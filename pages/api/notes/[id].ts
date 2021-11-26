@@ -30,7 +30,7 @@ export default async function handler(
         res.status(200).json(notes);
         break;
       case cRestMethods.DELETE:
-        await deleteNote(id as string);
+        await deleteNote(id as string, session);
         res.status(200).json({ message: "Note deleted." });
         break;
       default:

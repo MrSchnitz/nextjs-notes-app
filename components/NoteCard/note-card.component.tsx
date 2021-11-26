@@ -7,6 +7,7 @@ import { ChangeActionType } from "../../lib/helpers";
 import { Dialog, Divider, IconButton } from "@material-ui/core";
 import {
   NoteCardComponent,
+  NoteCardContainer,
   NoteCardContent,
   NoteCardHeader,
   NoteCardTag,
@@ -15,6 +16,7 @@ import {
 import DeleteOutlineOutlinedIcon from "@material-ui/icons/DeleteOutlineOutlined";
 import LabelOutlinedIcon from "@material-ui/icons/LabelOutlined";
 import AddNote from "../AddNote/add-note.component";
+import { Draggable } from "react-beautiful-dnd";
 
 const transition = {
   type: "spring",
@@ -31,6 +33,7 @@ const noteVariants = {
 };
 
 export interface NoteCardProps {
+  index: number;
   note: NoteType;
   tags: TagType[];
   editNote: NoteType | null;
@@ -40,9 +43,11 @@ export interface NoteCardProps {
   onClick?: () => void;
   onCheckItemClick?: (checkItem: CheckPointType) => void;
   onCloseModal?: () => void;
+  style?: React.CSSProperties;
 }
 
 const NoteCard: React.FC<NoteCardProps> = ({
+  index,
   note,
   tags,
   editNote,
@@ -52,6 +57,7 @@ const NoteCard: React.FC<NoteCardProps> = ({
   onClick,
   onCheckItemClick,
   onDeleteNote,
+  style,
 }: NoteCardProps) => {
   const [modalOpen, setModalOpen] = useState(false);
 
@@ -148,6 +154,7 @@ const NoteCard: React.FC<NoteCardProps> = ({
         initial="exit"
         animate="enter"
         exit="exit"
+        style={style}
       >
         {renderHeader}
         {renderContent}
@@ -156,6 +163,38 @@ const NoteCard: React.FC<NoteCardProps> = ({
       {renderEditModal}
     </>
   );
+
+  // return (
+  //   <Draggable key={note.id} draggableId={note.id!} index={index}>
+  //     {(provided, snapshot) => (
+  //       <NoteCardContainer
+  //         {...provided.draggableProps}
+  //         {...provided.dragHandleProps}
+  //         ref={provided.innerRef}
+  //         isDragging={snapshot.isDragging}
+  //         style={style}
+  //       >
+  //           <NoteCardComponent
+  //             onClick={() => {
+  //               setModalOpen(!modalOpen);
+  //               if (onClick) {
+  //                 onClick();
+  //               }
+  //             }}
+  //             color={note.color}
+  //             variants={noteVariants}
+  //             initial="exit"
+  //             animate="enter"
+  //             exit="exit"
+  //           >
+  //             {renderHeader}
+  //             {renderContent}
+  //             {renderTags}
+  //           </NoteCardComponent>
+  //       </NoteCardContainer>
+  //     )}
+  //   </Draggable>
+  // );
 };
 
 export default React.memo(NoteCard);

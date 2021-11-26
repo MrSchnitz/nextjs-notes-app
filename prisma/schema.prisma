@@ -76,6 +76,8 @@ model Note {
   checkPoints CheckPoint[]
   user User @relation(fields: [userId], references: [id])
   userId String
+  column Int @default(0)
+  row Int @default(0)
 }
 
 model Tag {

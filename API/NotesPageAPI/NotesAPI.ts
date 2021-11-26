@@ -11,6 +11,7 @@ import {
   CheckPointType,
 } from "../../models/CheckPointObject";
 import { ApiLinks, PageLinks } from "../../lib/Links";
+import { changeNotesOrder } from "../../repositories/NoteRepository";
 
 /**
  * NotesPage API State interface
@@ -60,6 +61,7 @@ class NotesApi {
     this.handleChange = this.handleChange.bind(this);
     this.handleCheckNoteAndSubmit = this.handleCheckNoteAndSubmit.bind(this);
     this.handleOnSearchNotes = this.handleOnSearchNotes.bind(this);
+    this.handleChangeNotesOrder = this.handleChangeNotesOrder.bind(this);
     this.saga = this.saga.bind(this);
   }
 
@@ -83,13 +85,14 @@ class NotesApi {
       handleChange(state, action: PayloadAction<ChangeActionType>) {},
       setNote(state, action: PayloadAction<SetNoteType>) {
         if (action.payload.edit) {
-          const checkPoints: CheckPointType[] = action.payload.note.checkPoints!.map(
-            (ch: CheckPointType, i: number) => ({
-              id: i,
-              text: ch.text,
-              checked: ch.checked,
-            })
-          );
+          const checkPoints: CheckPointType[] =
+            action.payload.note.checkPoints!.map(
+              (ch: CheckPointType, i: number) => ({
+                id: i,
+                text: ch.text,
+                checked: ch.checked,
+              })
+            );
           const editedNote = { ...action.payload.note };
           editedNote.checkPoints = checkPoints;
 
@@ -115,6 +118,7 @@ class NotesApi {
         state.searchNotesLoading = true;
         state.searchNoteQuery = action.payload.query;
       },
+      changeNotesOrder(state, action: PayloadAction<NoteType[]>) {},
     },
   });
 
@@ -142,8 +146,8 @@ class NotesApi {
 
     if (attr === cNoteModel.checkPoints) {
       if (value === CheckPointObject) {
-        const lastCheckPointId = note.checkPoints![note.checkPoints!.length - 1]
-          .id;
+        const lastCheckPointId =
+          note.checkPoints![note.checkPoints!.length - 1].id;
 
         const newCheckPoint: CheckPointType = {
           checked: false,
@@ -297,6 +301,19 @@ class NotesApi {
     }
   }
 
+  public *handleChangeNotesOrder(action: PayloadAction<NoteType[]>): Generator<any> {
+    const notes = action.payload;
+
+    try {
+      const response = yield call(update, `${ApiLinks.notes}/order`, notes);
+
+      toast.success("Notes order successfully changed.");
+    } catch (e) {
+      console.log(e);
+      toast.error("Sorry, something went wrong when changing notes order...");
+    }
+  }
+
   /*
    * SAGA - MAIN
    */
@@ -307,6 +324,7 @@ class NotesApi {
       handleChange,
       checkNoteAndSubmit,
       searchNotes,
+      changeNotesOrder,
     } = this.slice.actions;
     yield all([
       yield takeLatest([handleChange.type], this.handleChange),
@@ -317,6 +335,7 @@ class NotesApi {
         this.handleCheckNoteAndSubmit
       ),
       yield takeLatest([searchNotes.type], this.handleOnSearchNotes),
+      yield takeLatest([changeNotesOrder.type], this.handleChangeNotesOrder),
     ]);
   }
 
@@ -378,4 +397,5 @@ export const {
   handleCheckNoteAndSubmit,
   handleDeleteNote,
   handleOnSearchNotes,
+    handleChangeNotesOrder
 } = NotesApi.getInstance();
