@@ -125,6 +125,8 @@ export const addNewNote = async (
         noteType: note.noteType,
         color: note.color,
         pinned: note.pinned,
+        column: 0,
+        row: 0,
         tags: {
           connect: [...tags],
         },
@@ -138,6 +140,19 @@ export const addNewNote = async (
         },
       },
     });
+
+    await prisma.note.updateMany({
+      where: {
+        id: {
+          not: newNote.id,
+        },
+        column: 0,
+      },
+      data: {
+        row: { increment: 1 },
+      },
+    });
+
     return newNote;
   }
   return undefined;
@@ -189,11 +204,68 @@ export const updateNote = async (note: NoteType) => {
   });
 };
 
+export const changeNotesOrder = async (
+  notesToChange: NoteType[]
+): Promise<void> => {
+  await Promise.all(
+    notesToChange.map(async (note) => {
+      await prisma.note.update({
+        where: {
+          id: note.id,
+        },
+        data: {
+          row: note.row,
+          column: note.column,
+        },
+      });
+    })
+  );
+};
+
 /**
  * Delete note by ID
  * @param noteId
  */
-export const deleteNote = async (noteId: string) => {
+export const deleteNote = async (noteId: string, userSession: Session) => {
+  const note: Note = await prisma.note.findFirst({
+    where: { id: noteId },
+  });
+
+  if (!note) {
+    throw Error("Note not found");
+  }
+
+  const user = await prisma.user.findFirst({
+    where: {name: userSession?.user?.name},
+    include: {
+      notes: {
+        where: {
+          id: {
+            not: noteId,
+          },
+          column: note.column,
+        },
+        orderBy: {
+          row: "asc",
+        },
+      }
+    }
+  });
+  const columnNotes: Note[] = user.notes;
+
+  console.log(columnNotes);
+
+  for (let i = 0; i < columnNotes.length; i++) {
+    await prisma.note.update({
+      where: {
+        id: columnNotes[i].id,
+      },
+      data: {
+        row: i,
+      },
+    });
+  }
+
   await prisma.checkPoint.deleteMany({
     where: { noteId: noteId },
   });
