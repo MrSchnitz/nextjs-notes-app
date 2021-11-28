@@ -46,7 +46,7 @@ interface NoteColumnType {
 }
 
 const orderNotes = (notes: NoteType[]): NoteColumnType[] => {
-  const col = 6;
+  const col = 12;
 
   const columns: NoteColumnType[] = [];
 
@@ -139,7 +139,6 @@ export default function NotesPage({ session, userNotes }: NotesPageProps) {
           );
 
         if (!noteSourceToChange) {
-          console.log("Uhh", source.droppableId, source.index);
           return;
         }
         noteSourceToChange.column = parseInt(destination.droppableId);

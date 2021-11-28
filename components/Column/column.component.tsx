@@ -4,11 +4,13 @@ import { Draggable, Droppable } from "react-beautiful-dnd";
 import styled from "styled-components";
 import { children } from "cheerio/lib/api/traversing";
 import { TagType } from "../../models/Tag";
+import {NOTE_WIDTH} from "../NoteCard/note-card.styles";
 
 const TaskList = styled.div<{ isDraggingOver: boolean }>`
   //padding: 8px;
   transition: background-color 0.2s ease;
   background-color: ${(props) => (props.isDraggingOver ? "skyblue" : "white")};
+  min-height: ${NOTE_WIDTH}px;
   //float: left;
   //flex: 50%;
   //flex-grow: 1;
