@@ -1,3 +1,4 @@
+"use client";
 import React, { ReactNode, useEffect, useState } from "react";
 import {
   NavContent,
@@ -12,11 +13,10 @@ import { Button, IconButton, useMediaQuery } from "@material-ui/core";
 import ExitToAppOutlinedIcon from "@material-ui/icons/ExitToAppOutlined";
 import NavigationItem from "../NavItem/navitem.component";
 import EmojiObjectsOutlinedIcon from "@material-ui/icons/EmojiObjectsOutlined";
-import KeepLogo from "../../../resources/assets/keep.svg";
+import keepLogo from "../../../resources/assets/keep.svg";
 import MenuIcon from "@material-ui/icons/Menu";
 import PersonOutlineOutlinedIcon from "@material-ui/icons/PersonOutlineOutlined";
-import { useRouter } from "next/router";
-import { signIn, signOut, useSession } from "next-auth/client";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import {
   selectNewTag,
   selectTags,
@@ -30,7 +30,6 @@ import Link from "next/link";
 import LabelOutlinedIcon from "@material-ui/icons/LabelOutlined";
 import { ChangeActionType } from "../../../lib/helpers";
 import { Loading } from "../../Loading/loading.component";
-import useRouterRefresh from "../../../hooks/useRouterRefresh";
 import { PageLinks } from "../../../lib/Links";
 import { device } from "../../../resources/styles/utils/media-query-utils";
 import NavSearchField from "../NavSearchField/nav-search-field.component";
@@ -38,23 +37,25 @@ import {
   NotesAPI,
   selectSearchNotesQuery,
 } from "../../../API/NotesPageAPI/NotesAPI";
+import { signIn, signOut, useSession } from "next-auth/react";
+import Image from "next/image";
 
 export interface NavbarProps {
   children: ReactNode;
 }
 
-const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
+export default function Navbar({ children }: NavbarProps) {
   const matchesMobileL = useMediaQuery(device.mobileL);
 
   const [openNav, setOpenNav] = useState(!matchesMobileL);
 
-  const [session, loading] = useSession();
+  const { data: session } = useSession();
 
   const dispatch = useDispatch();
 
-  const refresh = useRouterRefresh();
-
   const router = useRouter();
+  const query = useSearchParams();
+  const pathname = usePathname();
 
   const tagsLoading: boolean = useSelector(selectTagsLoading);
   const tags: TagType[] = useSelector(selectTags);
@@ -92,24 +93,20 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
         icon={<LabelOutlinedIcon />}
         url={`${PageLinks.tagsPage}/${tag.id}`}
         isTag={true}
-        isActive={router.query.tagId === tag.id}
+        isActive={query.get("tagId") === tag.id}
         onClick={handleOnNavClick}
       />
     ))
   );
 
   const renderDrawer = session &&
-    (router.pathname.includes("/notes") ||
-      router.pathname.includes("/tags")) && (
+    (pathname.includes("/notes") || pathname.includes("/tags")) && (
       <NavLeft open={openNav}>
         <NavigationItem
           name={"Notes"}
           url={PageLinks.notesPage}
           icon={<EmojiObjectsOutlinedIcon />}
-          isActive={
-            router.pathname.includes("notes") &&
-            !router.pathname.includes("all")
-          }
+          isActive={pathname.includes("notes") && !pathname.includes("all")}
           isOpen={openNav}
           onClick={handleOnNavClick}
         />
@@ -125,7 +122,7 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
           onUpdateTag={(tag: TagType) => dispatch(TagsAPI.updateTag(tag))}
           onDeleteTag={(tag: TagType) => {
             dispatch(TagsAPI.deleteTag(tag));
-            refresh();
+            router.refresh();
           }}
         />
       </NavLeft>
@@ -157,7 +154,7 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
   const renderLogo = (
     <Link href={PageLinks.landingPage}>
       <NavLogo>
-        <KeepLogo className="ms-2" />
+        <Image src={keepLogo} alt="logo" height={40} width={40} className="m-2" />
         <h2 className="m-0 ms-2">Notes</h2>
       </NavLogo>
     </Link>
@@ -178,14 +175,12 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
 
   const renderSearchField = session && (
     <NavSearchField
-      onSearch={(query: string) =>
+      onSearch={(queryString: string) =>
         dispatch(
           NotesAPI.searchNotes({
-            query: query,
-            tagId: router.query.tagId
-              ? (router.query.tagId as string)
-              : undefined,
-          })
+            query: queryString,
+            tagId: query.get("tagId") ?? undefined,
+          }),
         )
       }
       value={searchNotesQuery}
@@ -207,6 +202,4 @@ const Navbar: React.FC<NavbarProps> = ({ children }: NavbarProps) => {
       </NavContent>
     </>
   );
-};
-
-export default React.memo(Navbar);
+}

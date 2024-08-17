@@ -1,6 +1,4 @@
-import { GetServerSideProps } from "next";
-import { Session } from "next-auth";
-import { getSession } from "next-auth/client";
+"use client";
 import AddNote from "../../components/AddNote/add-note.component";
 import {
   NotesPageAddNote,
@@ -23,23 +21,28 @@ import NoteCard from "../../components/NoteCard/note-card.component";
 import { TagType } from "../../models/Tag";
 import { selectTags } from "../../API/TagsAPI/TagsAPI";
 import { ChangeActionType } from "../../lib/helpers";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { ApiLinks, PageLinks } from "../../lib/Links";
 import { CheckPointType } from "../../models/CheckPointObject";
 import { Loading } from "../../components/Loading/loading.component";
 import Head from "next/head";
+import { useSession } from "next-auth/react";
 
-export interface NotesPageProps {
-  session: Session | null;
-  userNotes: NoteType[];
-}
+export default function NotesPage() {
+  const { data: session } = useSession();
+  const router = useRouter();
+  const [notesToRender, setNotesToRender] = useState([]);
 
-export default function NotesPage({ session, userNotes }: NotesPageProps) {
+  // if (!session) {
+  //   router.replace(PageLinks.landingPage);
+  // }
   const dispatch = useDispatch();
 
-  const router = useRouter();
-
-  const [notesToRender, setNotesToRender] = useState(userNotes);
+  useEffect(() => {
+    get(`${process.env.HOST}${ApiLinks.notes}`).then((notes) =>
+      setNotesToRender(notes),
+    );
+  }, []);
 
   const newNote = useSelector(selectNote);
   const editNote = useSelector(selectEditNote);
@@ -52,13 +55,13 @@ export default function NotesPage({ session, userNotes }: NotesPageProps) {
     router.replace(currentRoute);
   }, [currentRoute]);
 
-  useEffect(() => {
-    if (searchNotes.length > 0) {
-      setNotesToRender(searchNotes);
-    } else {
-      setNotesToRender(userNotes);
-    }
-  }, [userNotes, searchNotes]);
+  // useEffect(() => {
+  //   if (searchNotes.length > 0) {
+  //     setNotesToRender(searchNotes);
+  //   } else {
+  //     setNotesToRender(userNotes);
+  //   }
+  // }, [searchNotes]);
 
   const handleOnAddNote = (update: boolean) => {
     dispatch(NotesAPI.addNote(update));
@@ -74,7 +77,7 @@ export default function NotesPage({ session, userNotes }: NotesPageProps) {
 
   const handleClickNoteCheckItem = (
     note: NoteType,
-    checkitem: CheckPointType
+    checkitem: CheckPointType,
   ) => {
     dispatch(NotesAPI.checkNoteAndSubmit({ note: note, checkitem: checkitem }));
   };
@@ -130,30 +133,30 @@ export default function NotesPage({ session, userNotes }: NotesPageProps) {
     </>
   );
 }
-
-export const getServerSideProps: GetServerSideProps<NotesPageProps> = async (
-  context
-) => {
-  const session = await getSession(context);
-
-  if (!session) {
-    return {
-      redirect: {
-        permanent: false,
-        destination: PageLinks.landingPage,
-      },
-    };
-  }
-
-  const userNotes: NoteType[] = await get(
-    `${process.env.HOST}${ApiLinks.notes}`,
-    context.req.headers.cookie!
-  );
-
-  return {
-    props: {
-      session: session,
-      userNotes: userNotes,
-    },
-  };
-};
+//
+// export const getServerSideProps: GetServerSideProps<NotesPageProps> = async (
+//   context,
+// ) => {
+//   const session = await getSession(context);
+//
+//   if (!session) {
+//     return {
+//       redirect: {
+//         permanent: false,
+//         destination: PageLinks.landingPage,
+//       },
+//     };
+//   }
+//
+//   const userNotes: NoteType[] = await get(
+//     `${process.env.HOST}${ApiLinks.notes}`,
+//     context.req.headers.cookie!,
+//   );
+//
+//   return {
+//     props: {
+//       session: session,
+//       userNotes: userNotes,
+//     },
+//   };
+// };

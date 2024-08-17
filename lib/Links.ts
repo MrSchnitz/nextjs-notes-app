@@ -1,6 +1,6 @@
 export const PageLinks = {
   landingPage: "/",
-  notesPage: "/notes/all",
+  notesPage: "/notes",
   notesPageNewNote: "/notes/new-note",
   notesPageDeleteNote: "/notes/delete-note",
   tagsPage: "/tags",

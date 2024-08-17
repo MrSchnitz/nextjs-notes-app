@@ -1,7 +1,6 @@
 import {
   combineReducers,
   configureStore,
-  getDefaultMiddleware,
 } from "@reduxjs/toolkit";
 import rootSaga, { mainReducers } from "./RootState";
 import createSagaMiddleware from "redux-saga";
@@ -17,7 +16,7 @@ function configureAppStore() {
 
   const store = configureStore({
     reducer: combineReducers({ ...mainReducers }),
-    middleware: [...getDefaultMiddleware(), ...middlewares],
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(middlewares),
     devTools: process.env.NODE_ENV !== "production",
   });
 

@@ -1,30 +1,37 @@
 import NextAuth from "next-auth";
-import Providers from "next-auth/providers";
-import {PrismaAdapter} from "@next-auth/prisma-adapter";
-import prisma from "../../../lib/prisma";
+import GithubProvider from "next-auth/providers/github";
+import CredentialsProvider from "next-auth/providers/credentials";
+import { PrismaAdapter } from "@next-auth/prisma-adapter";
+import prisma from "../../../../lib/prisma";
 
 // For more information on each option (and a full list of options) go to
 // https://next-auth.js.org/configuration/options
-export default NextAuth({
+const handler = NextAuth({
   // https://next-auth.js.org/configuration/providers
   providers: [
-    Providers.GitHub({
-      clientId: process.env.GITHUB_ID,
-      clientSecret: process.env.GITHUB_SECRET,
+    GithubProvider({
+      clientId: process.env.GITHUB_ID ?? "",
+      clientSecret: process.env.GITHUB_SECRET ?? "",
     }),
-    Providers.Credentials({
-      name: "credentials",
+    CredentialsProvider({
+      name: "Credentials",
+      credentials: {
+        userName: {
+          label: "Username",
+          type: "text",
+          placeholder: "Your username",
+        },
+      },
 
-      authorize: async (credentials: any) => {
+      async authorize(credentials: any) {
+        console.log("CredentialsProvider", credentials)
         const user = await prisma.user.findFirst({
           where: { name: credentials.userName },
         });
 
-        if (user) {
-          return Promise.resolve(user);
-        } else {
-          return Promise.resolve(null);
-        }
+        console.log("User", user)
+
+        return user ?? null;
       },
     }),
   ],
@@ -36,11 +43,6 @@ export default NextAuth({
   // secret: process.env.SECRET,
 
   session: {
-    // Use JSON Web Tokens for session instead of database sessions.
-    // This option can be used with or without a database for users/accounts.
-    // Note: `jwt` is automatically set to `true` if no database is specified.
-    jwt: true,
-
     // Seconds - How long until an idle session expires and is no longer valid.
     maxAge: 30 * 24 * 60 * 60, // 30 days
 
@@ -93,8 +95,10 @@ export default NextAuth({
 
   // You can set the theme to 'light', 'dark' or use 'auto' to default to the
   // whatever prefers-color-scheme is set to in the browser. Default is 'auto'
-  theme: "light",
+  // theme: { colorScheme: "auto" },
 
   // Enable debug messages in the console if you are having problems
   debug: false,
 });
+
+export { handler as GET, handler as POST };

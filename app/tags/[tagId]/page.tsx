@@ -1,11 +1,13 @@
-import { Session } from "next-auth";
+"use client";
 import React, { useEffect, useState } from "react";
 import { NoteType } from "../../../models/Note";
-import { TagsPageNoNotes, TagsPageNotes } from "../../../views/tags/[tagId]/tags-page.styles";
+import {
+  TagsPageNoNotes,
+  TagsPageNotes,
+} from "../../../views/tags/[tagId]/tags-page.styles";
 import { useDispatch, useSelector } from "react-redux";
 import NoteCard from "../../../components/NoteCard/note-card.component";
 import { GetServerSideProps } from "next";
-import { getSession } from "next-auth/client";
 import { get } from "../../../lib/RestAPI";
 import {
   NotesAPI,
@@ -22,16 +24,24 @@ import { CheckPointType } from "../../../models/CheckPointObject";
 import { useRouter } from "next/router";
 import { Loading } from "../../../components/Loading/loading.component";
 import Head from "next/head";
+import { useSession } from "next-auth/react";
 
-export interface TagsPageProps {
-  session: Session | null;
-  tagNotes: NoteType[];
-}
+export default async function TagsPage({
+  params,
+}: {
+  params: Record<string, string>;
+}) {
+  const { data: session } = useSession();
+  const router = useRouter();
 
-export default function TagsPage({ session, tagNotes }: TagsPageProps) {
+  if (!session) {
+    router.replace(PageLinks.landingPage);
+  }
   const dispatch = useDispatch();
 
-  const router = useRouter();
+  const tagNotes: NoteType[] = await get(
+    `${process.env.HOST}${ApiLinks.tagsNotes}/${params.tagId}`,
+  );
 
   const [notesToRender, setNotesToRender] = useState(tagNotes);
 
@@ -67,7 +77,7 @@ export default function TagsPage({ session, tagNotes }: TagsPageProps) {
 
   const handleClickNoteCheckItem = (
     note: NoteType,
-    checkitem: CheckPointType
+    checkitem: CheckPointType,
   ) => {
     dispatch(NotesAPI.checkNoteAndSubmit({ note: note, checkitem: checkitem }));
   };
@@ -110,31 +120,31 @@ export default function TagsPage({ session, tagNotes }: TagsPageProps) {
   );
 }
 
-export const getServerSideProps: GetServerSideProps<TagsPageProps> = async (
-  context
-) => {
-  const session = await getSession(context);
-
-  if (!session) {
-    return {
-      redirect: {
-        permanent: false,
-        destination: PageLinks.landingPage,
-      },
-    };
-  }
-
-  const { tagId } = context.query;
-
-  const userNotes: NoteType[] = await get(
-    `${process.env.HOST}${ApiLinks.tagsNotes}/${tagId}`,
-    context.req.headers.cookie!
-  );
-
-  return {
-    props: {
-      session: session,
-      tagNotes: userNotes,
-    },
-  };
-};
+// export const getServerSideProps: GetServerSideProps<TagsPageProps> = async (
+//   context,
+// ) => {
+//   const session = await getSession(context);
+//
+//   if (!session) {
+//     return {
+//       redirect: {
+//         permanent: false,
+//         destination: PageLinks.landingPage,
+//       },
+//     };
+//   }
+//
+//   const { tagId } = context.query;
+//
+//   const userNotes: NoteType[] = await get(
+//     `${process.env.HOST}${ApiLinks.tagsNotes}/${tagId}`,
+//     context.req.headers.cookie!,
+//   );
+//
+//   return {
+//     props: {
+//       session: session,
+//       tagNotes: userNotes,
+//     },
+//   };
+// };

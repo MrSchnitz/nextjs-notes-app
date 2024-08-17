@@ -1,9 +1,6 @@
+"use client";
 import React from "react";
 import Head from "next/head";
-import { getSession, signIn } from "next-auth/client";
-import { GetServerSideProps } from "next";
-import { Session } from "next-auth";
-import { PageLinks } from "../lib/Links";
 import {
   LandingPageBanner,
   LandingPageBannerText,
@@ -25,6 +22,9 @@ import NoteIcon from "@material-ui/icons/Note";
 import ListIcon from "@material-ui/icons/List";
 import ArrowForwardOutlinedIcon from "@material-ui/icons/ArrowForwardOutlined";
 import useSwitchTimeout from "../hooks/useSwitchTimeout";
+import { signIn, useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { PageLinks } from "../lib/Links";
 
 const transition = {
   type: "spring",
@@ -41,6 +41,16 @@ const bannerVariants = {
 };
 
 export default function LandingPage() {
+  const { data: session } = useSession();
+  // const router = useRouter();
+
+    console.log("SSS", session)
+
+  if (session) {
+      console.log("SSS", session)
+    // router.push(PageLinks.notesPage);
+  }
+
   const {
     switchContent: firstCardSwitch,
     setSwitchContent: setFirstCardSwitch,
@@ -174,23 +184,23 @@ export default function LandingPage() {
   );
 }
 
-export const getServerSideProps: GetServerSideProps<{
-  session: Session | null;
-}> = async (context) => {
-  const session = await getSession(context);
-
-  if (session) {
-    return {
-      redirect: {
-        permanent: false,
-        destination: PageLinks.notesPage,
-      },
-    };
-  }
-
-  return {
-    props: {
-      session: session,
-    },
-  };
-};
+// export const getServerSideProps: GetServerSideProps<{
+//   session: Session | null;
+// }> = async (context) => {
+//   const session = await getSession(context);
+//
+//   if (session) {
+//     return {
+//       redirect: {
+//         permanent: false,
+//         destination: PageLinks.notesPage,
+//       },
+//     };
+//   }
+//
+//   return {
+//     props: {
+//       session: session,
+//     },
+//   };
+// };

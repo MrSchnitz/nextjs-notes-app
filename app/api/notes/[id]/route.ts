@@ -1,8 +1,11 @@
 import { Note } from "@prisma/client";
 import { NextApiRequest, NextApiResponse } from "next";
-import { getSession } from "next-auth/client";
-import { deleteNote, searchNotes } from "../../../repositories/NoteRepository";
-import { cRestMethods } from "../../../lib/RestAPI";
+import {
+  deleteNote,
+  searchNotes,
+} from "../../../../repositories/NoteRepository";
+import { cRestMethods } from "../../../../lib/RestAPI";
+import { getServerSession } from "next-auth";
 
 type Data = {
   message: string;
@@ -10,9 +13,9 @@ type Data = {
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Data | Note[]>
+  res: NextApiResponse<Data | Note[]>,
 ) {
-  const session = await getSession({ req });
+  const session = await getServerSession(req, res, {});
 
   if (session) {
     const {
@@ -25,7 +28,7 @@ export default async function handler(
         const notes: Note[] = await searchNotes(
           query as string,
           session,
-          tagId ? (tagId as string) : undefined
+          tagId ? (tagId as string) : undefined,
         );
         res.status(200).json(notes);
         break;

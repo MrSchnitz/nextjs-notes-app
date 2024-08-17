@@ -1,3 +1,4 @@
+"use client"
 import React from "react";
 import {
   NotFoundPageContentWrapper,
@@ -6,7 +7,7 @@ import {
 } from "../views/404.styles";
 import Image from "next/image";
 import notFoundGif from "../resources/assets/404.gif";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { Button } from "@material-ui/core";
 import { PageLinks } from "../lib/Links";
 import DirectionsRunOutlinedIcon from "@material-ui/icons/DirectionsRunOutlined";
