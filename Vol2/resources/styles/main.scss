@@ -1,0 +1,22 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+// Main
+@import "./base/base";
+@import "./base/variables";
+@import "./base/scrollbar";
+
+.masonry {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  max-height: 1000px;
+
+  //@for $i from 1 through 36 {
+  //  & > div:nth-child(#{$i}) {
+  //    $h: (random(400) + 100) + px;
+  //    height: $h;
+  //  }
+  //}
+}
