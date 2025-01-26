@@ -16,13 +16,13 @@ export default async function Home() {
 
   return (
     <main className="h-full hero bg-[#e1d8d1]">
-      <div className="hero-content flex-col lg:flex-row">
+      <div className="hero-content flex-col p-0 lg:flex-row">
         <Image
           src={LightBulb}
           alt="light bulb"
           className="max-w-sm rounded-lg"
         />
-        <div>
+        <div className="flex flex-col md:items-start">
           <h1 className="text-5xl font-bold">Notes App</h1>
           <p className="py-6">Capture what&apos;s on your mind</p>
           <Link className="btn btn-sm" href={PAGE_LINKS.auth}>

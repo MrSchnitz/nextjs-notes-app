@@ -1,13 +1,6 @@
 "use client";
 
-import Head from "next/head";
 import React, { useEffect, useState } from "react";
-import {
-  SignInPageContainer,
-  SignInPageForm,
-  SignInPageHeadline,
-  SignInPageLogo,
-} from "@/views/auth/signin/sigin.styles";
 import { ClientSafeProvider, getProviders, signIn } from "next-auth/react";
 import keepLogo from "../../../resources/assets/keep.svg";
 import Image from "next/image";
@@ -52,7 +45,7 @@ const CredentialsProviderSection = ({
         onKeyDown={(event) => event.code === "Enter" && handleSignIn()}
         value={userName}
       />
-      <button className="btn btn-sm w-full mt-2 mb-3" onClick={handleSignIn}>
+      <button className="btn btn-sm w-full mt-1 mb-3" onClick={handleSignIn}>
         Sign in
       </button>
       <hr />
@@ -74,10 +67,10 @@ export default function SignInPage() {
 
   const renderHeader = (
     <>
-      <SignInPageLogo>
-        <Image src={keepLogo} alt="logo" height={40} width={40} />
-      </SignInPageLogo>
-      <SignInPageHeadline>Notes</SignInPageHeadline>
+      <div className="my-1 border-2 border-white rounded-lg [&_svg]:h-[50px] [&_svg]:w-[50px]">
+        <Image src={keepLogo} alt="logo" height={50} width={50} />
+      </div>
+      <h1 className="font-bold text-2xl uppercase text-white mb-2">Notes</h1>
     </>
   );
 
@@ -103,40 +96,16 @@ export default function SignInPage() {
 
   const renderForm = () => {
     return (
-      <SignInPageForm>
+      <div className="flex flex-col items-center w-[300px] bg-[#f5b500] p-4 rounded-xl shadow-[0_0_1rem_rgba(0,0,0,0.3)]">
         {renderHeader}
         {renderProvidersInputs}
-      </SignInPageForm>
+      </div>
     );
   };
 
-  return <SignInPageContainer>{renderForm()}</SignInPageContainer>;
+  return (
+    <section className="w-full h-screen flex justify-center items-center">
+      {renderForm()}
+    </section>
+  );
 }
-
-// export async function getServerSideProps(
-//   context: GetServerSidePropsContext
-// ): Promise<GetServerSidePropsResult<SignInProps>> {
-//   const { req, res } = context;
-//   const session = await getSession({ req });
-//
-//   if (session && res) {
-//     res.writeHead(302, {
-//       Location: "/",
-//     });
-//     res.end();
-//     return {
-//       props: { providers: null },
-//     };
-//   }
-//
-//   const providers: Record<
-//     string,
-//     ClientSafeProvider
-//   > | null = await getProviders();
-//
-//   return {
-//     props: {
-//       providers: providers,
-//     },
-//   };
-// }

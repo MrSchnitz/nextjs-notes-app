@@ -2,10 +2,12 @@ import React, {
   forwardRef,
   PropsWithChildren,
   ReactNode,
+  useEffect,
   useImperativeHandle,
   useState,
 } from "react";
 import { Bars3Icon } from "@heroicons/react/24/solid";
+import clsx from "clsx";
 
 type Props = {
   header: ReactNode;
@@ -18,10 +20,14 @@ const Drawer = forwardRef(
     { children, header, side, isToggleHidden }: PropsWithChildren<Props>,
     ref,
   ) => {
-    const [isDrawerOpened, setDraweOpened] = useState(false);
+    const [isDrawerOpened, setDrawerOpened] = useState(
+      typeof window == "undefined"
+        ? false
+        : window?.matchMedia("(min-width: 768px)").matches,
+    );
 
     const toggleDrawer = () => {
-      setDraweOpened((prevState) => !prevState);
+      setDrawerOpened((prevState) => !prevState);
     };
 
     useImperativeHandle(
@@ -33,42 +39,51 @@ const Drawer = forwardRef(
     );
 
     return (
-      <div className="drawer">
-        <input
-          id="my-drawer"
-          type="checkbox"
-          className="drawer-toggle"
-          checked={isDrawerOpened}
-          onChange={() => {}}
-        />
-        <div className="drawer-content">
-          <div className="w-full py-0.5 flex items-center bg-[#f5b500]">
-            {!isToggleHidden && (
-              <div className="ml-4 btn btn-ghost btn-circle">
-                <Bars3Icon
-                  className="text-white font-bold cursor-pointer"
-                  onClick={toggleDrawer}
-                  width={24}
-                  height={24}
-                />
+      <>
+        <div className="w-full py-0.5 flex items-center bg-[#f5b500]">
+          {!isToggleHidden && (
+            <button
+              className="ml-4 btn btn-ghost btn-circle"
+              onClick={toggleDrawer}
+            >
+              <Bars3Icon
+                className="text-white font-bold cursor-pointer"
+                width={24}
+                height={24}
+              />
+            </button>
+          )}
+          {header}
+        </div>
+        <div className="w-full flex">
+          {!isToggleHidden && (
+            <>
+              <input
+                id="my-drawer"
+                type="checkbox"
+                className="drawer-toggle [&:checked~.side_.sidebar-item]:w-40 md:[&:checked~.side_.sidebar-item]:w-72 [&:checked~.side_.sidebar-item]:rounded-l-none [&:checked~.side_.sidebar-item]:rounded-r-full [&:checked~.side_.sidebar-item]:ml-0 [&:checked~.side_.sidebar-item]:pl-6"
+                checked={isDrawerOpened}
+                onChange={() => {}}
+              />
+              <div
+                className={clsx(
+                  "fixed md:static z-50 bg-white md:bg-transparent mt-2 text-base-content min-h-full side",
+                )}
+              >
+                {side}
               </div>
+            </>
+          )}
+          <div
+            className={clsx(
+              "w-full min-h-[calc(100svh-60px)]",
+              !isToggleHidden && "ml-16 md:ml-0",
             )}
-            {header}
-          </div>
-          <div className="h-[calc(100vh-64px)]">{children}</div>
-        </div>
-        <div className="drawer-side top-[60px] z-50">
-          <label
-            htmlFor="my-drawer"
-            aria-label="close sidebar"
-            className="drawer-overlay !bg-transparent"
-            onClick={toggleDrawer}
-          ></label>
-          <div className="menu text-base-content min-h-full w-80 p-4 bg-[#f5b500]">
-            {side}
+          >
+            {children}
           </div>
         </div>
-      </div>
+      </>
     );
   },
 );

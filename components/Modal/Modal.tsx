@@ -1,24 +1,33 @@
 "use client";
-import React, { ReactNode, useEffect, useRef } from "react";
+import React, { PropsWithChildren, useEffect, useRef } from "react";
+import clsx from "clsx";
+import { createPortal } from "react-dom";
 
 interface Props {
-  children: ReactNode;
+  className?: string;
   onClose?: () => void;
 }
 
-export default function Modal({ children, onClose }: Props) {
+export default function Modal({
+  children,
+  className,
+  onClose,
+}: PropsWithChildren<Props>) {
   const modalRef = useRef<HTMLDialogElement>(null);
 
   useEffect(() => {
     modalRef.current?.showModal();
   }, []);
 
-  return (
+  return createPortal(
     <dialog className="modal" ref={modalRef} onClose={onClose}>
-      <div className="modal-box p-0 w-fit">{children}</div>
+      <div className={clsx("modal-box px-4 md:px-0 py-0 bg-transparent w-fit overflow-visible", className)}>
+        {children}
+      </div>
       <form method="dialog" className="modal-backdrop">
         <button>close</button>
       </form>
-    </dialog>
+    </dialog>,
+    document.body,
   );
 }

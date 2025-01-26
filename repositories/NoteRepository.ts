@@ -141,6 +141,7 @@ export const addNewNote = async (
         noteType: note.noteType,
         color: note.color,
         pinned: note.pinned,
+        image: note.image,
         tags: {
           connect: [...tags],
         },
@@ -158,8 +159,6 @@ export const addNewNote = async (
     try {
       const noteOrder = JSON.parse(user.noteOrder ?? "[]");
       const updatedNoteOrder = JSON.stringify([newNote.id, ...noteOrder]);
-
-      console.log("Updated note order", updatedNoteOrder);
 
       await prisma.user.update({
         where: { id: user.id },
@@ -213,6 +212,7 @@ export const updateNote = async (note: NoteType) => {
       noteType: note.noteType,
       color: note.color,
       pinned: note.pinned,
+      image: note.image,
       tags: {
         disconnect: [...oldTags],
         connect: [...tags],

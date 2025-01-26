@@ -1,5 +1,5 @@
-import React, { Suspense } from "react";
-import AddNote from "../../components/AddNote/AddNote";
+import React from "react";
+import EditNote from "@/components/EditNote/EditNote";
 import "../globals.css";
 import { NoteType } from "@/models/Note";
 import {
@@ -12,13 +12,9 @@ import {
 import { revalidatePath } from "next/cache";
 import { getServerSession, Session } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-import { getAllUserTags } from "@/repositories/TagRepository";
 import { PAGE_LINKS } from "@/lib/Links";
 import { redirect } from "next/navigation";
 import NotesWrapper from "@/components/NoteCard/NotesWrapper";
-import { User } from "@prisma/client";
-
-const LAYOUT_STORAGE_KEY = "masonry-layout";
 
 export default async function NotesPage() {
   const session: Session | null = await getServerSession(authOptions);
@@ -30,8 +26,6 @@ export default async function NotesPage() {
   const user = session ? await getUser(session) : [];
   const { notes, tags, noteOrder } = user;
   const parsedNoteOrder = noteOrder ? JSON.parse(noteOrder) : null;
-
-  console.log("NNN", user);
 
   const handleUpdateNoteLayoutOrder = async (order: string[]) => {
     "use server";
@@ -90,15 +84,16 @@ export default async function NotesPage() {
   const areNotesEmpty = notes.length === 0;
 
   return (
-    <div className="py-8 px-16 h-full">
-      <div className="p-12 w-full flex justify-center">
-        <AddNote onAddNote={handleAddNote} tags={tags} />
+    <div className="py-8 px-2 md:px-16 h-full">
+      <div className="pt-8 pb-8 md:p-12 w-full flex justify-center">
+        <EditNote onAddNote={handleAddNote} tags={tags} />
       </div>
       {areNotesEmpty ? (
         NotesEmptyElement
       ) : (
         <NotesWrapper
           notes={notes}
+          tags={tags}
           layoutOrder={parsedNoteOrder}
           onEditNote={handleEditNote}
           onDeleteNote={handleDeleteNote}

@@ -75,6 +75,7 @@ model Note {
   createdAt   DateTime     @default(now())
   tags        Tag[]
   checkPoints CheckPoint[]
+  image       String?
   user        User?        @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId      String?
 }

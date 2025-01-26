@@ -1,0 +1,229 @@
+"use client";
+import React, { ChangeEvent, useId, useRef, useState } from "react";
+import { EMPTY_NOTE, NoteType, NoteTypeEnum } from "@/models/Note";
+import { TagType } from "@/models/Tag";
+import clsx from "clsx";
+import { CheckPointType } from "@/models/CheckPointObject";
+import ColorPicker from "@/components/ColorPicker/ColorPicker";
+import { ImageInput } from "@/components/ImageInput/ImageInput";
+import { ImageInputViewer } from "@/components/ImageInput/ImageInputViewer";
+import useClickOutside from "@/lib/hooks/useClickOutside";
+import SelectTagDropdown from "@/components/EditNote/components/SelectTagDropdown";
+import EditNoteBody from "@/components/EditNote/components/EditNoteBody";
+import EditNoteFooter from "@/components/EditNote/components/EditNoteFooter";
+import EditNotePinButton from "@/components/EditNote/components/EditNotePinButton";
+import AnimatedHeight from "@/components/AnimatedHeight/AnimatedHeight";
+import AddNodeButton from "@/components/EditNote/components/EditNoteButton";
+
+export const ADD_NOTE_TRANSITION_DURATION = 500; // ms
+
+export interface AddNoteProps {
+  tags?: TagType[];
+  defaultNote?: NoteType;
+  onAddNote: (note: NoteType) => void;
+  onDeleteNote?: (id: string) => void;
+}
+
+const EditNote = ({
+  onAddNote,
+  tags,
+  defaultNote,
+  onDeleteNote,
+}: AddNoteProps) => {
+  const [isFocused, setIsFocused] = useState<boolean>(!!defaultNote);
+  const [note, setNote] = useState<NoteType>(
+    defaultNote ? { ...defaultNote } : EMPTY_NOTE,
+  );
+
+  const mainRef = useRef<HTMLDivElement>(null);
+
+  const id = useId();
+
+  console.log("DEFAULT NOTE", id);
+
+  const handleSetNoteProp = (prop: string, value: any) => {
+    console.log("WHAT", prop, defaultNote);
+    setNote((prevState) => ({
+      ...prevState,
+      [prop]: value,
+    }));
+  };
+
+  const handleChange = (
+    event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>,
+  ) => {
+    handleSetNoteProp(event.target.name, event.target.value);
+  };
+
+  const handleCheckPointChange = (newCheckPoints: CheckPointType[]) => {
+    handleSetNoteProp("checkPoints", newCheckPoints);
+  };
+
+  const handlePinChange = (isPinned: boolean) => {
+    handleSetNoteProp("pinned", isPinned);
+  };
+
+  const handleChangeColor = (color: string) => {
+    handleSetNoteProp("color", color);
+  };
+
+  const handleChangeImage = (image: string) => {
+    handleSetNoteProp("image", image);
+  };
+
+  const handleFocus = () => {
+    if (defaultNote === undefined) {
+      setIsFocused(true);
+    }
+  };
+
+  const handleAddTag = (tag: TagType) => {
+    const currentNoteTags = note.tags ?? [];
+    const newTags = currentNoteTags.find(
+      (currentTag) => currentTag.id === tag.id,
+    )
+      ? currentNoteTags.filter((tagIndex) => tagIndex.id !== tag.id)
+      : [...currentNoteTags, tag];
+
+    handleSetNoteProp("tags", newTags);
+  };
+
+  const handleChangeNoteType = () => {
+    setNote((prevState) => ({
+      ...prevState,
+      noteType:
+        prevState.noteType === NoteTypeEnum.TEXT
+          ? NoteTypeEnum.CHECK
+          : NoteTypeEnum.TEXT,
+      checkPoints:
+        prevState.noteType === NoteTypeEnum.TEXT &&
+        prevState.checkPoints?.length === 0
+          ? [{ text: null, checked: false }]
+          : prevState.checkPoints,
+    }));
+  };
+
+  const handleOnClose = () => {
+    if (defaultNote === undefined) {
+      setIsFocused(false);
+    }
+    if (
+      note.name.length > 0 ||
+      note.content.length > 0 ||
+      (note.checkPoints?.length ?? 0) > 0
+    ) {
+      const newNote = { ...note };
+      if (note.noteType === NoteTypeEnum.CHECK) {
+        newNote.checkPoints = newNote.checkPoints?.filter(
+          (cp) => cp.text !== null,
+        );
+        newNote.content = "";
+      } else {
+        newNote.checkPoints = [];
+      }
+      if (!defaultNote) {
+        setNote(EMPTY_NOTE);
+      }
+
+      setTimeout(() => {
+        onAddNote(newNote);
+      }, ADD_NOTE_TRANSITION_DURATION);
+    }
+  };
+
+  useClickOutside({
+    ref: mainRef,
+    onClickOutside: () => {
+      if (isFocused && !defaultNote) {
+        handleOnClose();
+      }
+    },
+  });
+
+  const isTransitionDisabled = defaultNote !== undefined;
+
+  return (
+    <div
+      className={clsx(
+        "flex flex-col px-4 py-3 rounded-lg bg-white shadow-[0_1px_2px_0_rgba(60,64,67,0.302),0_2px_6px_2px_rgba(60,64,67,0.149)] w-full max-w-[600px] transition-colors",
+      )}
+      style={{ backgroundColor: note.color }}
+      ref={mainRef}
+    >
+      <AnimatedHeight
+        duration={ADD_NOTE_TRANSITION_DURATION}
+        toggle={!!note.image}
+        className={clsx(!!note.image && "-mt-3 -mx-4 mb-4")}
+      >
+        {note.image && (
+          <ImageInputViewer
+            className="rounded-t-lg"
+            imageData={note.image}
+            onRemove={() => handleChangeImage("")}
+          />
+        )}
+      </AnimatedHeight>
+      <AnimatedHeight
+        duration={ADD_NOTE_TRANSITION_DURATION}
+        toggle={isFocused}
+        disabled={isTransitionDisabled}
+      >
+        <input
+          className="w-full mb-3 font-bold"
+          placeholder="Name"
+          name="name"
+          value={note.name}
+          onChange={handleChange}
+        />
+        <div className="absolute top-0 right-0 flex items-center gap-x-1">
+          <EditNotePinButton
+            isPinned={note.pinned}
+            onPinChange={handlePinChange}
+          />
+          {onDeleteNote && note.id && (
+            <AddNodeButton onClick={() => onDeleteNote(note.id ?? "")}>
+              <span className="material-icons-outlined">delete</span>
+            </AddNodeButton>
+          )}
+        </div>
+      </AnimatedHeight>
+      <EditNoteBody
+        noteType={note.noteType}
+        noteContent={note.content}
+        checkPoints={note.checkPoints ?? []}
+        isFocused={isFocused}
+        onContentChange={handleChange}
+        onCheckPointChange={handleCheckPointChange}
+        onClick={handleFocus}
+      />
+      <AnimatedHeight
+        duration={ADD_NOTE_TRANSITION_DURATION}
+        toggle={isFocused}
+        disabled={isTransitionDisabled}
+      >
+        <EditNoteFooter tags={note.tags ?? []}>
+          <ColorPicker onChooseColor={handleChangeColor} />
+          <AddNodeButton
+            onClick={handleChangeNoteType}
+            isActive={note.noteType === NoteTypeEnum.CHECK}
+          >
+            <span className="material-icons-outlined">check_box</span>
+          </AddNodeButton>
+          <ImageInput onFile={handleChangeImage} />
+          <SelectTagDropdown
+            tags={tags}
+            noteTags={note.tags}
+            addTag={handleAddTag}
+          />
+          <div className="w-full flex items-center justify-end">
+            <button className="btn btn-sm btn-ghost" onClick={handleOnClose}>
+              Close
+            </button>
+          </div>
+        </EditNoteFooter>
+      </AnimatedHeight>
+    </div>
+  );
+};
+
+export default EditNote;

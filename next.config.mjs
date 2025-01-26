@@ -7,6 +7,11 @@ const nextConfig = {
   images: {
     domains: ["avatars.githubusercontent.com"],
   },
+  experimental: {
+    serverActions: {
+      bodySizeLimit: "50mb",
+    }
+  }
 };
 
 export default nextConfig;

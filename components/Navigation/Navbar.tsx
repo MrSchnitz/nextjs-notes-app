@@ -1,13 +1,12 @@
 "use client";
-import React, { ReactNode, useState } from "react";
+import React, { ReactNode } from "react";
 import keepLogo from "../../resources/assets/keep.svg";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { PAGE_LINKS } from "../../lib/Links";
+import { PAGE_LINKS } from "@/lib/Links";
 import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
-import { Bars3Icon } from "@heroicons/react/24/solid";
-import TagsModal from "@/components/TagsModal/TagsModal";
+import Sidebar from "@/components/Sidebar/Sidebar";
 import Drawer from "@/components/Navigation/Drawer";
 
 export interface NavbarProps {
@@ -15,17 +14,8 @@ export interface NavbarProps {
 }
 
 export default function Navbar({ children }: NavbarProps) {
-  const [isDrawerOpened, setDraweOpened] = useState(false);
-
   const { data: session } = useSession();
-
   const router = useRouter();
-  const query = useSearchParams();
-  const pathname = usePathname();
-
-  const toggleDrawer = () => {
-    setDraweOpened((prevState) => !prevState);
-  };
 
   const renderLogo = (
     <Link href={PAGE_LINKS.landingPage}>
@@ -75,7 +65,7 @@ export default function Navbar({ children }: NavbarProps) {
           {renderUserBar}
         </>
       }
-      side={<TagsModal />}
+      side={<Sidebar />}
       isToggleHidden={!session}
     >
       {children}

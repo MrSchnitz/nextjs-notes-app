@@ -1,6 +1,5 @@
 import { TagType } from "./Tag";
 import { CheckPointType } from "./CheckPointObject";
-import { Note } from "@prisma/client";
 
 export enum NoteTypeEnum {
   CHECK = "CHECK",
@@ -15,43 +14,21 @@ export interface NoteModel {
   color: string;
   pinned: boolean;
   createdAt: string;
+  image?: string;
   tags?: TagType[];
   checkPoints?: CheckPointType[];
 }
 
 export type NoteType = NoteModel;
 
-export const NoteObject: NoteType = {
-  id: "",
+export const EMPTY_NOTE: NoteType = {
   name: "",
+  content: "",
   noteType: NoteTypeEnum.TEXT,
-  content: "",
-  color: "#fff",
-  pinned: false,
-  createdAt: new Date(Date.now()).toString(),
-  tags: [],
   checkPoints: [],
-};
-
-export const NoteDBObject: Note = {
-  id: "",
-  name: "",
-  noteType: "TEXT",
+  tags: [],
   color: "",
-  content: "",
   pinned: false,
-  createdAt: new Date(Date.now()),
-  userId: "",
+  createdAt: "",
+  image: undefined,
 };
-
-export enum cNoteModel {
-  id = "id",
-  name = "name",
-  noteType = "noteType",
-  color = "color",
-  content = "content",
-  pinned = "pinned",
-  createdAt = "createdAt",
-  tags = "tags",
-  checkPoints = "checkPoints",
-}
