@@ -13,7 +13,7 @@ import EditNoteBody from "@/components/Note/EditNote/components/EditNoteBody";
 import EditNoteFooter from "@/components/Note/EditNote/components/EditNoteFooter";
 import EditNotePinButton from "@/components/Note/EditNote/components/EditNotePinButton";
 import AnimatedHeight from "@/components/AnimatedHeight/AnimatedHeight";
-import AddNodeButton from "@/components/Note/EditNote/components/EditNoteButton";
+import GhostCircleButton from "@/components/GhostCircleButton/GhostCircleButton";
 
 export const ADD_NOTE_TRANSITION_DURATION = 500; // ms
 
@@ -181,9 +181,9 @@ const EditNote = ({
             onPinChange={handlePinChange}
           />
           {onDeleteNote && note.id && (
-            <AddNodeButton onClick={() => onDeleteNote(note.id ?? "")}>
+            <GhostCircleButton onClick={() => onDeleteNote(note.id ?? "")}>
               <span className="material-icons-outlined">delete</span>
-            </AddNodeButton>
+            </GhostCircleButton>
           )}
         </div>
       </AnimatedHeight>
@@ -203,12 +203,12 @@ const EditNote = ({
       >
         <EditNoteFooter tags={note.tags ?? []}>
           <ColorPicker onChooseColor={handleChangeColor} />
-          <AddNodeButton
+          <GhostCircleButton
             onClick={handleChangeNoteType}
             isActive={note.noteType === NoteTypeEnum.CHECK}
           >
             <span className="material-icons-outlined">check_box</span>
-          </AddNodeButton>
+          </GhostCircleButton>
           <ImageInput onFile={handleChangeImage} />
           <SelectTagDropdown
             tags={tags}

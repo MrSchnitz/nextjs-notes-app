@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import React from "react";
-import AddNodeButton from "@/components/Note/EditNote/components/EditNoteButton";
+import GhostCircleButton from "@/components/GhostCircleButton/GhostCircleButton";
 
 type Props = {
   className?: string;
@@ -16,7 +16,7 @@ const EditNotePinButton = ({ className, isPinned, onPinChange }: Props) => {
 
   return (
     <div className={className}>
-      <AddNodeButton onClick={handleClick}>
+      <GhostCircleButton onClick={handleClick}>
         <span
           className={clsx(
             isPinned ? "material-icons" : "material-icons-outlined",
@@ -24,7 +24,7 @@ const EditNotePinButton = ({ className, isPinned, onPinChange }: Props) => {
         >
           push_pin
         </span>
-      </AddNodeButton>
+      </GhostCircleButton>
     </div>
   );
 };

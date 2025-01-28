@@ -1,17 +1,19 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useSession } from "next-auth/react";
+import { Tag } from "@prisma/client";
+import { usePathname, useRouter } from "next/navigation";
+import TagsModal, {
+  TagsModalImperativeProps,
+} from "@/components/Sidebar/TagsModal";
 import {
   addNewTag,
   deleteTag,
   getAllUserTags,
+  updateTag,
 } from "@/repositories/TagRepository";
-import { Tag } from "@prisma/client";
-import { usePathname, useRouter } from "next/navigation";
-import { PAGE_LINKS } from "@/lib/Links";
 import SidebarItem from "@/components/Sidebar/SidebarItem";
-import TagsModal, {
-  TagsModalImperativeProps,
-} from "@/components/Sidebar/TagsModal";
+import { PAGE_LINKS } from "@/lib/Links";
+import GhostCircleButton from "@/components/GhostCircleButton/GhostCircleButton";
 
 export default function Sidebar() {
   const [tags, setTags] = useState<Tag[]>([]);
@@ -39,6 +41,18 @@ export default function Sidebar() {
     }
   };
 
+  const handleUpdateTag = async (tagName: string, tagId: string) => {
+    if (session) {
+      try {
+        await updateTag({ name: tagName, id: tagId }, session);
+        getTags();
+        refresh();
+      } catch (e) {
+        alert("Update tag went wrong...");
+      }
+    }
+  };
+
   const handleDeleteTag = async (event: React.MouseEvent, tagId: string) => {
     event.stopPropagation();
     event.preventDefault();
@@ -60,7 +74,11 @@ export default function Sidebar() {
 
   return (
     <>
-      <TagsModal onAddTag={handleAddTag} ref={tagModalRef} />
+      <TagsModal
+        onAddTag={handleAddTag}
+        onUpdateTag={handleUpdateTag}
+        ref={tagModalRef}
+      />
       <div className="mb-2 flex flex-col">
         <SidebarItem
           icon="lightbulb"
@@ -85,12 +103,23 @@ export default function Sidebar() {
                 href={currentLink}
                 isActive={pathname === tagLink}
                 sideItem={
-                  <button
-                    className="btn btn-sm btn-circle btn-ghost hidden group-hover:block"
-                    onClick={(event) => handleDeleteTag(event, tag.id)}
-                  >
-                    <span className="material-icons">delete</span>
-                  </button>
+                  <div className="flex items-center invisible pointer-events-none group-hover:visible group-hover:pointer-events-auto">
+                    <GhostCircleButton
+                      onClick={(event: React.MouseEvent) => {
+                        event.preventDefault();
+                        tagModalRef.current.edit(tag.name, tag.id);
+                      }}
+                    >
+                      <span className="material-icons">edit</span>
+                    </GhostCircleButton>
+                    <GhostCircleButton
+                      onClick={(event: React.MouseEvent) =>
+                        handleDeleteTag(event, tag.id)
+                      }
+                    >
+                      <span className="material-icons">delete</span>
+                    </GhostCircleButton>
+                  </div>
                 }
               />
             </div>

@@ -2,7 +2,7 @@ import { TagType } from "@/models/Tag";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import clsx from "clsx";
 import useClickOutside from "@/lib/hooks/useClickOutside";
-import AddNodeButton from "@/components/Note/EditNote/components/EditNoteButton";
+import GhostCircleButton from "@/components/GhostCircleButton/GhostCircleButton";
 
 const SelectTagDropdown = ({
   tags,
@@ -30,9 +30,9 @@ const SelectTagDropdown = ({
     <div
       className={clsx("dropdown dropdown-bottom", isOpen && "dropdown-open")}
     >
-      <AddNodeButton onClick={() => setIsOpen((prevState) => !prevState)}>
+      <GhostCircleButton onClick={() => setIsOpen((prevState) => !prevState)}>
         <span className="material-icons-outlined">label</span>
-      </AddNodeButton>
+      </GhostCircleButton>
       <ul
         className={clsx(
           "dropdown-content menu bg-base-100 rounded-box z-20 w-52 p-2 shadow",
