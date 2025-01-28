@@ -8,12 +8,12 @@ import ColorPicker from "@/components/ColorPicker/ColorPicker";
 import { ImageInput } from "@/components/ImageInput/ImageInput";
 import { ImageInputViewer } from "@/components/ImageInput/ImageInputViewer";
 import useClickOutside from "@/lib/hooks/useClickOutside";
-import SelectTagDropdown from "@/components/EditNote/components/SelectTagDropdown";
-import EditNoteBody from "@/components/EditNote/components/EditNoteBody";
-import EditNoteFooter from "@/components/EditNote/components/EditNoteFooter";
-import EditNotePinButton from "@/components/EditNote/components/EditNotePinButton";
+import SelectTagDropdown from "@/components/Note/EditNote/components/SelectTagDropdown";
+import EditNoteBody from "@/components/Note/EditNote/components/EditNoteBody";
+import EditNoteFooter from "@/components/Note/EditNote/components/EditNoteFooter";
+import EditNotePinButton from "@/components/Note/EditNote/components/EditNotePinButton";
 import AnimatedHeight from "@/components/AnimatedHeight/AnimatedHeight";
-import AddNodeButton from "@/components/EditNote/components/EditNoteButton";
+import AddNodeButton from "@/components/Note/EditNote/components/EditNoteButton";
 
 export const ADD_NOTE_TRANSITION_DURATION = 500; // ms
 

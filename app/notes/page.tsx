@@ -1,5 +1,5 @@
 import React from "react";
-import EditNote from "@/components/EditNote/EditNote";
+import EditNote from "@/components/Note/EditNote/EditNote";
 import "../globals.css";
 import { NoteType } from "@/models/Note";
 import {
@@ -14,7 +14,14 @@ import { getServerSession, Session } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { PAGE_LINKS } from "@/lib/Links";
 import { redirect } from "next/navigation";
-import NotesWrapper from "@/components/NoteCard/NotesWrapper";
+import {
+  handleAddNote,
+  handleDeleteNote,
+  handleEditNote,
+  handleUpdateNoteLayoutOrder,
+} from "@/app/actions";
+import NotesWrapper from "@/app/notes/NotesWrapper";
+import NotesEmptyElement from "@/components/Note/NotesEmptyElement";
 
 export default async function NotesPage() {
   const session: Session | null = await getServerSession(authOptions);
@@ -27,69 +34,15 @@ export default async function NotesPage() {
   const { notes, tags, noteOrder } = user;
   const parsedNoteOrder = noteOrder ? JSON.parse(noteOrder) : null;
 
-  const handleUpdateNoteLayoutOrder = async (order: string[]) => {
-    "use server";
-    if (session) {
-      try {
-        await updateNoteOrder(session, JSON.stringify(order));
-        // revalidatePath("/");
-      } catch (error) {
-        console.log("Update note order went wrong", error);
-      }
-    }
-  };
-
-  const handleAddNote = async (note: NoteType) => {
-    "use server";
-    if (session) {
-      try {
-        await addNewNote(note, session);
-        revalidatePath(PAGE_LINKS.notesPage);
-      } catch (error) {
-        console.log("Add note went wrong", error);
-      }
-    }
-  };
-
-  const handleDeleteNote = async (id: string) => {
-    "use server";
-    if (session) {
-      try {
-        await deleteNote(id, session);
-        revalidatePath(PAGE_LINKS.notesPage);
-      } catch (error) {
-        console.log("Delete note went wrong", error);
-      }
-    }
-  };
-
-  const handleEditNote = async (note: NoteType) => {
-    "use server";
-    if (session) {
-      try {
-        await updateNote(note);
-        revalidatePath(PAGE_LINKS.notesPage);
-      } catch (error) {
-        console.log("Edit note went wrong", error);
-      }
-    }
-  };
-
-  const NotesEmptyElement = (
-    <div className="w-full h-full flex justify-center items-center text-center text-4xl font-bold">
-      <h1>Sorry, no notes are available...</h1>
-    </div>
-  );
-
   const areNotesEmpty = notes.length === 0;
 
   return (
-    <div className="py-8 px-2 md:px-16 h-full">
+    <div className="py-8 px-2 md:px-4 h-full w-full">
       <div className="pt-8 pb-8 md:p-12 w-full flex justify-center">
         <EditNote onAddNote={handleAddNote} tags={tags} />
       </div>
       {areNotesEmpty ? (
-        NotesEmptyElement
+        <NotesEmptyElement />
       ) : (
         <NotesWrapper
           notes={notes}

@@ -2,7 +2,7 @@ import { NoteTypeEnum } from "@/models/Note";
 import clsx from "clsx";
 import React, { ChangeEvent, useRef } from "react";
 import { CheckPointType } from "@/models/CheckPointObject";
-import NoteCheckItem from "@/components/EditNote/components/NoteCheckItem";
+import NoteCheckItem from "@/components/Note/EditNote/components/NoteCheckItem";
 
 type Props = {
   noteType: NoteTypeEnum;

@@ -2,7 +2,7 @@ import { TagType } from "@/models/Tag";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import clsx from "clsx";
 import useClickOutside from "@/lib/hooks/useClickOutside";
-import AddNodeButton from "@/components/EditNote/components/EditNoteButton";
+import AddNodeButton from "@/components/Note/EditNote/components/EditNoteButton";
 
 const SelectTagDropdown = ({
   tags,

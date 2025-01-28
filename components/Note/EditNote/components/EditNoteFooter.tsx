@@ -1,7 +1,7 @@
 import { TagType } from "@/models/Tag";
 import React, { PropsWithChildren } from "react";
 import AnimatedHeight from "@/components/AnimatedHeight/AnimatedHeight";
-import { ADD_NOTE_TRANSITION_DURATION } from "@/components/EditNote/EditNote";
+import { ADD_NOTE_TRANSITION_DURATION } from "@/components/Note/EditNote/EditNote";
 
 type Props = {
   tags: TagType[];

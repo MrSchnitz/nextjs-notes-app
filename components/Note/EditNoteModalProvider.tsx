@@ -9,7 +9,7 @@ import React, {
 } from "react";
 import Modal from "@/components/Modal/Modal";
 import { NoteType, NoteTypeEnum } from "@/models/Note";
-import EditNote from "@/components/EditNote/EditNote";
+import EditNote from "@/components/Note/EditNote/EditNote";
 import { TagType } from "@/models/Tag";
 
 type EditModalContextType = {

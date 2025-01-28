@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import React from "react";
-import AddNodeButton from "@/components/EditNote/components/EditNoteButton";
+import AddNodeButton from "@/components/Note/EditNote/components/EditNoteButton";
 
 type Props = {
   className?: string;

@@ -1,4 +1,4 @@
-import React, {ChangeEvent, useCallback, useId} from "react";
+import React, { ChangeEvent, useCallback } from "react";
 import clsx from "clsx";
 
 async function convertFileToBase64(file: File): Promise<string> {
@@ -36,10 +36,6 @@ type Props = {
 };
 
 export const ImageInput = ({ className, onFile }: Props) => {
-  const id = useId();
-
-  console.log("id", id);
-
   const handleChange = useCallback(
     async (event: ChangeEvent<HTMLInputElement>) => {
       const files = event.target.files;

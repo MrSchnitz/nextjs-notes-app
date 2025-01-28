@@ -1,4 +1,4 @@
-"use server"
+"use server";
 import { Note, Tag } from "@prisma/client";
 import { Session } from "next-auth";
 import { TagType } from "@/models/Tag";
@@ -59,7 +59,7 @@ export const addNewTag = async (
  * @param tag
  */
 export const updateTag = async (tag: TagType): Promise<Tag | undefined> => {
-  return await prisma.tag.update({
+  return prisma.tag.update({
     where: {
       id: tag.id,
     },
@@ -72,9 +72,10 @@ export const updateTag = async (tag: TagType): Promise<Tag | undefined> => {
 /**
  * Get all searchNotes of given tag by its ID
  * @param tagId
+ * @param userSession - session object of current user
  */
-export const getTagNotes = async (tagId: string): Promise<Note[]> => {
-  return await prisma.note.findMany({
+export const getTagPageItems = async (tagId: string, userSession: Session) => {
+  const notes = await prisma.note.findMany({
     where: {
       tags: {
         some: { id: tagId },
@@ -85,6 +86,13 @@ export const getTagNotes = async (tagId: string): Promise<Note[]> => {
       checkPoints: true,
     },
   });
+
+  const tags = await getAllUserTags(userSession);
+
+  return {
+    notes,
+    tags,
+  };
 };
 
 /**

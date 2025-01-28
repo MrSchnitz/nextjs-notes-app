@@ -2,10 +2,10 @@
 import React, { useState } from "react";
 import { NoteType, NoteTypeEnum } from "@/models/Note";
 import { CheckPointType } from "@/models/CheckPointObject";
-import NoteCardCheckItem from "@/components/NoteCard/NoteCardCheckbox";
+import NoteCardCheckItem from "@/components/Note/NoteCard/NoteCardCheckbox";
 import clsx from "clsx";
-import { useEditNoteModalContext } from "@/components/NoteCard/EditNoteModalProvider";
-import EditNotePinButton from "@/components/EditNote/components/EditNotePinButton";
+import { useEditNoteModalContext } from "@/components/Note/EditNoteModalProvider";
+import EditNotePinButton from "@/components/Note/EditNote/components/EditNotePinButton";
 
 interface Props {
   note: NoteType;
@@ -46,7 +46,7 @@ export default function NoteCard({ note, onEditNote, onDeleteNote }: Props) {
   return (
     <>
       <div
-        className="px-4 py-3 border rounded-xl border-[#e0e0e0] bg-white w-[250px] h-fit relative cursor-pointer"
+        className="px-4 py-3 border rounded-xl border-[#e0e0e0] bg-white w-full md:w-[250px] h-fit relative cursor-pointer"
         style={{ backgroundColor: note.color }}
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
