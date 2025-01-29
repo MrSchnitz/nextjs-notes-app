@@ -34,15 +34,9 @@ const EditNote = ({
   const [note, setNote] = useState<NoteType>(
     defaultNote ? { ...defaultNote } : EMPTY_NOTE,
   );
-
   const mainRef = useRef<HTMLDivElement>(null);
 
-  const id = useId();
-
-  console.log("DEFAULT NOTE", id);
-
   const handleSetNoteProp = (prop: string, value: any) => {
-    console.log("WHAT", prop, defaultNote);
     setNote((prevState) => ({
       ...prevState,
       [prop]: value,
@@ -134,7 +128,7 @@ const EditNote = ({
   useClickOutside({
     ref: mainRef,
     onClickOutside: () => {
-      if (isFocused && !defaultNote) {
+      if (isFocused) {
         handleOnClose();
       }
     },

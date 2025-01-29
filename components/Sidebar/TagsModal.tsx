@@ -38,6 +38,7 @@ const TagsModal = forwardRef<TagsModalImperativeProps, Props>(
 
     const handleClose = () => {
       setNewTagName("");
+      setTagId(null);
     };
 
     useImperativeHandle(ref, () => ({

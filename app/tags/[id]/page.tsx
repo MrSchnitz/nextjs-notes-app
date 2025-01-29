@@ -9,10 +9,11 @@ import { redirect } from "next/navigation";
 import { PAGE_LINKS } from "@/lib/Links";
 
 export default async function Tags({
-  params: { id },
+  params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
+  const { id } = await params;
   const session: Session | null = await getServerSession(authOptions);
 
   if (!session) {

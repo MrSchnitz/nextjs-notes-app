@@ -40,7 +40,7 @@ export const addNewTag = async (
   });
 
   if (user) {
-    return await prisma.tag.create({
+    return prisma.tag.create({
       data: {
         name: tag.name,
         user: {

@@ -1,39 +1,30 @@
-import React, { useEffect, useRef, useState } from "react";
+"use client";
+import React, { useRef } from "react";
 import { useSession } from "next-auth/react";
 import { Tag } from "@prisma/client";
 import { usePathname, useRouter } from "next/navigation";
 import TagsModal, {
   TagsModalImperativeProps,
 } from "@/components/Sidebar/TagsModal";
-import {
-  addNewTag,
-  deleteTag,
-  getAllUserTags,
-  updateTag,
-} from "@/repositories/TagRepository";
+import { addNewTag, deleteTag, updateTag } from "@/repositories/TagRepository";
 import SidebarItem from "@/components/Sidebar/SidebarItem";
 import { PAGE_LINKS } from "@/lib/Links";
 import GhostCircleButton from "@/components/GhostCircleButton/GhostCircleButton";
 
-export default function Sidebar() {
-  const [tags, setTags] = useState<Tag[]>([]);
+type Props = {
+  tags: Tag[];
+};
+
+export default function Sidebar({ tags }: Props) {
   const tagModalRef = useRef<TagsModalImperativeProps>(null);
   const pathname = usePathname();
   const { refresh } = useRouter();
-
   const { data: session } = useSession();
-
-  const getTags = () => {
-    if (session) {
-      getAllUserTags(session).then((tags) => setTags(tags));
-    }
-  };
 
   const handleAddTag = async (tagName: string) => {
     if (session) {
       try {
         await addNewTag({ name: tagName }, session);
-        getTags();
         refresh();
       } catch (e) {
         alert("Add tag went wrong...");
@@ -44,8 +35,7 @@ export default function Sidebar() {
   const handleUpdateTag = async (tagName: string, tagId: string) => {
     if (session) {
       try {
-        await updateTag({ name: tagName, id: tagId }, session);
-        getTags();
+        await updateTag({ name: tagName, id: tagId });
         refresh();
       } catch (e) {
         alert("Update tag went wrong...");
@@ -60,17 +50,12 @@ export default function Sidebar() {
     if (session) {
       try {
         await deleteTag(tagId);
-        getTags();
         refresh();
       } catch (e) {
         alert("Delete tag went wrong...");
       }
     }
   };
-
-  useEffect(() => {
-    getTags();
-  }, [session]);
 
   return (
     <>
@@ -107,7 +92,7 @@ export default function Sidebar() {
                     <GhostCircleButton
                       onClick={(event: React.MouseEvent) => {
                         event.preventDefault();
-                        tagModalRef.current.edit(tag.name, tag.id);
+                        tagModalRef.current?.edit(tag.name, tag.id);
                       }}
                     >
                       <span className="material-icons">edit</span>

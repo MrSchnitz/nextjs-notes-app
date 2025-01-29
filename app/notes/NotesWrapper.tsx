@@ -1,11 +1,12 @@
 "use client";
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import { NoteType } from "@/models/Note";
 import { TagType } from "@/models/Tag";
 import EditNoteModalProvider from "@/components/Note/EditNoteModalProvider";
 import NoteCard from "@/components/Note/NoteCard/NoteCard";
 import MasonryLayoutDnD from "@/components/MansoryLayout/MasonryLayout";
 import { MasonryItem } from "@/components/MansoryLayout/MasonryLayout";
+import {NotesSkeletonLoader} from "@/components/SkeletonLoading/SkeletonLoading";
 
 function getSortedNotes(notes: NoteType[], layoutOrder: string[]) {
   const sortedNotes = [...notes].sort(
@@ -35,6 +36,7 @@ const NotesWrapper = ({
   onEditNote,
   onLayoutOrderChange,
 }: Props) => {
+  const [isMounted, setIsMounted] = useState(false);
   const [noteLayoutOrder, setNoteLayoutOrder] = useState<string[]>(layoutOrder);
 
   const sortedNotes = getSortedNotes(notes, noteLayoutOrder);
@@ -70,6 +72,14 @@ const NotesWrapper = ({
     setNoteLayoutOrder(newOrder);
     onLayoutOrderChange?.(newOrder);
   };
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, [])
+
+  if (!isMounted) {
+    return <NotesSkeletonLoader />
+  }
 
   return (
       <EditNoteModalProvider

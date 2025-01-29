@@ -1,7 +1,6 @@
 import { TagType } from "@/models/Tag";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import clsx from "clsx";
-import useClickOutside from "@/lib/hooks/useClickOutside";
 import GhostCircleButton from "@/components/GhostCircleButton/GhostCircleButton";
 
 const SelectTagDropdown = ({
@@ -15,16 +14,6 @@ const SelectTagDropdown = ({
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLUListElement>(null);
-
-  useClickOutside({
-    ref: dropdownRef,
-    onClickOutside: () => {
-      if (isOpen) {
-        console.log("CLOSE");
-        // setIsOpen(false);
-      }
-    },
-  });
 
   return (
     <div

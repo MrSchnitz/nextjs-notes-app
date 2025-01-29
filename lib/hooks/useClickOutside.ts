@@ -1,6 +1,6 @@
 import { RefObject, useCallback, useEffect } from "react";
 
-export default function useClickOutside<T extends HTMLElement>({
+export default function useClickOutside<T extends HTMLElement | null>({
   ref,
   onClickOutside,
 }: {
@@ -13,7 +13,6 @@ export default function useClickOutside<T extends HTMLElement>({
         ref.current &&
         !ref.current.contains(e.target as Node)
       ) {
-      console.log("WOW")
         onClickOutside();
       }
     },

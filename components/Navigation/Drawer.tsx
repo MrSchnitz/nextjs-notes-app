@@ -1,3 +1,4 @@
+"use client";
 import React, {
   forwardRef,
   PropsWithChildren,
@@ -20,11 +21,7 @@ const Drawer = forwardRef(
     { children, header, side, isToggleHidden }: PropsWithChildren<Props>,
     ref,
   ) => {
-    const [isDrawerOpened, setDrawerOpened] = useState(
-      typeof window == "undefined"
-        ? false
-        : window?.matchMedia("(min-width: 768px)").matches,
-    );
+    const [isDrawerOpened, setDrawerOpened] = useState(false);
 
     const toggleDrawer = () => {
       setDrawerOpened((prevState) => !prevState);
@@ -37,6 +34,12 @@ const Drawer = forwardRef(
       }),
       [],
     );
+
+    useEffect(() => {
+      if (window?.matchMedia("(min-width: 768px)").matches) {
+        setDrawerOpened(true);
+      }
+    }, []);
 
     return (
       <>

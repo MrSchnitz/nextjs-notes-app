@@ -1,10 +1,11 @@
 "use client";
-import React from "react";
+import React, {useEffect, useState} from "react";
 import { NoteType } from "@/models/Note";
 import { TagType } from "@/models/Tag";
 import EditNoteModalProvider from "@/components/Note/EditNoteModalProvider";
 import NoteCard from "@/components/Note/NoteCard/NoteCard";
 import MasonryLayoutDnD from "@/components/MansoryLayout/MasonryLayout";
+import {NotesSkeletonLoader} from "@/components/SkeletonLoading/SkeletonLoading";
 
 type Props = {
   notes: NoteType[];
@@ -14,6 +15,8 @@ type Props = {
 };
 
 const TagNotesWrapper = ({ notes, tags, onDeleteNote, onEditNote }: Props) => {
+  const [isMounted, setIsMounted] = useState(false);
+
   const items = notes.map((note, index) => ({
     id: note.id ?? index.toString(),
     content: (
@@ -25,6 +28,14 @@ const TagNotesWrapper = ({ notes, tags, onDeleteNote, onEditNote }: Props) => {
     ),
     order: index,
   }));
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, [])
+
+  if (!isMounted) {
+    return <NotesSkeletonLoader />
+  }
 
   return (
     <EditNoteModalProvider

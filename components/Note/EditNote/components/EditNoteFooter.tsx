@@ -22,7 +22,9 @@ const EditNoteFooter = ({
       >
         <div className="flex items-center gap-x-2 mb-2 min-h-[20px]">
           {tags.map((tag) => (
-            <div className="badge badge-neutral">{tag.name}</div>
+            <div key={tag.id} className="badge badge-neutral">
+              {tag.name}
+            </div>
           ))}
         </div>
       </AnimatedHeight>

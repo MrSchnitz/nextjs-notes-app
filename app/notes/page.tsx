@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import EditNote from "@/components/Note/EditNote/EditNote";
 import "../globals.css";
 import { NoteType } from "@/models/Note";
@@ -30,15 +30,15 @@ export default async function NotesPage() {
     redirect(PAGE_LINKS.landingPage);
   }
 
-  const user = session ? await getUser(session) : [];
+  const user = await getUser(session);
   const { notes, tags, noteOrder } = user;
   const parsedNoteOrder = noteOrder ? JSON.parse(noteOrder) : null;
 
   const areNotesEmpty = notes.length === 0;
 
   return (
-    <div className="py-8 px-2 md:px-4 h-full w-full">
-      <div className="pt-8 pb-8 md:p-12 w-full flex justify-center">
+    <div className="w-full h-[calc(100svh-60px)] px-2 md:px-4 overflow-y-auto">
+      <div className="sticky top-0 z-20 pt-16 pb-8 md:p-12 bg-white w-full flex justify-center">
         <EditNote onAddNote={handleAddNote} tags={tags} />
       </div>
       {areNotesEmpty ? (
