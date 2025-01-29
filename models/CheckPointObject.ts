@@ -5,15 +5,3 @@ export interface CheckPointInterface {
 }
 
 export type CheckPointType = CheckPointInterface;
-
-export const CheckPointObject: CheckPointType = {
-  id: 0,
-  text: "",
-  checked: false,
-};
-
-export enum cCheckPoint {
-  id = "id",
-  text = "text",
-  checked = "checked",
-}

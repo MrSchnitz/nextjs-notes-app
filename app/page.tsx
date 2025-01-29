@@ -5,7 +5,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { redirect } from "next/navigation";
 import Image from "next/image";
-import LightBulb from "@/resources/assets/lightbulb3.jpg";
+import LightBulb from "@/resources/assets/lightbulb.png";
 
 export default async function Home() {
   const session = await getServerSession(authOptions);
@@ -15,7 +15,7 @@ export default async function Home() {
   }
 
   return (
-    <main className="h-full hero bg-[#e1d8d1]">
+    <main className="h-full hero">
       <div className="hero-content flex-col p-0 lg:flex-row">
         <Image
           src={LightBulb}
@@ -24,9 +24,10 @@ export default async function Home() {
         />
         <div className="flex flex-col md:items-start">
           <h1 className="text-5xl font-bold">Notes App</h1>
-          <p className="py-6">Capture what&apos;s on your mind</p>
-          <Link className="btn btn-sm" href={PAGE_LINKS.auth}>
+          <p className="text-xl py-6">Capture what&apos;s on your mind</p>
+          <Link className="btn btn-outline" href={PAGE_LINKS.auth}>
             Sign in
+            <span className="material-icons-outlined">login</span>
           </Link>
         </div>
       </div>

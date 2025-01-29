@@ -7,7 +7,7 @@ import { PAGE_LINKS } from "@/lib/Links";
 
 export default function NotFoundPage() {
   return (
-    <div className="h-[calc(100vh-64px)] w-full flex justify-center items-center">
+    <div className="h-page w-full flex justify-center items-center">
       <div className="flex flex-col justify-center items-center relative">
         <h1 className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 text-8xl text-white font-bold">
           404

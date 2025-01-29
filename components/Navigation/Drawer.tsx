@@ -43,7 +43,7 @@ const Drawer = forwardRef(
 
     return (
       <>
-        <div className="w-full py-0.5 flex items-center bg-[#f5b500]">
+        <div className="w-full py-0.5 flex items-center bg-app-primary">
           {!isToggleHidden && (
             <button
               className="ml-4 btn btn-ghost btn-circle"
@@ -79,7 +79,7 @@ const Drawer = forwardRef(
           )}
           <div
             className={clsx(
-              "w-full min-h-[calc(100svh-60px)]",
+              "w-full min-h-page",
               !isToggleHidden && "ml-16 md:ml-0",
             )}
           >

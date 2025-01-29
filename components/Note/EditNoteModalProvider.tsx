@@ -1,14 +1,12 @@
 "use client";
 import React, {
-  ChangeEvent,
   createContext,
   PropsWithChildren,
   useContext,
-  useEffect,
   useState,
 } from "react";
 import Modal from "@/components/Modal/Modal";
-import { NoteType, NoteTypeEnum } from "@/models/Note";
+import { NoteType } from "@/models/Note";
 import EditNote from "@/components/Note/EditNote/EditNote";
 import { TagType } from "@/models/Tag";
 

@@ -30,7 +30,17 @@ const NavUser = () => {
         <strong>{session?.user?.name}</strong>
       </h6>
       <button className="btn btn-sm" onClick={handleSignClick}>
-        {session ? "Sign out" : "Sign in"}
+        {session ? (
+          <>
+            <span className="material-icons-outlined">logout</span>
+            <span className="hidden md:block">Sign out</span>
+          </>
+        ) : (
+          <>
+            <span>Sign in</span>
+            <span className="material-icons-outlined">login</span>
+          </>
+        )}
       </button>
     </div>
   );

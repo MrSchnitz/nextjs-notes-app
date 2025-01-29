@@ -1,5 +1,5 @@
 "use server";
-import { Note, Tag } from "@prisma/client";
+import { Tag } from "@prisma/client";
 import { Session } from "next-auth";
 import { TagType } from "@/models/Tag";
 import prisma from "../lib/prisma";
@@ -100,5 +100,5 @@ export const getTagPageItems = async (tagId: string, userSession: Session) => {
  * @param tagId
  */
 export const deleteTag = async (tagId: string) => {
-  return await prisma.tag.delete({ where: { id: tagId } });
+  return prisma.tag.delete({ where: { id: tagId } });
 };

@@ -1,15 +1,7 @@
-import React, { Suspense } from "react";
+import React from "react";
 import EditNote from "@/components/Note/EditNote/EditNote";
 import "../globals.css";
-import { NoteType } from "@/models/Note";
-import {
-  addNewNote,
-  deleteNote,
-  getUser,
-  updateNote,
-  updateNoteOrder,
-} from "@/repositories/NoteRepository";
-import { revalidatePath } from "next/cache";
+import { getUser } from "@/repositories/NoteRepository";
 import { getServerSession, Session } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { PAGE_LINKS } from "@/lib/Links";
@@ -37,7 +29,7 @@ export default async function NotesPage() {
   const areNotesEmpty = notes.length === 0;
 
   return (
-    <div className="w-full h-[calc(100svh-60px)] px-2 md:px-4 overflow-y-auto">
+    <div className="w-full h-page px-2 md:px-4 overflow-y-auto">
       <div className="sticky top-0 z-20 pt-16 pb-8 md:p-12 bg-white w-full flex justify-center">
         <EditNote onAddNote={handleAddNote} tags={tags} />
       </div>

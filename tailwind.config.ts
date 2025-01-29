@@ -9,6 +9,13 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      spacing: {
+        navbar: "60px",
+        page: "calc(100svh - 60px)",
+      },
+      colors: {
+        "app-primary": "#f5b500",
+      },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":
@@ -34,7 +41,7 @@ const config: Config = {
   },
   plugins: [daisyui],
   daisyui: {
-    themes: ["light","dark"],
+    themes: ["light", "dark"],
   },
 };
 export default config;

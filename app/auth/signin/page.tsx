@@ -96,7 +96,7 @@ export default function SignInPage() {
 
   const renderForm = () => {
     return (
-      <div className="flex flex-col items-center w-[300px] bg-[#f5b500] p-4 rounded-xl shadow-[0_0_1rem_rgba(0,0,0,0.3)]">
+      <div className="flex flex-col items-center w-[300px] bg-app-primary p-4 rounded-xl shadow-[0_0_1rem_rgba(0,0,0,0.3)]">
         {renderHeader}
         {renderProvidersInputs}
       </div>

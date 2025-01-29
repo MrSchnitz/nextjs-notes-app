@@ -227,6 +227,7 @@ export const updateNote = async (note: NoteType) => {
 /**
  * Delete note by ID
  * @param noteId
+ * @param userSession - session object of current user
  */
 export const deleteNote = async (noteId: string, userSession: Session) => {
   const user = await prisma.user.findFirst({

@@ -4,7 +4,6 @@ import React, {
   useRef,
   useState,
 } from "react";
-import {tag} from "postcss-selector-parser";
 
 export type TagsModalImperativeProps = {
   open: () => void;
@@ -54,7 +53,9 @@ const TagsModal = forwardRef<TagsModalImperativeProps, Props>(
     return (
       <dialog className="modal" ref={modalRef} onClose={handleClose}>
         <div className="modal-box">
-          <h2 className="text-lg mb-2">{tagId ? "Update tag" : "Add new tag"}</h2>
+          <h2 className="text-lg mb-2">
+            {tagId ? "Update tag" : "Add new tag"}
+          </h2>
           <input
             className="input input-sm w-full"
             onChange={(event) => setNewTagName(event.target.value)}

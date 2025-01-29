@@ -6,9 +6,3 @@ export const PAGE_LINKS = {
   notesPageDeleteNote: "/notes/delete-note",
   tagsPage: "/tags",
 };
-
-export const ApiLinks = {
-  notes: "/api/notes",
-  tags: "/api/tags",
-  tagsNotes: "/api/tags/notes",
-};
