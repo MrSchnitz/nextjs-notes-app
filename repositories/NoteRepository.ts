@@ -1,5 +1,5 @@
 import { Session } from "next-auth";
-import { NoteType } from "@/models/Note";
+import {NoteError, NoteType} from "@/models/Note";
 import { TagType } from "@/models/Tag";
 import { CheckPointType } from "@/models/CheckPointObject";
 import prisma from "../lib/prisma";
@@ -118,7 +118,7 @@ export const searchNotes = async (
 export const addNewNote = async (
   note: NoteType,
   userSession: Session,
-): Promise<Note | undefined> => {
+): Promise<Note | undefined | NoteError> => {
   const user = await prisma.user.findFirst({
     where: { name: userSession?.user?.name },
   });
@@ -167,8 +167,7 @@ export const addNewNote = async (
         },
       });
     } catch (e) {
-      console.log("Update note order error", e);
-      throw e;
+      return { message: "Add note went wrong..." };
     }
 
     return newNote;
@@ -204,24 +203,28 @@ export const updateNote = async (note: NoteType) => {
     id: tag.id,
   }));
 
-  return prisma.note.update({
-    where: { id: note.id },
-    data: {
-      name: note.name,
-      content: note.content,
-      noteType: note.noteType,
-      color: note.color,
-      pinned: note.pinned,
-      image: note.image,
-      tags: {
-        disconnect: [...oldTags],
-        connect: [...tags],
+  try {
+    return prisma.note.update({
+      where: {id: note.id},
+      data: {
+        name: note.name,
+        content: note.content,
+        noteType: note.noteType,
+        color: note.color,
+        pinned: note.pinned,
+        image: note.image,
+        tags: {
+          disconnect: [...oldTags],
+          connect: [...tags],
+        },
+        checkPoints: {
+          create: [...checkPoints],
+        },
       },
-      checkPoints: {
-        create: [...checkPoints],
-      },
-    },
-  });
+    });
+  } catch (e) {
+    return { message: "Update note went wrong..." };
+  }
 };
 
 /**

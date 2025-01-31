@@ -1,6 +1,13 @@
 "use client";
-import React, { ChangeEvent, useId, useRef, useState } from "react";
-import { EMPTY_NOTE, NoteType, NoteTypeEnum } from "@/models/Note";
+import React, {
+  ChangeEvent,
+  startTransition,
+  useActionState,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+import { EMPTY_NOTE, NoteError, NoteType, NoteTypeEnum } from "@/models/Note";
 import { TagType } from "@/models/Tag";
 import clsx from "clsx";
 import { CheckPointType } from "@/models/CheckPointObject";
@@ -15,6 +22,28 @@ import EditNotePinButton from "@/components/Note/EditNote/components/EditNotePin
 import AnimatedHeight from "@/components/AnimatedHeight/AnimatedHeight";
 import GhostCircleButton from "@/components/GhostCircleButton/GhostCircleButton";
 
+function checkAndGetNoteToSave(note: NoteType) {
+  if (
+    note.name.length > 0 ||
+    note.content.length > 0 ||
+    (note.checkPoints?.length ?? 0) > 0
+  ) {
+    const newNote = { ...note };
+    if (note.noteType === NoteTypeEnum.CHECK) {
+      newNote.checkPoints = newNote.checkPoints?.filter(
+        (cp) => cp.text !== null,
+      );
+      newNote.content = "";
+    } else {
+      newNote.checkPoints = [];
+    }
+
+    return newNote;
+  }
+
+  return null;
+}
+
 export const ADD_NOTE_TRANSITION_DURATION = 500; // ms
 
 export interface AddNoteProps {
@@ -22,6 +51,7 @@ export interface AddNoteProps {
   defaultNote?: NoteType;
   onAddNote: (note: NoteType) => void;
   onDeleteNote?: (id: string) => void;
+  onClose?: () => void;
 }
 
 const EditNote = ({
@@ -29,12 +59,18 @@ const EditNote = ({
   tags,
   defaultNote,
   onDeleteNote,
+  onClose,
 }: AddNoteProps) => {
   const [isFocused, setIsFocused] = useState<boolean>(!!defaultNote);
+  const [wasSubmitted, setWasSubmitted] = useState<boolean>(false);
   const [note, setNote] = useState<NoteType>(
     defaultNote ? { ...defaultNote } : EMPTY_NOTE,
   );
   const mainRef = useRef<HTMLDivElement>(null);
+  const [error, action, isPending] = useActionState<
+    (NoteType & NoteError) | null,
+    NoteType
+  >((_, payload) => onAddNote(payload) as never, null);
 
   const handleSetNoteProp = (prop: string, value: any) => {
     setNote((prevState) => ({
@@ -98,37 +134,42 @@ const EditNote = ({
   };
 
   const handleOnClose = () => {
-    if (defaultNote === undefined) {
-      setIsFocused(false);
-    }
     if (
-      note.name.length > 0 ||
-      note.content.length > 0 ||
-      (note.checkPoints?.length ?? 0) > 0
+      defaultNote !== undefined &&
+      JSON.stringify(note) === JSON.stringify(defaultNote)
     ) {
-      const newNote = { ...note };
-      if (note.noteType === NoteTypeEnum.CHECK) {
-        newNote.checkPoints = newNote.checkPoints?.filter(
-          (cp) => cp.text !== null,
-        );
-        newNote.content = "";
-      } else {
-        newNote.checkPoints = [];
-      }
-      if (!defaultNote) {
+      onClose?.();
+      return;
+    }
+
+    const newNote = checkAndGetNoteToSave(note);
+
+    if (newNote) {
+      startTransition(() => {
+        action(newNote);
+        setWasSubmitted(true);
+      });
+    }
+
+    setIsFocused(false);
+    setNote(EMPTY_NOTE);
+    onClose?.();
+  };
+
+  useEffect(() => {
+    if (!isPending && !error?.message && isFocused && wasSubmitted) {
+      if (defaultNote === undefined) {
+        setIsFocused(false);
         setNote(EMPTY_NOTE);
       }
-
-      setTimeout(() => {
-        onAddNote(newNote);
-      }, ADD_NOTE_TRANSITION_DURATION);
+      onClose?.();
     }
-  };
+  }, [isPending, error]);
 
   useClickOutside({
     ref: mainRef,
     onClickOutside: () => {
-      if (isFocused) {
+      if (isFocused && defaultNote === undefined) {
         handleOnClose();
       }
     },
@@ -140,6 +181,7 @@ const EditNote = ({
     <div
       className={clsx(
         "flex flex-col px-4 py-3 rounded-lg bg-white shadow-[0_1px_2px_0_rgba(60,64,67,0.302),0_2px_6px_2px_rgba(60,64,67,0.149)] w-full max-w-[600px] transition-colors",
+        isPending && "pointer-events-none",
       )}
       style={{ backgroundColor: note.color }}
       ref={mainRef}
@@ -210,11 +252,19 @@ const EditNote = ({
             addTag={handleAddTag}
           />
           <div className="w-full flex items-center justify-end">
-            <button className="btn btn-sm btn-ghost" onClick={handleOnClose}>
+            <button
+              className="btn btn-sm btn-ghost"
+              disabled={isPending}
+              onClick={handleOnClose}
+            >
+              {isPending && (
+                <span className="loading loading-sm loading-spinner"></span>
+              )}
               Close
             </button>
           </div>
         </EditNoteFooter>
+        {error?.message && <div className="text-red-500">{error.message}</div>}
       </AnimatedHeight>
     </div>
   );

@@ -9,6 +9,7 @@ import Modal from "@/components/Modal/Modal";
 import { NoteType } from "@/models/Note";
 import EditNote from "@/components/Note/EditNote/EditNote";
 import { TagType } from "@/models/Tag";
+import { handleEditNoteAction, handleDeleteNoteAction } from "@/app/actions";
 
 type EditModalContextType = {
   editNote: NoteType | null;
@@ -25,19 +26,10 @@ export const useEditNoteModalContext = () => useContext(EditNoteModalContext);
 export default function EditNoteModalProvider({
   children,
   tags,
-  onEditNote,
-  onDeleteNote,
 }: PropsWithChildren<{
   tags: TagType[];
-  onEditNote: (note: NoteType) => void;
-  onDeleteNote: (id: string) => void;
 }>) {
   const [editNote, setEditNote] = useState<NoteType | null>(null);
-
-  const handleOnEditNote = (note: NoteType) => {
-    onEditNote?.(note);
-    setEditNote?.(null);
-  };
 
   const handleCloseModal = () => {
     setEditNote?.(null);
@@ -48,7 +40,7 @@ export default function EditNoteModalProvider({
   };
 
   const handleDeleteNote = (id: string) => {
-    onDeleteNote?.(id);
+    void handleDeleteNoteAction(id);
     setEditNote?.(null);
   };
 
@@ -59,8 +51,9 @@ export default function EditNoteModalProvider({
           <EditNote
             defaultNote={editNote}
             tags={tags}
-            onAddNote={handleOnEditNote}
+            onAddNote={handleEditNoteAction}
             onDeleteNote={handleDeleteNote}
+            onClose={handleCloseModal}
           />
         </Modal>
       )}

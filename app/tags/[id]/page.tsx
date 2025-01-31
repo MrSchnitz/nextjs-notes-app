@@ -2,7 +2,7 @@ import { getTagPageItems } from "@/repositories/TagRepository";
 import React from "react";
 import TagNotesWrapper from "@/app/tags/TagNotesWrapper";
 import NotesEmptyElement from "@/components/Note/NotesEmptyElement";
-import { handleDeleteNote, handleEditNote } from "@/app/actions";
+import { handleDeleteNoteAction, handleEditNoteAction } from "@/app/actions";
 import { getServerSession, Session } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { redirect } from "next/navigation";
@@ -31,8 +31,8 @@ export default async function Tags({
       <TagNotesWrapper
         notes={notes}
         tags={tags}
-        onEditNote={handleEditNote}
-        onDeleteNote={handleDeleteNote}
+        onEditNote={handleEditNoteAction}
+        onDeleteNote={handleDeleteNoteAction}
       />
     </div>
   );

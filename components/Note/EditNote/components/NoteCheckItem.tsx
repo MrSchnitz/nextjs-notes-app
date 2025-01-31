@@ -1,5 +1,5 @@
-import React, { forwardRef, useState } from "react";
-import { cCheckPoint, CheckPointType } from "@/models/CheckPointObject";
+import React, { ChangeEvent, forwardRef, useState } from "react";
+import { CheckPointType } from "@/models/CheckPointObject";
 import clsx from "clsx";
 
 export interface NoteCheckItemProps {
@@ -14,10 +14,13 @@ const NoteCheckItem = forwardRef<HTMLInputElement, NoteCheckItemProps>(
   ({ index, checkItem, onHandleChange, onDelete, onKeyDown }, ref) => {
     const [focused, setFocused] = useState<boolean>(false);
 
-    const handleChange = (attr: string, val: any) => {
-      const newCheckItem: any = { ...checkItem };
-      newCheckItem[attr] = val;
-      onHandleChange(newCheckItem);
+    const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+      const { type, name, value, checked } = event.target;
+      if (type === "checkbox") {
+        onHandleChange({ ...checkItem, [name]: checked });
+        return
+      }
+      onHandleChange({ ...checkItem, [name]: value });
     };
 
     const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -44,11 +47,10 @@ const NoteCheckItem = forwardRef<HTMLInputElement, NoteCheckItemProps>(
           ) : (
             <input
               type="checkbox"
+              name="checked"
               defaultChecked={checkItem.checked}
               className="checkbox"
-              onChange={(e) =>
-                handleChange(cCheckPoint.checked, e.target.checked)
-              }
+              onChange={handleChange}
               onClick={(event) => event.stopPropagation()}
             />
           )}
@@ -59,11 +61,10 @@ const NoteCheckItem = forwardRef<HTMLInputElement, NoteCheckItemProps>(
               "w-full flex-1",
               checkItem.checked && "line-through",
             )}
+            name="text"
             placeholder={"Write something..."}
             value={checkItem.text ?? ""}
-            onChange={(event) =>
-              handleChange(cCheckPoint.text, event.target.value)
-            }
+            onChange={handleChange}
             autoFocus={index === 0}
             onFocus={() => setFocused(true)}
             onBlur={() => setFocused(false)}

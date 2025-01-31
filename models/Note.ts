@@ -19,6 +19,10 @@ export interface NoteModel {
   checkPoints?: CheckPointType[];
 }
 
+export type NoteError = {
+  message: string;
+}
+
 export type NoteType = NoteModel;
 
 export const EMPTY_NOTE: NoteType = {

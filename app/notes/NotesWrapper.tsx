@@ -1,12 +1,12 @@
 "use client";
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import { NoteType } from "@/models/Note";
 import { TagType } from "@/models/Tag";
 import EditNoteModalProvider from "@/components/Note/EditNoteModalProvider";
 import NoteCard from "@/components/Note/NoteCard/NoteCard";
 import MasonryLayoutDnD from "@/components/MansoryLayout/MasonryLayout";
 import { MasonryItem } from "@/components/MansoryLayout/MasonryLayout";
-import {NotesSkeletonLoader} from "@/components/SkeletonLoading/SkeletonLoading";
+import { NotesSkeletonLoader } from "@/components/SkeletonLoading/SkeletonLoading";
 
 function getSortedNotes(notes: NoteType[], layoutOrder: string[]) {
   const sortedNotes = [...notes].sort(
@@ -75,32 +75,32 @@ const NotesWrapper = ({
 
   useEffect(() => {
     setIsMounted(true);
-  }, [])
+  }, []);
 
   if (!isMounted) {
-    return <NotesSkeletonLoader />
+    return <NotesSkeletonLoader />;
   }
 
   return (
-      <EditNoteModalProvider
-          tags={tags}
-          onEditNote={onEditNote}
-          onDeleteNote={onDeleteNote}
-      >
-        <h2 className="text-sm ml-6 mb-4 uppercase tracking-wider font-semibold text-gray-800">pinned</h2>
-        <MasonryLayoutDnD
-            items={getMasonryItems(sortedNotes.pinned)}
-            gap={4}
-            onReorder={(newItems) => handleReorder(newItems, "pinned")}
-        />
-        <hr className="mt-4 mb-8 md:my-10"/>
-        <h2 className="text-sm ml-6 mb-4 uppercase tracking-wider font-semibold text-gray-800">unpinned</h2>
-        <MasonryLayoutDnD
-            items={getMasonryItems(sortedNotes.unpinned)}
-            gap={4}
-            onReorder={(newItems) => handleReorder(newItems, "unpinned")}
-        />
-      </EditNoteModalProvider>
+    <EditNoteModalProvider tags={tags}>
+      <h2 className="text-sm ml-6 mb-4 uppercase tracking-wider font-semibold text-gray-800">
+        pinned
+      </h2>
+      <MasonryLayoutDnD
+        items={getMasonryItems(sortedNotes.pinned)}
+        gap={4}
+        onReorder={(newItems) => handleReorder(newItems, "pinned")}
+      />
+      <hr className="mt-4 mb-8 md:my-10" />
+      <h2 className="text-sm ml-6 mb-4 uppercase tracking-wider font-semibold text-gray-800">
+        unpinned
+      </h2>
+      <MasonryLayoutDnD
+        items={getMasonryItems(sortedNotes.unpinned)}
+        gap={4}
+        onReorder={(newItems) => handleReorder(newItems, "unpinned")}
+      />
+    </EditNoteModalProvider>
   );
 };
 

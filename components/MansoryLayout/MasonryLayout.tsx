@@ -87,7 +87,6 @@ const MasonryLayout: React.FC<MasonryLayoutProps> = ({
     const updateColumns = () => {
       if (containerRef.current) {
         const containerWidth = containerRef.current.offsetWidth;
-        console.log("WWW", containerWidth)
         const count = Math.max(1, Math.floor(containerWidth / minColumnWidth));
         setColumnCount(count);
       }

@@ -11,7 +11,7 @@ import { PAGE_LINKS } from "@/lib/Links";
 import { getServerSession, Session } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
-export const handleUpdateNoteLayoutOrder = async (order: string[]) => {
+export const handleUpdateNoteLayoutOrderAction = async (order: string[]) => {
   const session: Session | null = await getServerSession(authOptions);
   if (session) {
     try {
@@ -22,9 +22,10 @@ export const handleUpdateNoteLayoutOrder = async (order: string[]) => {
   }
 };
 
-export const handleAddNote = async (note: NoteType) => {
+export const handleAddNoteAction = async (note: NoteType | null) => {
+  console.log("HELLO", note)
   const session: Session | null = await getServerSession(authOptions);
-  if (session) {
+  if (session && note) {
     try {
       await addNewNote(note, session);
       revalidatePath(PAGE_LINKS.notesPage);
@@ -34,7 +35,7 @@ export const handleAddNote = async (note: NoteType) => {
   }
 };
 
-export const handleDeleteNote = async (id: string) => {
+export const handleDeleteNoteAction = async (id: string) => {
   const session: Session | null = await getServerSession(authOptions);
   if (session) {
     try {
@@ -46,7 +47,7 @@ export const handleDeleteNote = async (id: string) => {
   }
 };
 
-export const handleEditNote = async (note: NoteType) => {
+export const handleEditNoteAction = async (note: NoteType) => {
   const session: Session | null = await getServerSession(authOptions);
   if (session) {
     try {
