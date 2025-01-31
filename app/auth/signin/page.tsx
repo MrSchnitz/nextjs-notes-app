@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { startTransition, useEffect, useState } from "react";
 import { ClientSafeProvider, getProviders, signIn } from "next-auth/react";
 import keepLogo from "../../../resources/assets/keep.svg";
 import Image from "next/image";
@@ -27,23 +27,46 @@ const CredentialsProviderSection = ({
 }: {
   provider: ClientSafeProvider;
 }) => {
-  const [userName, setUserName] = useState("");
+  const [credentials, setCredentials] = useState({
+    userName: "",
+    password: "",
+  });
 
   const handleSignIn = () => {
     signIn("credentials", {
-      userName: userName,
+      userName: credentials.userName,
+      password: credentials.password,
       callbackUrl: PAGE_LINKS.notesPage,
-    });
+    }).catch((error) => console.log(error));
   };
 
   return (
     <>
       <input
         type="text"
-        className="input input-sm w-full"
-        onChange={(event) => setUserName(event.target.value)}
+        className="input input-sm w-full mb-1"
+        placeholder="Username"
+        onChange={(event) =>
+          setCredentials((prevState) => ({
+            ...prevState,
+            userName: event.target.value,
+          }))
+        }
         onKeyDown={(event) => event.code === "Enter" && handleSignIn()}
-        value={userName}
+        value={credentials.userName}
+      />
+      <input
+        type="text"
+        className="input input-sm w-full"
+        placeholder="Password"
+        onChange={(event) =>
+          setCredentials((prevState) => ({
+            ...prevState,
+            password: event.target.value,
+          }))
+        }
+        onKeyDown={(event) => event.code === "Enter" && handleSignIn()}
+        value={credentials.password}
       />
       <button className="btn btn-sm w-full mt-1 mb-3" onClick={handleSignIn}>
         Sign in

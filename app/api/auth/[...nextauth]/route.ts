@@ -3,6 +3,19 @@ import GithubProvider from "next-auth/providers/github";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import prisma from "../../../../lib/prisma";
+import bcrypt from "bcrypt";
+
+async function verifyPassword(
+  plainTextPassword: string,
+  hashedPassword: string,
+) {
+  try {
+    return await bcrypt.compare(plainTextPassword, hashedPassword); // returns true or false
+  } catch (error) {
+    console.error("Error verifying password:", error);
+    throw error;
+  }
+}
 
 // For more information on each option (and a full list of options) go to
 // https://next-auth.js.org/configuration/options
@@ -21,34 +34,33 @@ const handler = NextAuth({
           type: "text",
           placeholder: "Your username",
         },
+        password: {
+          label: "Password",
+          type: "text",
+          placeholder: "Your password",
+        },
       },
 
-      async authorize(credentials: any) {
-        console.log("CredentialsProvider", credentials)
+      async authorize(credentials) {
+        console.log("CredentialsProvider", credentials);
         const user = await prisma.user.findFirst({
-          where: { name: credentials.userName },
+          where: { name: credentials?.userName },
         });
 
-        console.log("User", user)
+        if (
+          !user ||
+          !(await verifyPassword(credentials?.password ?? "", user.password))
+        ) {
+          return null;
+        }
 
-        return user ?? null;
+        return user;
       },
     }),
   ],
   adapter: PrismaAdapter(prisma),
-
-  // The secret should be set to a reasonably long random string.
-  // It is used to sign cookies and to sign and encrypt JSON Web Tokens, unless
-  // a separate secret is defined explicitly for encrypting the JWT.
   secret: process.env.NEXTAUTH_SECRET,
-
   session: {
-    // Choose how you want to save the user session.
-    // The default is `"jwt"`, an encrypted JWT (JWE) stored in the session cookie.
-    // If you use an `adapter` however, we default it to `"database"` instead.
-    // You can still force a JWT session by explicitly defining `"jwt"`.
-    // When using `"database"`, the session cookie will only contain a `sessionToken` value,
-    // which is used to look up the session in the database.
     strategy: "jwt",
 
     // Seconds - How long until an idle session expires and is no longer valid.
@@ -59,51 +71,9 @@ const handler = NextAuth({
     // Note: This option is ignored if using JSON Web Tokens
     updateAge: 24 * 60 * 60, // 24 hours
   },
-
-  // JSON Web tokens are only used for sessions if the `jwt: true` session
-  // option is set - or by default if no database is specified.
-  // https://next-auth.js.org/configuration/options#jwt
-  // jwt: {
-  // A secret to use for key generation (you should set this explicitly)
-  // secret: 'INp8IvdIyeMcoGAgFGoA61DdBglwwSqnXJZkgz8PSnw',
-  // Set to true to use encryption (default: false)
-  // encryption: true,
-  // You can define your own encode/decode functions for signing and encryption
-  // if you want to override the default behaviour.
-  // encode: async ({ secret, token, maxAge }) => {},
-  // decode: async ({ secret, token, maxAge }) => {},
-  // },
-
-  // You can define custom pages to override the built-in ones. These will be regular Next.js pages
-  // so ensure that they are placed outside of the '/api' folder, e.g. login: '/auth/mycustom-signin'
-  // The routes shown here are the default URLs that will be used when a custom
-  // pages is not specified for that route.
-  // https://next-auth.js.org/configuration/pages
   pages: {
     signIn: "/auth/signin", // Displays signin buttons
-    // signOut: '/auth/signout', // Displays form with sign out button
-    // error: '/auth/error', // Error code passed in query string as ?error=
-    // verifyRequest: '/auth/verify-request', // Used for check email page
-    // newUser: null // If set, new users will be directed here on first sign in
   },
-
-  // Callbacks are asynchronous functions you can use to control what happens
-  // when an action is performed.
-  // https://next-auth.js.org/configuration/callbacks
-  // callbacks: {
-  // async login(user, account, profile) { return true },
-  // async redirect(url, baseUrl) { return baseUrl },
-  // async session(session, user) { return session },
-  // async jwt(token, user, account, profile, isNewUser) { return token }
-  // },
-
-  // Events are useful for logging
-  // https://next-auth.js.org/configuration/events
-  // events: {},
-
-  // You can set the theme to 'light', 'dark' or use 'auto' to default to the
-  // whatever prefers-color-scheme is set to in the browser. Default is 'auto'
-  // theme: { colorScheme: "auto" },
 
   // Enable debug messages in the console if you are having problems
   debug: true,
