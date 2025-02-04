@@ -41,7 +41,6 @@ export default function NoteCard({ note, onEditNote, onDeleteNote }: Props) {
     note.checkPoints?.filter((cp) => !cp.checked) ?? [];
   const showSeparator =
     checkedCheckPoints.length > 0 && uncheckedCheckPoints.length > 0;
-  const textAreaRows = (note.content.match(/\n/g) || []).length + 1;
 
   return (
     <>
@@ -83,11 +82,9 @@ export default function NoteCard({ note, onEditNote, onDeleteNote }: Props) {
         </div>
         <div className="pt-3">
           {note.noteType === NoteTypeEnum.TEXT ? (
-            <textarea
-              className="text-sm text-justify break-words resize-none"
-              rows={textAreaRows}
-              defaultValue={note.content}
-            />
+            <p className="w-full text-sm text-justify break-words">
+              {note.content}
+            </p>
           ) : (
             <>
               {uncheckedCheckPoints.map((cp: CheckPointType, i: number) => (
@@ -109,7 +106,7 @@ export default function NoteCard({ note, onEditNote, onDeleteNote }: Props) {
           )}
         </div>
         {note.tags?.length !== 0 && (
-          <div className="flex items-center gap-x-2 mt-2">
+          <div className="flex items-center flex-wrap gap-2 mt-2">
             {note.tags?.map((tag) => (
               <div key={tag.id} className={clsx("badge badge-neutral")}>
                 {tag.name}

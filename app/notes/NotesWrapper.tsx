@@ -83,23 +83,29 @@ const NotesWrapper = ({
 
   return (
     <EditNoteModalProvider tags={tags}>
-      <h2 className="text-sm ml-6 mb-4 uppercase tracking-wider font-semibold text-gray-800">
-        pinned
-      </h2>
-      <MasonryLayoutDnD
-        items={getMasonryItems(sortedNotes.pinned)}
-        gap={4}
-        onReorder={(newItems) => handleReorder(newItems, "pinned")}
-      />
-      <hr className="mt-4 mb-8 md:my-10" />
-      <h2 className="text-sm ml-6 mb-4 uppercase tracking-wider font-semibold text-gray-800">
-        unpinned
-      </h2>
-      <MasonryLayoutDnD
-        items={getMasonryItems(sortedNotes.unpinned)}
-        gap={4}
-        onReorder={(newItems) => handleReorder(newItems, "unpinned")}
-      />
+      <div className="md:mb-10">
+        {sortedNotes.pinned.length !== 0 && (
+          <>
+            <h2 className="text-sm ml-6 mb-4 uppercase tracking-wider font-semibold text-gray-800">
+              pinned
+            </h2>
+            <MasonryLayoutDnD
+              items={getMasonryItems(sortedNotes.pinned)}
+              gap={4}
+              onReorder={(newItems) => handleReorder(newItems, "pinned")}
+            />
+            <hr className="mt-4 mb-8 md:my-10" />
+            <h2 className="text-sm ml-6 mb-4 uppercase tracking-wider font-semibold text-gray-800">
+              unpinned
+            </h2>
+          </>
+        )}
+        <MasonryLayoutDnD
+          items={getMasonryItems(sortedNotes.unpinned)}
+          gap={4}
+          onReorder={(newItems) => handleReorder(newItems, "unpinned")}
+        />
+      </div>
     </EditNoteModalProvider>
   );
 };

@@ -22,10 +22,25 @@ import EditNotePinButton from "@/components/Note/EditNote/components/EditNotePin
 import AnimatedHeight from "@/components/AnimatedHeight/AnimatedHeight";
 import GhostCircleButton from "@/components/GhostCircleButton/GhostCircleButton";
 
+function prepareDefaultNote(defaultNote: NoteType) {
+  const defaultNoteCopy = { ...defaultNote };
+  if (defaultNoteCopy.noteType === NoteTypeEnum.CHECK) {
+    return {
+      ...defaultNoteCopy,
+      checkPoints: [
+        ...(defaultNoteCopy.checkPoints ?? []),
+        { text: null, checked: false },
+      ],
+    };
+  }
+
+  return defaultNoteCopy;
+}
+
 function checkAndGetNoteToSave(note: NoteType) {
   if (
-    note.name.length > 0 ||
-    note.content.length > 0 ||
+    note.name.trim().length > 0 ||
+    note.content.trim().length > 0 ||
     (note.checkPoints?.length ?? 0) > 0
   ) {
     const newNote = { ...note };
@@ -64,7 +79,7 @@ const EditNote = ({
   const [isFocused, setIsFocused] = useState<boolean>(!!defaultNote);
   const [wasSubmitted, setWasSubmitted] = useState<boolean>(false);
   const [note, setNote] = useState<NoteType>(
-    defaultNote ? { ...defaultNote } : EMPTY_NOTE,
+    defaultNote ? prepareDefaultNote(defaultNote) : EMPTY_NOTE,
   );
   const mainRef = useRef<HTMLDivElement>(null);
   const [error, action, isPending] = useActionState<
@@ -237,7 +252,7 @@ const EditNote = ({
         toggle={isFocused}
         disabled={isTransitionDisabled}
       >
-        <EditNoteFooter tags={note.tags ?? []}>
+        <EditNoteFooter className="mt-3" tags={note.tags ?? []}>
           <ColorPicker onChooseColor={handleChangeColor} />
           <GhostCircleButton
             onClick={handleChangeNoteType}
@@ -264,7 +279,9 @@ const EditNote = ({
             </button>
           </div>
         </EditNoteFooter>
-        {error?.message && <div className="text-red-500">{error.message}</div>}
+        {error?.message && (
+          <div className="mt-2 text-red-500">{error.message}</div>
+        )}
       </AnimatedHeight>
     </div>
   );
